@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:painel_velocitynet/pages/home.dart';
 import 'package:painel_velocitynet/pages/login.dart';
 
 void main() {
