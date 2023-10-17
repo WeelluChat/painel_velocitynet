@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:painel_velocitynet/pages/ofertas.dart';
 import 'package:painel_velocitynet/pages/planos.dart';
 import 'package:painel_velocitynet/pages/slide.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -179,6 +180,7 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                 // Conteúdo de cada guia aqui
                 Slide(),
                 Planos(),
+                Ofertas(),
               ],
             ),
           ),

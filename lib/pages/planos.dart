@@ -45,6 +45,41 @@ class _PlanosState extends State<Planos> {
                     const SizedBox(
                       height: 30,
                     ),
+                    Text(
+                      'Título',
+                      style: GoogleFonts.getFont('Poppins',
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: const Color(0xff3D3D3D),
+                      ),
+                      width: double.infinity,
+                      child: TextField(
+                        style: const TextStyle(color: Colors.white),
+                        // obscureText: true,
+                        decoration: InputDecoration(
+                          fillColor: Colors.red,
+                          hintText: '',
+                          hintStyle: GoogleFonts.getFont('Poppins',
+                              color: const Color(0xff969696),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600),
+                          border: const OutlineInputBorder(
+                              borderSide: BorderSide.none),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
                     Container(
                       height: 65,
                       decoration: const BoxDecoration(
@@ -82,9 +117,9 @@ class _PlanosState extends State<Planos> {
                                   Row(
                                     children: [
                                       Text(
-                                        'Titulo',
+                                        'Título',
                                         style: GoogleFonts.getFont('Poppins',
-                                            color: Colors.white, fontSize: 18),
+                                            color: Colors.white, fontSize: 15),
                                       )
                                     ],
                                   ),
@@ -159,9 +194,11 @@ class _PlanosState extends State<Planos> {
                             ),
                             actions: <Widget>[
                               Padding(
-                                padding: const EdgeInsets.only(left:30, right: 30, top: 20, bottom: 30),
+                                padding: const EdgeInsets.only(
+                                    left: 30, right: 30, top: 20, bottom: 30),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Container(
                                       height: 65,
@@ -175,7 +212,8 @@ class _PlanosState extends State<Planos> {
                                           shape: MaterialStateProperty.all(
                                               RoundedRectangleBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(10))),
+                                                      BorderRadius.circular(
+                                                          10))),
                                           backgroundColor:
                                               MaterialStateProperty.all(
                                                   const Color(0xff46964A)),
@@ -204,7 +242,8 @@ class _PlanosState extends State<Planos> {
                                           shape: MaterialStateProperty.all(
                                               RoundedRectangleBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(10))),
+                                                      BorderRadius.circular(
+                                                          10))),
                                           backgroundColor:
                                               MaterialStateProperty.all(
                                                   const Color(0xff46964A)),
@@ -244,7 +283,8 @@ class _PlanosState extends State<Planos> {
                       children: [
                         SizedBox(
                           width: double.infinity,
-                          height: 500,
+                          height: 350,
+                          // color: Colors.red,
                           child: GridView.builder(
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
