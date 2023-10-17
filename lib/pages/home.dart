@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:painel_velocitynet/pages/slide.dart';
@@ -9,10 +7,10 @@ class MyTabbedPanel extends StatefulWidget {
   const MyTabbedPanel({super.key});
 
   @override
-  _MyTabbedPanelState createState() => _MyTabbedPanelState();
+  MyTabbedPanelState createState() => MyTabbedPanelState();
 }
 
-class _MyTabbedPanelState extends State<MyTabbedPanel> {
+class MyTabbedPanelState extends State<MyTabbedPanel> {
   int _currentIndex = 0;
   final PageController _pageController = PageController();
 
@@ -186,5 +184,4 @@ class _MyTabbedPanelState extends State<MyTabbedPanel> {
       ),
     );
   }
-
 }
