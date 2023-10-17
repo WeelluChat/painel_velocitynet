@@ -1,5 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:painel_velocitynet/pages/login.dart';
+import 'package:painel_velocitynet/pages/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,11 +13,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      scrollBehavior: const MaterialScrollBehavior().copyWith(
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+          PointerDeviceKind.stylus,
+          PointerDeviceKind.unknown
+        },
+      ),
       title: 'Flutter Demo',
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: const Login(),
+      home: const MyTabbedPanel(),
     );
   }
 }
