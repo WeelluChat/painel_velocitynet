@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:painel_velocitynet/pages/home.dart';
 import 'package:painel_velocitynet/pages/login.dart';
 
 void main() {
@@ -23,7 +22,10 @@ class MyApp extends StatelessWidget {
         },
       ),
       title: 'Flutter Demo',
-      home: const MyTabbedPanel(),
+      // theme: ThemeData(
+      //   useMaterial3: true,
+      // ),
+      home: const Login(),
     );
   }
 }
