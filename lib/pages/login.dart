@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
-import 'package:painel_velocitynet/pages/home.dart';
+import 'package:painel_velocitynet/login/authManeger.dart';
+import 'package:painel_velocitynet/login/auth_service.dart';
+import 'package:painel_velocitynet/login/apiService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
@@ -17,61 +16,12 @@ class _LoginState extends State<Login> {
   TextEditingController controlerEmail = TextEditingController();
   TextEditingController controllerPassword = TextEditingController();
 
-  Future<void> autentication() async {
-    const String url = 'http://10.0.0.149:3000/api/v1/auth/login';
-    var parse = Uri.parse(url);
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-    };
-    Map<String, String> body = {
-      'email': controlerEmail.text,
-      'password': controllerPassword.text,
-    };
-
-    http.Response response =
-        await http.post(parse, headers: headers, body: jsonEncode(body));
-    if (response.statusCode == 200) {
-      // print('Resposta da API: ${response.body}');
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      final String token = responseData['token'];
-      await AuthManager.setToken(token);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const MyTabbedPanel(),
-        ),
-      );
-      controlerEmail.clear();
-      controllerPassword.clear();
-      fazerRequisicaoAutenticada(token);
-    } else {
-      print('Erro na API: ${response.statusCode}');
-    }
-  }
-
-  Future<void> fazerRequisicaoAutenticada(String token) async {
-    String apiUrl = "http://10.0.0.149:3000/api/v1/login";
-    Map<String, String> headers = {
-      'Authorization': 'Bearer $token',
-    };
-    try {
-      final response = await http.post(Uri.parse(apiUrl), headers: headers);
-
-      if (response.statusCode == 200) {
-        print("Token: $token");
-      } else {
-        print("Erro na API: ${response.statusCode}");
-      }
-    } catch (e) {
-      print("Erro ao fazer a requisição: $e");
-    }
-  }
-
+  late AuthService authService = AuthService(controlerEmail: controlerEmail, controllerPassword: controllerPassword, context: context);
+  late ApiService apiService = ApiService();
+ 
   @override
   void initState() {
     super.initState();
-    // loginAutentication();
-    // autentication();
   }
 
   @override
@@ -205,11 +155,11 @@ class _LoginState extends State<Login> {
                             onPressed: () async {
                               // print(controlerEmail.text);
                               // print(controllerPassword.text);
-                              await autentication(); // Espera a autenticação ser concluída
+                              await authService.autentication(); // Espera a autenticação ser concluída
                               final token = await AuthManager
                                   .getToken(); // Obtém o token armazenado
                               if (token != null) {
-                                fazerRequisicaoAutenticada(token);
+                                ApiService.fazerRequisicaoAutenticada(token);
                               }
                             },
                             child: Text(
@@ -234,21 +184,84 @@ class _LoginState extends State<Login> {
   }
 }
 
-class AuthManager {
-  static const String _tokenKey = 'token';
+// class AuthManager {
+//   static const String _tokenKey = 'token';
 
-  static Future<void> setToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_tokenKey, token);
-  }
+//   static Future<void> setToken(String token) async {
+//     final prefs = await SharedPreferences.getInstance();
+//     await prefs.setString(_tokenKey, token);
+//   }
 
-  static Future<String?> getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_tokenKey);
-  }
+//   static Future<String?> getToken() async {
+//     final prefs = await SharedPreferences.getInstance();
+//     return prefs.getString(_tokenKey);
+//   }
 
-  static Future<void> clearToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_tokenKey);
-  }
-}
+//   static Future<void> clearToken() async {
+//     final prefs = await SharedPreferences.getInstance();
+//     await prefs.remove(_tokenKey);
+//   }
+// }
+
+
+
+
+ // Future<void> autentication() async {
+  //   var parse = Uri.parse("${ApiRotaAuthLogin.rotaAuthLogin}/auth/login");
+  //   Map<String, String> headers = {
+  //     'Content-Type': 'application/json',
+  //   };
+  //   Map<String, String> body = {
+  //     'email': controlerEmail.text,
+  //     'password': controllerPassword.text,
+  //   };
+
+  //   http.Response response =
+  //       await http.post(parse, headers: headers, body: jsonEncode(body));
+  //   if (response.statusCode == 200) {
+  //     // print('Resposta da API: ${response.body}');
+  //     final Map<String, dynamic> responseData = json.decode(response.body);
+  //     final String token = responseData['token'];
+  //     await AuthManager.setToken(token);
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => const MyTabbedPanel(),
+  //       ),
+  //     );
+  //     controlerEmail.clear();
+  //     controllerPassword.clear();
+  //     fazerRequisicaoAutenticada(token);
+  //   } else if (response.statusCode == 404) {
+  //     final snackBar = SnackBar(
+  //       backgroundColor: Colors.red,
+  //       content: const Text('Usuário não cadastrado'),
+  //       action: SnackBarAction(
+  //         label: 'Close',
+  //         textColor: Colors.white,
+  //         onPressed: () {},
+  //       ),
+  //     );
+  //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  //   } else {
+  //     print('Erro na API: ${response.statusCode}');
+  //   }
+  // }
+
+  // Future<void> fazerRequisicaoAutenticada(String token) async {
+  //   Map<String, String> headers = {
+  //     'Authorization': 'Bearer $token',
+  //   };
+  //   try {
+  //     final response = await http.post(
+  //         Uri.parse("${ApiRotaAuthLogin.rotaAuthLogin}/login"),
+  //         headers: headers);
+  //     if (response.statusCode == 200) {
+  //       print("Token: $token");
+  //     } else {
+  //       print("Erro na API: ${response.statusCode}");
+  //     }
+  //   } catch (e) {
+  //     print("Erro ao fazer a requisição: $e");
+  //   }
+  // }
