@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:painel_velocitynet/pages/home.dart';
+import 'package:painel_velocitynet/pages/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       // theme: ThemeData(
       //   useMaterial3: true,
       // ),
-      home: const MyTabbedPanel(),
+      home: const Login(),
     );
   }
 }

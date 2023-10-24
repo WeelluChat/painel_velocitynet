@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:painel_velocitynet/pages/home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -9,6 +14,66 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  TextEditingController controlerEmail = TextEditingController();
+  TextEditingController controllerPassword = TextEditingController();
+
+  Future<void> autentication() async {
+    const String url = 'http://10.0.0.149:3000/api/v1/auth/login';
+    var parse = Uri.parse(url);
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+    };
+    Map<String, String> body = {
+      'email': controlerEmail.text,
+      'password': controllerPassword.text,
+    };
+
+    http.Response response =
+        await http.post(parse, headers: headers, body: jsonEncode(body));
+    if (response.statusCode == 200) {
+      // print('Resposta da API: ${response.body}');
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final String token = responseData['token'];
+      await AuthManager.setToken(token);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MyTabbedPanel(),
+        ),
+      );
+      controlerEmail.clear();
+      controllerPassword.clear();
+      fazerRequisicaoAutenticada(token);
+    } else {
+      print('Erro na API: ${response.statusCode}');
+    }
+  }
+
+  Future<void> fazerRequisicaoAutenticada(String token) async {
+    String apiUrl = "http://10.0.0.149:3000/api/v1/login";
+    Map<String, String> headers = {
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      final response = await http.post(Uri.parse(apiUrl), headers: headers);
+
+      if (response.statusCode == 200) {
+        print("Token: $token");
+      } else {
+        print("Erro na API: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Erro ao fazer a requisição: $e");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // loginAutentication();
+    // autentication();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,6 +136,7 @@ class _LoginState extends State<Login> {
                           ),
                           width: double.infinity,
                           child: TextField(
+                            controller: controlerEmail,
                             // obscureText: true,
                             decoration: InputDecoration(
                               fillColor: Colors.red,
@@ -105,6 +171,7 @@ class _LoginState extends State<Login> {
                           width: double.infinity,
                           height: 65,
                           child: TextField(
+                            controller: controllerPassword,
                             obscureText: true,
                             decoration: InputDecoration(
                               fillColor: Colors.red,
@@ -135,7 +202,16 @@ class _LoginState extends State<Login> {
                               backgroundColor: MaterialStateProperty.all(
                                   const Color(0xff46964A)),
                             ),
-                            onPressed: () {},
+                            onPressed: () async {
+                              // print(controlerEmail.text);
+                              // print(controllerPassword.text);
+                              await autentication(); // Espera a autenticação ser concluída
+                              final token = await AuthManager
+                                  .getToken(); // Obtém o token armazenado
+                              if (token != null) {
+                                fazerRequisicaoAutenticada(token);
+                              }
+                            },
                             child: Text(
                               'Entrar',
                               style: GoogleFonts.getFont('Poppins',
@@ -155,5 +231,24 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+}
+
+class AuthManager {
+  static const String _tokenKey = 'token';
+
+  static Future<void> setToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_tokenKey, token);
+  }
+
+  static Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_tokenKey);
+  }
+
+  static Future<void> clearToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_tokenKey);
   }
 }
