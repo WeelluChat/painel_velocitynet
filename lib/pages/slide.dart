@@ -1,5 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:painel_velocitynet/constantes/api_url.dart';
+import 'package:painel_velocitynet/upload_image_slide/upload_slide_image.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class Slide extends StatefulWidget {
@@ -10,6 +14,49 @@ class Slide extends StatefulWidget {
 }
 
 class _SlideState extends State<Slide> {
+  late UploadImage authService = UploadImage();
+
+  //get imagem api
+  List<dynamic> dados = [];
+  Future<void> getSlide() async {
+    Uri url = Uri.parse("${ApiRotaAuthLogin.rotaAuthLogin}/slider");
+    http.Response response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      setState(() {
+        dados = jsonDecode(response.body);
+        print(dados);
+      });
+    }
+  }
+
+  void deleteItem(String itemId) async {
+    final url = Uri.parse("${ApiRotaAuthLogin.rotaAuthLogin}/slider");
+
+    try {
+      final response = await http.delete(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"id": itemId}),
+      );
+
+      if (response.statusCode == 200) {
+        getSlide();
+      } else {
+        print('Erro ao excluir o item: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Erro na solicitação DELETE: $error');
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSlide();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -59,7 +106,9 @@ class _SlideState extends State<Slide> {
                           backgroundColor: MaterialStateProperty.all(
                               const Color(0xff46964A)),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          UploadImage().selectImageGaleria(); 
+                        },
                         child: Text(
                           'Adicionar imagem',
                           style: GoogleFonts.getFont('Poppins',
@@ -77,23 +126,31 @@ class _SlideState extends State<Slide> {
                       height: 390,
                       // color: Colors.red,
                       child: GridView.builder(
-
                         gridDelegate:
-                             const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisSpacing: 10,
-                              childAspectRatio: 16 / 18,
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 16 / 18,
                           crossAxisCount: 4,
                         ),
                         scrollDirection: Axis.vertical,
-                        itemCount: 4,
+                        itemCount: dados.length,
                         itemBuilder: (context, index) {
+                          final imageUrl = dados[index]['name'];
                           return Container(
                             // color: Colors.cyan,
-                            child:  Column(
+
+                            child: Column(
                               children: [
                                 Image.network(
-                                  'https://images.pexels.com/photos/1166209/pexels-photo-1166209.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-                                  // width: 390,
+                                  'http://10.0.0.149:3000/api/v1/uploads/$imageUrl',
+                                  width: 390,
+                                  errorBuilder:
+                                      (context, exception, stackTrace) {
+                                    print(
+                                        'Erro ao carregar imagem: $exception');
+                                    return const Text(
+                                        'Erro ao carregar imagem');
+                                  },
                                 ),
                                 const SizedBox(
                                   height: 10,
@@ -101,17 +158,15 @@ class _SlideState extends State<Slide> {
                                 Container(
                                   height: 50,
                                   decoration: const BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.zero),
-                                        // color: Colors.green
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                    // color: Colors.green
                                   ),
                                   child: ElevatedButton(
                                     style: ButtonStyle(
                                       shape: MaterialStateProperty.all(
                                           RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(
-                                                      10))),
+                                                  BorderRadius.circular(10))),
                                       backgroundColor:
                                           MaterialStateProperty.all(
                                               const Color(0xFF4D73F1)),
@@ -131,12 +186,10 @@ class _SlideState extends State<Slide> {
                                         ),
                                         Text(
                                           'Selecionar imagem',
-                                          style: GoogleFonts.getFont(
-                                              'Poppins',
+                                          style: GoogleFonts.getFont('Poppins',
                                               color: Colors.white,
                                               fontSize: 15,
-                                              fontWeight:
-                                                  FontWeight.w500),
+                                              fontWeight: FontWeight.w500),
                                         ),
                                         const SizedBox(
                                           width: 20,
@@ -145,26 +198,29 @@ class _SlideState extends State<Slide> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 10,),
-                                 Container(
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
                                   height: 50,
                                   decoration: const BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.zero),
-                                        // color: Colors.green
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                    // color: Colors.green
                                   ),
                                   child: ElevatedButton(
                                     style: ButtonStyle(
                                       shape: MaterialStateProperty.all(
                                           RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(
-                                                      10))),
+                                                  BorderRadius.circular(10))),
                                       backgroundColor:
                                           MaterialStateProperty.all(
                                               const Color(0xffF14D4D)),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      final itemId = dados[index]['_id'];
+                                      deleteItem(itemId);
+                                    },
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -179,12 +235,10 @@ class _SlideState extends State<Slide> {
                                         ),
                                         Text(
                                           'Deletar imagem',
-                                          style: GoogleFonts.getFont(
-                                              'Poppins',
+                                          style: GoogleFonts.getFont('Poppins',
                                               color: Colors.white,
                                               fontSize: 15,
-                                              fontWeight:
-                                                  FontWeight.w500),
+                                              fontWeight: FontWeight.w500),
                                         ),
                                         const SizedBox(
                                           width: 35,
@@ -193,36 +247,37 @@ class _SlideState extends State<Slide> {
                                     ),
                                   ),
                                 ),
-                                  
                               ],
                             ),
                           );
                         },
                       ),
                     ),
-                    const SizedBox(height: 10,),
-                     Container(
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
                       height: 65,
                       decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.zero),
+                        borderRadius: BorderRadius.all(Radius.zero),
                       ),
                       width: 200,
                       child: ElevatedButton(
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10))),
-                      backgroundColor: MaterialStateProperty.all(
-                          const Color(0xff46964A)),
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      'Salvar',
-                      style: GoogleFonts.getFont('Poppins',
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500),
-                    ),
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color(0xff46964A)),
+                        ),
+                        onPressed: () {},
+                        child: Text(
+                          'Salvar',
+                          style: GoogleFonts.getFont('Poppins',
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500),
+                        ),
                       ),
                     ),
                   ],
