@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:painel_velocitynet/ofertas_classes/Item.dart';
+
 class Ofertas extends StatefulWidget {
   const Ofertas({super.key});
 
@@ -8,6 +13,74 @@ class Ofertas extends StatefulWidget {
 }
 
 class _OfertasState extends State<Ofertas> {
+
+  late Item itemApi = Item(id: id, titulo: titulo.text, decricao: descricao.text, valor: valor.text);
+  TextEditingController titulo = TextEditingController();
+  TextEditingController descricao = TextEditingController();
+  TextEditingController valor = TextEditingController();
+  TextEditingController textoPreco = TextEditingController();
+  late String id;
+
+  List<Item> dadosOfertas = [];
+
+  Future receberDadosOfertas() async {
+    Uri url = Uri.parse('http://10.0.0.149:3000/api/v1/offer');
+    http.Response response = await http.get(url);
+    if (response.statusCode == 200) {
+      final List<dynamic> decodedData = json.decode(response.body);
+      final List<Item> ofertas =
+          decodedData.map((item) => Item.fromJson(item)).toList();
+
+      if (ofertas.isNotEmpty) {
+        titulo.text = ofertas[0].titulo;
+        descricao.text = ofertas[0].decricao;
+        valor.text = ofertas[0].valor;
+        id = ofertas[0].id;
+      }
+
+      setState(() {
+        dadosOfertas = ofertas;
+      });
+    } else {
+      print(
+          'Erro ao buscar os dados das ofertas. Código de status: ${response.statusCode}');
+    }
+  }
+
+  Future atualizarDadosOfertas(String id, String novoTitulo, String novaDescricao,
+      String novoValor, ) async {
+    Uri url = Uri.parse('http://10.0.0.149:3000/api/v1/offer');
+
+    Map<String, String> body = {
+      'id': id,
+      'title': novoTitulo,
+      'description': novaDescricao,
+      'value': novoValor,
+    };
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+    };
+
+    http.Response response =
+        await http.patch(url, headers: headers, body: jsonEncode(body));
+    if (response.statusCode == 200) {
+      print('Dados da oferta atualizados com sucesso!');
+      print(response.body);
+      receberDadosOfertas();
+    } else {
+      print(
+          'Erro ao atualizar os dados da oferta. Status code: ${response.statusCode}');
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    receberDadosOfertas();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -61,6 +134,7 @@ class _OfertasState extends State<Ofertas> {
                       ),
                       width: double.infinity,
                       child: TextField(
+                        controller: titulo,
                         style: const TextStyle(color: Colors.white),
                         // obscureText: true,
                         decoration: InputDecoration(
@@ -96,6 +170,7 @@ class _OfertasState extends State<Ofertas> {
                       ),
                       width: double.infinity,
                       child: TextField(
+                        controller: descricao,
                         style: const TextStyle(color: Colors.white),
                         // obscureText: true,
                         decoration: InputDecoration(
@@ -137,6 +212,7 @@ class _OfertasState extends State<Ofertas> {
                               ),
                               width: 500,
                               child: TextField(
+                                controller: valor,
                                 style: const TextStyle(color: Colors.white),
                                 // obscureText: true,
                                 decoration: InputDecoration(
@@ -177,6 +253,7 @@ class _OfertasState extends State<Ofertas> {
                                   ),
                                   width: 500,
                                   child: TextField(
+                                    controller: textoPreco,
                                     style: const TextStyle(color: Colors.white),
                                     // obscureText: true,
                                     decoration: InputDecoration(
@@ -244,7 +321,10 @@ class _OfertasState extends State<Ofertas> {
                               backgroundColor: MaterialStateProperty.all(
                                   const Color(0xff46964A)),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              atualizarDadosOfertas(
+                                  id, titulo.text, descricao.text, valor.text);
+                            },
                             child: Text(
                               'Salvar',
                               style: GoogleFonts.getFont('Poppins',
@@ -266,3 +346,4 @@ class _OfertasState extends State<Ofertas> {
     );
   }
 }
+
