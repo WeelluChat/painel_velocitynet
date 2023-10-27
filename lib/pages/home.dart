@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:painel_velocitynet/pages/ofertas.dart';
 import 'package:painel_velocitynet/pages/descricao.dart';
-import 'package:painel_velocitynet/pages/plans.dart';
+import 'package:painel_velocitynet/modules/plans/widget/plans.dart';
 import 'package:painel_velocitynet/pages/slide.dart';
 import 'package:painel_velocitynet/pages/tv.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -112,64 +112,67 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                     ),
                   )),
               NavigationRailDestination(
-                  icon: PhosphorIcon(
-                    PhosphorIcons.regular.televisionSimple,
-                    color: const Color(0xff969696),
-                    size: 25,
+                icon: PhosphorIcon(
+                  PhosphorIcons.regular.televisionSimple,
+                  color: const Color(0xff969696),
+                  size: 25,
+                ),
+                label: Text(
+                  'TV',
+                  style: GoogleFonts.getFont(
+                    'Poppins',
+                    color: Colors.white,
+                    fontSize: 20,
                   ),
-                  label: Text(
-                    'TV',
-                    style: GoogleFonts.getFont(
-                      'Poppins',
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  )),
+                ),
+              ),
               NavigationRailDestination(
-                  icon: PhosphorIcon(
-                    PhosphorIcons.regular.chatCircleDots,
-                    color: const Color(0xff969696),
-                    size: 25,
+                icon: PhosphorIcon(
+                  PhosphorIcons.regular.chatCircleDots,
+                  color: const Color(0xff969696),
+                  size: 25,
+                ),
+                label: Text(
+                  'Perguntas',
+                  style: GoogleFonts.getFont(
+                    'Poppins',
+                    color: Colors.white,
+                    fontSize: 20,
                   ),
-                  label: Text(
-                    'Perguntas',
-                    style: GoogleFonts.getFont(
-                      'Poppins',
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  )),
+                ),
+              ),
               NavigationRailDestination(
-                  icon: PhosphorIcon(
-                    PhosphorIcons.regular.stackSimple,
-                    color: const Color(0xff969696),
-                    size: 25,
+                icon: PhosphorIcon(
+                  PhosphorIcons.regular.stackSimple,
+                  color: const Color(0xff969696),
+                  size: 25,
+                ),
+                label: Text(
+                  'Rodapé',
+                  style: GoogleFonts.getFont(
+                    'Poppins',
+                    color: Colors.white,
+                    fontSize: 20,
                   ),
-                  label: Text(
-                    'Rodapé',
-                    style: GoogleFonts.getFont(
-                      'Poppins',
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  )),
+                ),
+              ),
               NavigationRailDestination(
-                  icon: PhosphorIcon(
-                    PhosphorIcons.regular.signOut,
-                    size: 25,
-                    color: const Color(0xff969696),
+                icon: PhosphorIcon(
+                  PhosphorIcons.regular.signOut,
+                  size: 25,
+                  color: const Color(0xff969696),
+                ),
+                label: Text(
+                  'Sair',
+                  style: GoogleFonts.getFont(
+                    'Poppins',
+                    color: Colors.white,
+                    fontSize: 20,
                   ),
-                  label: Text(
-                    'Sair',
-                    style: GoogleFonts.getFont(
-                      'Poppins',
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  )),
+                ),
+              ),
             ],
           ),
-          // Conteúdo da guia selecionada
           Expanded(
             child: PageView(
               controller: _pageController,
@@ -179,7 +182,6 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                 });
               },
               children: const [
-                // Conteúdo de cada guia aqui
                 Slide(),
                 Plans(),
                 Planos(),

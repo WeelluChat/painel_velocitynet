@@ -109,7 +109,7 @@ class _SlideState extends State<Slide> {
                               const Color(0xff46964A)),
                         ),
                         onPressed: () {
-                          ApiSlider().uploadImage();
+                          ApiSlider().uploadImage("slider");
                           getSlide();
                         },
                         child: Text(
@@ -141,16 +141,20 @@ class _SlideState extends State<Slide> {
                           final imageUrl = dados[index]['name'];
                           return Column(
                             children: [
-                              Image.network(
-                                'http://10.0.0.149:3000/api/v1/uploads/$imageUrl',
-                                width: 390,
-                                errorBuilder: (context, exception, stackTrace) {
-                                  if (kDebugMode) {
-                                    print(
-                                        'Erro ao carregar imagem: $exception');
-                                  }
-                                  return const Text('Erro ao carregar imagem');
-                                },
+                              SizedBox(
+                                child: Image.network(
+                                  'http://10.0.0.149:3000/api/v1/uploads/$imageUrl',
+                                  width: 390,
+                                  errorBuilder:
+                                      (context, exception, stackTrace) {
+                                    if (kDebugMode) {
+                                      print(
+                                          'Erro ao carregar imagem: $exception');
+                                    }
+                                    return const Text(
+                                        'Erro ao carregar imagem');
+                                  },
+                                ),
                               ),
                               const SizedBox(
                                 height: 10,

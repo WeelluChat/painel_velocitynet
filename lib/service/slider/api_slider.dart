@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:painel_velocitynet/constantes/api_url.dart';
 
 class ApiSlider {
-  Future uploadImage() async {
+  Future uploadImage(String route) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.any,
       allowMultiple: false,
@@ -15,7 +15,7 @@ class ApiSlider {
       final fileName = result.files.first.name;
 
       var request = http.MultipartRequest(
-          'POST', Uri.parse("${ApiContants.baseApi}/slider"));
+          'POST', Uri.parse("${ApiContants.baseApi}/$route"));
       request.files.add(http.MultipartFile.fromBytes('image', fileBytes!,
           filename: fileName));
 

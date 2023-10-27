@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:painel_velocitynet/login/auth_maneger.dart';
-import 'package:painel_velocitynet/login/auth_service.dart';
-import 'package:painel_velocitynet/login/api_service.dart';
+import 'package:painel_velocitynet/modules/login/auth_maneger.dart';
+import 'package:painel_velocitynet/modules/login/auth_service.dart';
+import 'package:painel_velocitynet/modules/login/api_service.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});

@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:painel_velocitynet/login/auth_maneger.dart';
+import 'package:painel_velocitynet/modules/login/auth_maneger.dart';
 import 'package:painel_velocitynet/pages/home.dart';
-import 'package:painel_velocitynet/login/api_service.dart';
+import 'package:painel_velocitynet/modules/login/api_service.dart';
 
 class AuthService extends ApiService {
   final TextEditingController controlerEmail;
