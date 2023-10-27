@@ -65,7 +65,7 @@ class _PlansState extends State<Plans> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 40),
+          padding: const EdgeInsets.only(left:40, top: 40, right: 40),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -73,9 +73,8 @@ class _PlansState extends State<Plans> {
                 0xff292929,
               ),
             ),
-            child: SizedBox(
-              width: 1200,
-              height: 800,
+            child: Container(
+              // color: Colors.red,
               child: Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Column(
@@ -83,17 +82,20 @@ class _PlansState extends State<Plans> {
                   children: [
                     Row(
                       children: [
-                        Text(
-                          'Gerenciamento de configurações',
-                          style: GoogleFonts.getFont('Poppins',
-                              color: Colors.white,
-                              fontSize: 25,
-                              fontWeight: FontWeight.w600),
+                        Flexible(
+                          child: Text(
+                            maxLines: 2,
+                            'Gerenciamento de configurações',
+                            style: GoogleFonts.getFont('Poppins',
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontWeight: FontWeight.w600),
+                          ),
                         )
                       ],
                     ),
                     const SizedBox(
-                      height: 30,
+                      height: 20,
                     ),
                     Text(
                       'Título',
@@ -103,7 +105,7 @@ class _PlansState extends State<Plans> {
                           fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     Container(
                       height: 50,
@@ -128,7 +130,7 @@ class _PlansState extends State<Plans> {
                       ),
                     ),
                     const SizedBox(
-                      height: 30,
+                      height: 20,
                     ),
                     Container(
                       height: 45,
@@ -159,8 +161,8 @@ class _PlansState extends State<Plans> {
                     ),
                     SizedBox(
                       width: double.infinity,
-                      height: 400,
-                      // color: Colors.red,
+                      height: 370,
+                    //  color: Colors.green,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: dados.length,
@@ -168,20 +170,24 @@ class _PlansState extends State<Plans> {
                           final imageUrl = dados[index]['name'];
                           return Column(
                             children: [
-                              SizedBox(
-                                height: 250,
-                                child: Image.network(
-                                  'http://10.0.0.149:3000/api/v1/uploads/$imageUrl',
-                                  width: 390,
-                                  errorBuilder:
-                                      (context, exception, stackTrace) {
-                                    if (kDebugMode) {
-                                      print(
-                                          'Erro ao carregar imagem: $exception');
-                                    }
-                                    return const Text(
-                                        'Erro ao carregar imagem');
-                                  },
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  // color: Colors.amber,
+                                  height: 250,
+                                  child: Image.network(
+                                    'http://10.0.0.149:3000/api/v1/uploads/$imageUrl',
+                                    width: 280,
+                                    errorBuilder:
+                                        (context, exception, stackTrace) {
+                                      if (kDebugMode) {
+                                        print(
+                                            'Erro ao carregar imagem: $exception');
+                                      }
+                                      return const Text(
+                                          'Erro ao carregar imagem');
+                                    },
+                                  ),
                                 ),
                               ),
                               const SizedBox(
@@ -228,6 +234,7 @@ class _PlansState extends State<Plans> {
                                   ),
                                 ),
                               ),
+                              
                               const SizedBox(
                                 height: 10,
                               ),
@@ -280,36 +287,35 @@ class _PlansState extends State<Plans> {
                         },
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 45,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.zero),
-                          ),
-                          width: 250,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10))),
-                              backgroundColor: MaterialStateProperty.all(
-                                  const Color(0xff46964A)),
-                            ),
-                            onPressed: () {
-                              ApiSlider().uploadImage("plans");
-                            },
-                            child: Text(
-                              'Adicionar Imagem',
-                              style: GoogleFonts.getFont('Poppins',
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      height: 55,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.zero),
+                      ),
+                      
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color(0xff46964A)),
                         ),
-                      ],
+                        onPressed: () {
+                          ApiSlider().uploadImage("plans");
+                        },
+                        child: Text(
+                          maxLines: 2,
+                          'Adicionar Imagem',
+                          style: GoogleFonts.getFont('Poppins',
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
                     ),
                   ],
                 ),
