@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:painel_velocitynet/tv_classes/item_tv.dart';
 class TV extends StatefulWidget {
   const TV({super.key});
 
@@ -9,6 +12,68 @@ class TV extends StatefulWidget {
 }
 
 class _TVState extends State<TV> {
+  late ItemTv itemTv = ItemTv(id: id, titulo: titulo.text, decricao: descricao.text, valor: valor.text);
+  TextEditingController titulo = TextEditingController();
+  TextEditingController descricao = TextEditingController();
+  TextEditingController valor = TextEditingController();
+  late String id;
+
+  List<ItemTv> dadosTV = [];
+
+ Future receberDadosTv() async {
+    Uri url = Uri.parse('http://10.0.0.149:3000/api/v1/tv');
+    http.Response response = await http.get(url);
+    if (response.statusCode == 200) {
+      final List<dynamic> decodedData = json.decode(response.body);
+      final List<ItemTv> tv =
+          decodedData.map((item) => ItemTv.fromJson(item)).toList();
+
+      if (tv.isNotEmpty) {
+        titulo.text = tv[0].titulo;
+        descricao.text = tv[0].decricao;
+        valor.text = tv[0].valor;
+        id = tv[0].id;
+      }
+
+      setState(() {
+        dadosTV = tv;
+      });
+    } else {
+      print(
+          'Erro ao buscar os dados das ofertas. Código de status: ${response.statusCode}');
+    }
+  }
+
+  Future atualizarDadosTv(String id, String novoTitulo, String novaDescricao, String novoValor) async {
+    Uri url = Uri.parse('http://10.0.0.149:3000/api/v1/tv');
+
+    Map<String, String> body = {
+      'id': id,
+      'title': novoTitulo,
+      'description': novaDescricao,
+      'value': novoValor
+    };
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+    };
+
+        http.Response response =
+        await http.patch(url, headers: headers, body: jsonEncode(body));
+        if(response.statusCode == 200){
+          print('Dados da tv atualizados com sucesso!');
+          print(response.body);
+          receberDadosTv();
+        }else{
+          print('Erro ao atualizar os dados da tv, Status code: ${response.statusCode}');
+        }
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    receberDadosTv();
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -62,6 +127,7 @@ class _TVState extends State<TV> {
                       ),
                       width: double.infinity,
                       child: TextField(
+                        controller: titulo,
                         style: const TextStyle(color: Colors.white),
                         // obscureText: true,
                         decoration: InputDecoration(
@@ -97,6 +163,7 @@ class _TVState extends State<TV> {
                       ),
                       width: double.infinity,
                       child: TextField(
+                        controller: descricao,
                         style: const TextStyle(color: Colors.white),
                         // obscureText: true,
                         decoration: InputDecoration(
@@ -138,6 +205,7 @@ class _TVState extends State<TV> {
                               ),
                               width: 500,
                               child: TextField(
+                                controller: valor,
                                 style: const TextStyle(color: Colors.white),
                                 // obscureText: true,
                                 decoration: InputDecoration(
@@ -202,9 +270,11 @@ class _TVState extends State<TV> {
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10))),
                               backgroundColor: MaterialStateProperty.all(
-                                  const Color(0xff46964A)),
+                                   const Color(0xff46964A)),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              atualizarDadosTv(id, titulo.text, descricao.text, valor.text);
+                            },
                             child: Text(
                               'Salvar',
                               style: GoogleFonts.getFont('Poppins',
