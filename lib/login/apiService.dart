@@ -8,7 +8,7 @@ class ApiService {
     };
     try {
       final response = await http.post(
-        Uri.parse("${ApiRotaAuthLogin.rotaAuthLogin}/login"),
+        Uri.parse("${ApiContants.baseApi}/login"),
         headers: headers,
       );
       if (response.statusCode == 200) {
