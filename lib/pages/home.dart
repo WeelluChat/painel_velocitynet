@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:painel_velocitynet/pages/ofertas.dart';
 import 'package:painel_velocitynet/pages/descricao.dart';
 import 'package:painel_velocitynet/modules/plans/widget/plans.dart';
-import 'package:painel_velocitynet/pages/slide.dart';
+import 'package:painel_velocitynet/modules/slider/widget/slide.dart';
 import 'package:painel_velocitynet/pages/tv.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
