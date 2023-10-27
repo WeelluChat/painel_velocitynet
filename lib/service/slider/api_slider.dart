@@ -1,4 +1,5 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:painel_velocitynet/constantes/api_url.dart';
 
@@ -21,7 +22,9 @@ class ApiSlider {
       try {
         await request.send();
       } catch (e) {
-        print('Erro ao enviar a imagem: $e');
+        if (kDebugMode) {
+          print('Erro ao enviar a imagem: $e');
+        }
       }
     }
   }

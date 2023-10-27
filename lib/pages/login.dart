@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:painel_velocitynet/login/authManeger.dart';
+import 'package:painel_velocitynet/login/auth_maneger.dart';
 import 'package:painel_velocitynet/login/auth_service.dart';
-import 'package:painel_velocitynet/login/apiService.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:painel_velocitynet/login/api_service.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -16,9 +15,12 @@ class _LoginState extends State<Login> {
   TextEditingController controlerEmail = TextEditingController();
   TextEditingController controllerPassword = TextEditingController();
 
-  late AuthService authService = AuthService(controlerEmail: controlerEmail, controllerPassword: controllerPassword, context: context);
+  late AuthService authService = AuthService(
+      controlerEmail: controlerEmail,
+      controllerPassword: controllerPassword,
+      context: context);
   late ApiService apiService = ApiService();
- 
+
   @override
   void initState() {
     super.initState();
@@ -155,7 +157,8 @@ class _LoginState extends State<Login> {
                             onPressed: () async {
                               // print(controlerEmail.text);
                               // print(controllerPassword.text);
-                              await authService.autentication(); // Espera a autenticação ser concluída
+                              await authService
+                                  .autentication(); // Espera a autenticação ser concluída
                               final token = await AuthManager
                                   .getToken(); // Obtém o token armazenado
                               if (token != null) {

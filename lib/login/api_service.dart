@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:painel_velocitynet/constantes/api_url.dart';
 
@@ -12,12 +13,18 @@ class ApiService {
         headers: headers,
       );
       if (response.statusCode == 200) {
-        print("Token: $token");
+        if (kDebugMode) {
+          print("Token: $token");
+        }
       } else {
-        print("Erro na API: ${response.statusCode}");
+        if (kDebugMode) {
+          print("Erro na API: ${response.statusCode}");
+        }
       }
     } catch (e) {
-      print("Erro ao fazer a requisição: $e");
+      if (kDebugMode) {
+        print("Erro ao fazer a requisição: $e");
+      }
     }
   }
 }

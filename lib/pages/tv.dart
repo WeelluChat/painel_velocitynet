@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:painel_velocitynet/tv_classes/item_tv.dart';
+
 class TV extends StatefulWidget {
   const TV({super.key});
 
@@ -12,7 +14,8 @@ class TV extends StatefulWidget {
 }
 
 class _TVState extends State<TV> {
-  late ItemTv itemTv = ItemTv(id: id, titulo: titulo.text, decricao: descricao.text, valor: valor.text);
+  late ItemTv itemTv = ItemTv(
+      id: id, titulo: titulo.text, decricao: descricao.text, valor: valor.text);
   TextEditingController titulo = TextEditingController();
   TextEditingController descricao = TextEditingController();
   TextEditingController valor = TextEditingController();
@@ -20,7 +23,7 @@ class _TVState extends State<TV> {
 
   List<ItemTv> dadosTV = [];
 
- Future receberDadosTv() async {
+  Future receberDadosTv() async {
     Uri url = Uri.parse('http://10.0.0.149:3000/api/v1/tv');
     http.Response response = await http.get(url);
     if (response.statusCode == 200) {
@@ -39,12 +42,15 @@ class _TVState extends State<TV> {
         dadosTV = tv;
       });
     } else {
-      print(
-          'Erro ao buscar os dados das ofertas. Código de status: ${response.statusCode}');
+      if (kDebugMode) {
+        print(
+            'Erro ao buscar os dados das ofertas. Código de status: ${response.statusCode}');
+      }
     }
   }
 
-  Future atualizarDadosTv(String id, String novoTitulo, String novaDescricao, String novoValor) async {
+  Future atualizarDadosTv(String id, String novoTitulo, String novaDescricao,
+      String novoValor) async {
     Uri url = Uri.parse('http://10.0.0.149:3000/api/v1/tv');
 
     Map<String, String> body = {
@@ -58,22 +64,24 @@ class _TVState extends State<TV> {
       'Content-Type': 'application/json',
     };
 
-        http.Response response =
+    http.Response response =
         await http.patch(url, headers: headers, body: jsonEncode(body));
-        if(response.statusCode == 200){
-          print('Dados da tv atualizados com sucesso!');
-          print(response.body);
-          receberDadosTv();
-        }else{
-          print('Erro ao atualizar os dados da tv, Status code: ${response.statusCode}');
-        }
+    if (response.statusCode == 200) {
+      receberDadosTv();
+    } else {
+      if (kDebugMode) {
+        print(
+            'Erro ao atualizar os dados da tv, Status code: ${response.statusCode}');
+      }
+    }
   }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     receberDadosTv();
   }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -222,7 +230,6 @@ class _TVState extends State<TV> {
                             ),
                           ],
                         ),
-                       
                       ],
                     ),
                     const SizedBox(
@@ -270,10 +277,11 @@ class _TVState extends State<TV> {
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10))),
                               backgroundColor: MaterialStateProperty.all(
-                                   const Color(0xff46964A)),
+                                  const Color(0xff46964A)),
                             ),
                             onPressed: () {
-                              atualizarDadosTv(id, titulo.text, descricao.text, valor.text);
+                              atualizarDadosTv(
+                                  id, titulo.text, descricao.text, valor.text);
                             },
                             child: Text(
                               'Salvar',

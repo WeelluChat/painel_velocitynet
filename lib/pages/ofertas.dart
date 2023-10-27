@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-import 'package:painel_velocitynet/ofertas_classes/Item.dart';
+import 'package:painel_velocitynet/ofertas_classes/item.dart';
 
 class Ofertas extends StatefulWidget {
   const Ofertas({super.key});
@@ -13,8 +14,8 @@ class Ofertas extends StatefulWidget {
 }
 
 class _OfertasState extends State<Ofertas> {
-
-  late Item itemApi = Item(id: id, titulo: titulo.text, decricao: descricao.text, valor: valor.text);
+  late Item itemApi = Item(
+      id: id, titulo: titulo.text, decricao: descricao.text, valor: valor.text);
   TextEditingController titulo = TextEditingController();
   TextEditingController descricao = TextEditingController();
   TextEditingController valor = TextEditingController();
@@ -42,13 +43,19 @@ class _OfertasState extends State<Ofertas> {
         dadosOfertas = ofertas;
       });
     } else {
-      print(
-          'Erro ao buscar os dados das ofertas. Código de status: ${response.statusCode}');
+      if (kDebugMode) {
+        print(
+            'Erro ao buscar os dados das ofertas. Código de status: ${response.statusCode}');
+      }
     }
   }
 
-  Future atualizarDadosOfertas(String id, String novoTitulo, String novaDescricao,
-      String novoValor, ) async {
+  Future atualizarDadosOfertas(
+    String id,
+    String novoTitulo,
+    String novaDescricao,
+    String novoValor,
+  ) async {
     Uri url = Uri.parse('http://10.0.0.149:3000/api/v1/offer');
 
     Map<String, String> body = {
@@ -65,18 +72,23 @@ class _OfertasState extends State<Ofertas> {
     http.Response response =
         await http.patch(url, headers: headers, body: jsonEncode(body));
     if (response.statusCode == 200) {
-      print('Dados da oferta atualizados com sucesso!');
-      print(response.body);
+      if (kDebugMode) {
+        print('Dados da oferta atualizados com sucesso!');
+      }
+      if (kDebugMode) {
+        print(response.body);
+      }
       receberDadosOfertas();
     } else {
-      print(
-          'Erro ao atualizar os dados da oferta. Status code: ${response.statusCode}');
+      if (kDebugMode) {
+        print(
+            'Erro ao atualizar os dados da oferta. Status code: ${response.statusCode}');
+      }
     }
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     receberDadosOfertas();
   }
@@ -346,4 +358,3 @@ class _OfertasState extends State<Ofertas> {
     );
   }
 }
-

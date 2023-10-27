@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -41,10 +42,14 @@ class _SlideState extends State<Slide> {
       if (response.statusCode == 200) {
         getSlide();
       } else {
-        print('Erro ao excluir o item: ${response.statusCode}');
+        if (kDebugMode) {
+          print('Erro ao excluir o item: ${response.statusCode}');
+        }
       }
     } catch (error) {
-      print('Erro na solicitação DELETE: $error');
+      if (kDebugMode) {
+        print('Erro na solicitação DELETE: $error');
+      }
     }
   }
 
@@ -140,7 +145,10 @@ class _SlideState extends State<Slide> {
                                 'http://10.0.0.149:3000/api/v1/uploads/$imageUrl',
                                 width: 390,
                                 errorBuilder: (context, exception, stackTrace) {
-                                  print('Erro ao carregar imagem: $exception');
+                                  if (kDebugMode) {
+                                    print(
+                                        'Erro ao carregar imagem: $exception');
+                                  }
                                   return const Text('Erro ao carregar imagem');
                                 },
                               ),

@@ -1,13 +1,14 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:painel_velocitynet/login/authManeger.dart';
+import 'package:painel_velocitynet/login/auth_maneger.dart';
 import 'package:painel_velocitynet/pages/home.dart';
-import 'package:painel_velocitynet/login/apiService.dart';
+import 'package:painel_velocitynet/login/api_service.dart';
 
 class AuthService extends ApiService {
-  final controlerEmail;
-  final controllerPassword;
+  final TextEditingController controlerEmail;
+  final TextEditingController controllerPassword;
   final BuildContext context;
 
   AuthService({
@@ -66,7 +67,9 @@ class AuthService extends ApiService {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
-      print('Erro na API: ${response.statusCode}');
+      if (kDebugMode) {
+        print('Erro na API: ${response.statusCode}');
+      }
     }
   }
 }
