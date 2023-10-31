@@ -84,223 +84,255 @@ class _TVState extends State<TV> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 40),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: const Color(
-                0xff292929,
-              ),
-            ),
-            child: SizedBox(
-              width: 1200,
-              height: 800,
-              child: Padding(
-                padding: const EdgeInsets.all(30.0),
+    return Container(
+      padding: const EdgeInsets.only(top: 40, bottom: 40),
+      child: Flex(
+        mainAxisAlignment: MainAxisAlignment.start,
+        direction: Axis.vertical,
+        children: [
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: 1416,
+                height: 802,
+                padding: const EdgeInsets.only(
+                  top: 27,
+                  bottom: 50,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: const Color(
+                    0xff292929,
+                  ),
+                ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Gerenciamento de configurações',
-                          style: GoogleFonts.getFont('Poppins',
-                              color: Colors.white,
-                              fontSize: 25,
-                              fontWeight: FontWeight.w600),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
                     Text(
-                      'Título',
-                      style: GoogleFonts.getFont('Poppins',
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: const Color(0xff3D3D3D),
-                      ),
-                      width: double.infinity,
-                      child: TextField(
-                        controller: titulo,
-                        style: const TextStyle(color: Colors.white),
-                        // obscureText: true,
-                        decoration: InputDecoration(
-                          fillColor: Colors.red,
-                          hintText: '',
-                          hintStyle: GoogleFonts.getFont('Poppins',
-                              color: const Color(0xff969696),
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600),
-                          border: const OutlineInputBorder(
-                              borderSide: BorderSide.none),
-                        ),
+                      'Gerenciamento de configurações',
+                      textAlign: TextAlign.center,
+                      maxLines: 3,
+                      style: GoogleFonts.getFont(
+                        'Poppins',
+                        color: Colors.white,
+                        fontSize:
+                            MediaQuery.of(context).size.width < 800 ? 22 : 28,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(
-                      height: 30,
+                      height: 55,
                     ),
-                    Text(
-                      'Descrição',
-                      style: GoogleFonts.getFont('Poppins',
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: const Color(0xff3D3D3D),
-                      ),
-                      width: double.infinity,
-                      child: TextField(
-                        controller: descricao,
-                        style: const TextStyle(color: Colors.white),
-                        // obscureText: true,
-                        decoration: InputDecoration(
-                          fillColor: Colors.red,
-                          hintText: '',
-                          hintStyle: GoogleFonts.getFont('Poppins',
-                              color: const Color(0xff969696),
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600),
-                          border: const OutlineInputBorder(
-                              borderSide: BorderSide.none),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                    Flexible(
+                      child: SizedBox(
+                        width: 900,
+                        // color: Colors.red,
+                        child: ListView(
+                          padding: const EdgeInsets.all(16.0),
                           children: [
-                            Text(
-                              'Valor',
-                              style: GoogleFonts.getFont('Poppins',
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w600),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Título',
+                                  style: GoogleFonts.getFont('Poppins',
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  height: 61,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: const Color(0xff3D3D3D),
+                                  ),
+                                  width: 912,
+                                  child: TextField(
+                                    controller: titulo,
+                                    style: const TextStyle(color: Colors.white),
+                                    // obscureText: true,
+                                    decoration: InputDecoration(
+                                      // fillColor: Colors.red,
+                                      hintText: '',
+                                      hintStyle: GoogleFonts.getFont('Poppins',
+                                          color: const Color(0xff969696),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600),
+                                      border: const OutlineInputBorder(
+                                          borderSide: BorderSide.none),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Descrição',
+                                  style: GoogleFonts.getFont('Poppins',
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                  height: 61,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: const Color(0xff3D3D3D),
+                                  ),
+                                  width: 912,
+                                  child: TextField(
+                                    controller: descricao,
+                                    style: const TextStyle(color: Colors.white),
+                                    // obscureText: true,
+                                    decoration: InputDecoration(
+                                      // fillColor: Colors.red,
+                                      hintText: '',
+                                      hintStyle: GoogleFonts.getFont('Poppins',
+                                          color: const Color(0xff969696),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600),
+                                      border: const OutlineInputBorder(
+                                          borderSide: BorderSide.none),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Valor',
+                                  style: GoogleFonts.getFont('Poppins',
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                  height: 61,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: const Color(0xff3D3D3D),
+                                  ),
+                                  width: 500,
+                                  child: TextField(
+                                    controller: valor,
+                                    style: const TextStyle(color: Colors.white),
+                                    // obscureText: true,
+                                    decoration: InputDecoration(
+                                      // fillColor: Colors.red,
+                                      hintText: '',
+                                      hintStyle: GoogleFonts.getFont('Poppins',
+                                          color: const Color(0xff969696),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600),
+                                      border: const OutlineInputBorder(
+                                          borderSide: BorderSide.none),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(
-                              height: 20,
+                              height: 51,
                             ),
-                            Container(
-                              height: 60,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: const Color(0xff3D3D3D),
-                              ),
-                              width: 500,
-                              child: TextField(
-                                controller: valor,
-                                style: const TextStyle(color: Colors.white),
-                                // obscureText: true,
-                                decoration: InputDecoration(
-                                  fillColor: Colors.red,
-                                  hintText: '',
-                                  hintStyle: GoogleFonts.getFont('Poppins',
-                                      color: const Color(0xff969696),
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600),
-                                  border: const OutlineInputBorder(
-                                      borderSide: BorderSide.none),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height:
+                                      MediaQuery.of(context).size.width < 600
+                                          ? 51
+                                          : 61,
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                  ),
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      padding: const MaterialStatePropertyAll(
+                                          EdgeInsets.only(left: 20, right: 20)),
+                                      shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10))),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              const Color(0xff46964A)),
+                                    ),
+                                    onPressed: () {},
+                                    child: Text(
+                                      'Adicionar imagem',
+                                      style: GoogleFonts.getFont('Poppins',
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 45,
+                            ),
+                            Center(
+                              child: Container(
+                                height: MediaQuery.of(context).size.width < 800
+                                    ? 51
+                                    : 61,
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.zero),
+                                ),
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    padding: const MaterialStatePropertyAll(
+                                        EdgeInsets.only(left: 70, right: 70)),
+                                    shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10))),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        const Color(0xff46964A)),
+                                  ),
+                                  onPressed: () {
+                                    atualizarDadosTv(id, titulo.text,
+                                        descricao.text, valor.text);
+                                  },
+                                  child: Text(
+                                    'Salvar',
+                                    style: GoogleFonts.getFont('Poppins',
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500),
+                                  ),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    Container(
-                      height: 60,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.zero),
                       ),
-                      width: 250,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                          backgroundColor: MaterialStateProperty.all(
-                              const Color(0xff46964A)),
-                        ),
-                        onPressed: () {},
-                        child: Text(
-                          'Adicionar imagem',
-                          style: GoogleFonts.getFont('Poppins',
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 120,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 65,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.zero),
-                          ),
-                          width: 200,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10))),
-                              backgroundColor: MaterialStateProperty.all(
-                                  const Color(0xff46964A)),
-                            ),
-                            onPressed: () {
-                              atualizarDadosTv(
-                                  id, titulo.text, descricao.text, valor.text);
-                            },
-                            child: Text(
-                              'Salvar',
-                              style: GoogleFonts.getFont('Poppins',
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                   ],
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

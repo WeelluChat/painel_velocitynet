@@ -63,265 +63,303 @@ class _PlansState extends State<Plans> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.only(top: 40, bottom: 40),
       // color: Colors.pinkAccent,
-      child: Padding(
-        padding: const EdgeInsets.only(right: 20, bottom: 20, top: 20, left:20),
-        child: Column(
-          children: [
-            Expanded(
+      child: Flex(
+        mainAxisAlignment: MainAxisAlignment.start,
+        direction: Axis.vertical,
+        children: [
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
               child: Container(
+                width: 1416,
+                height: 802,
+                padding: const EdgeInsets.only(
+                  top: 27,
+                  bottom: 50,
+                ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: const Color(
                     0xff292929,
                   ),
-                  // color: Colors.amber
+                  // color: Colors.cyan,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(30.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+                child: Column(
+                  children: [
+                    Text(
+                      'Gerenciamento de configurações',
+                      textAlign: TextAlign.center,
+                      maxLines: 3,
+                      style: GoogleFonts.getFont(
+                        'Poppins',
+                        color: Colors.white,
+                        fontSize:
+                            MediaQuery.of(context).size.width < 800 ? 22 : 28,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Flexible(
+                        child: SizedBox(
+                      width: 1200,
+                      // color: Colors.red,
+                      child: ListView(
+                        padding: const EdgeInsets.all(16.0),
                         children: [
-                          Flexible(
-                            child: Text(
-                              maxLines: 2,
-                              'Gerenciamento de configurações',
-                              style: GoogleFonts.getFont('Poppins',
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600),
+                          Text(
+                            'Título',
+                            style: GoogleFonts.getFont('Poppins',
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            height: 61,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: const Color(0xff3D3D3D),
                             ),
-                          )
+                            width: double.infinity,
+                            child: TextField(
+                              style: const TextStyle(color: Colors.white),
+                              // obscureText: true,
+                              decoration: InputDecoration(
+                                // fillColor: Colors.red,
+                                hintText: '',
+                                hintStyle: GoogleFonts.getFont('Poppins',
+                                    color: const Color(0xff969696),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600),
+                                border: const OutlineInputBorder(
+                                    borderSide: BorderSide.none),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          Wrap(
+                            runSpacing: 20,
+                            // crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: MediaQuery.of(context).size.width < 600
+                                    ? 51
+                                    : 50,
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.zero),
+                                ),
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    padding: const MaterialStatePropertyAll(
+                                        EdgeInsets.only(left: 20, right: 20)),
+                                    shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10))),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        const Color(0xff46964A)),
+                                  ),
+                                  onPressed: () {},
+                                  child: Text(
+                                    'Salvar',
+                                    style: GoogleFonts.getFont('Poppins',
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              Container(
+                                height: MediaQuery.of(context).size.width < 600
+                                    ? 51
+                                    : 50,
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.zero),
+                                ),
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    padding: const MaterialStatePropertyAll(
+                                        EdgeInsets.only(left: 20, right: 20)),
+                                    shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10))),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        const Color(0xff46964A)),
+                                  ),
+                                  onPressed: () {
+                                    ApiSlider().uploadImage("plans");
+                                  },
+                                  child: Text(
+                                    maxLines: 2,
+                                    'Adicionar Imagem',
+                                    style: GoogleFonts.getFont('Poppins',
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          SizedBox(
+                            height: 400,
+                            //  color: Colors.green,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: dados.length,
+                              itemBuilder: (context, index) {
+                                final imageUrl = dados[index]['name'];
+                                return Column(
+                                  children: [
+                                    Expanded(
+                                      child: SizedBox(
+                                        // color: Colors.amber,
+                                        height: 290,
+                                        width: 320,
+                                        child: Image.network(
+                                          'http://10.0.0.149:3000/api/v1/uploads/$imageUrl',
+                                          errorBuilder:
+                                              (context, exception, stackTrace) {
+                                            if (kDebugMode) {
+                                              print(
+                                                  'Erro ao carregar imagem: $exception');
+                                            }
+                                            return const Text(
+                                                'Erro ao carregar imagem');
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 35,
+                                      decoration: const BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.all(Radius.zero),
+                                        // color: Colors.green
+                                      ),
+                                      child: ElevatedButton(
+                                        style: ButtonStyle(
+                                          shape: MaterialStateProperty.all(
+                                              RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10))),
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  const Color(0xFF4D73F1)),
+                                        ),
+                                        onPressed: () {},
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            PhosphorIcon(
+                                              PhosphorIcons.regular.pencil,
+                                              color: Colors.white,
+                                              size: 25,
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              'Selecionar imagem',
+                                              style: GoogleFonts.getFont(
+                                                  'Poppins',
+                                                  color: Colors.white,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            const SizedBox(
+                                              width: 20,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      height: 35,
+                                      decoration: const BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.all(Radius.zero),
+                                        // color: Colors.green
+                                      ),
+                                      child: ElevatedButton(
+                                        style: ButtonStyle(
+                                          shape: MaterialStateProperty.all(
+                                              RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10))),
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  const Color(0xffF14D4D)),
+                                        ),
+                                        onPressed: () {
+                                          final itemId = dados[index]['_id'];
+                                          deleteItem(itemId);
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            PhosphorIcon(
+                                              PhosphorIcons.regular.trash,
+                                              color: Colors.white,
+                                              size: 25,
+                                            ),
+                                            const SizedBox(
+                                              width: 20,
+                                            ),
+                                            Text(
+                                              'Deletar imagem',
+                                              style: GoogleFonts.getFont(
+                                                  'Poppins',
+                                                  color: Colors.white,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            const SizedBox(
+                                              width: 35,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        'Título',
-                        style: GoogleFonts.getFont('Poppins',
-                            color: Colors.white,
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: const Color(0xff3D3D3D),
-                        ),
-                        width: double.infinity,
-                        child: TextField(
-                          style: const TextStyle(color: Colors.white),
-                          // obscureText: true,
-                          decoration: InputDecoration(
-                            // fillColor: Colors.red,
-                            hintText: '',
-                            hintStyle: GoogleFonts.getFont('Poppins',
-                                color: const Color(0xff969696),
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600),
-                            border: const OutlineInputBorder(
-                                borderSide: BorderSide.none),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        height: 45,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.zero),
-                        ),
-                        width: 100,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10))),
-                            backgroundColor: MaterialStateProperty.all(
-                                const Color(0xff46964A)),
-                          ),
-                          onPressed: () {},
-                          child: Text(
-                            'Salvar',
-                            style: GoogleFonts.getFont('Poppins',
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Expanded(
-                        child: Container(
-                        //  color: Colors.green,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: dados.length,
-                            itemBuilder: (context, index) {
-                              final imageUrl = dados[index]['name'];
-                              return Column(
-                                children: [
-                                  Expanded(
-                                    child: SizedBox(
-                                      // color: Colors.amber,
-                                      height: 290,
-                                      width: 320,
-                                      child: Image.network(
-                                        'http://10.0.0.149:3000/api/v1/uploads/$imageUrl',
-                                        errorBuilder:
-                                            (context, exception, stackTrace) {
-                                          if (kDebugMode) {
-                                            print(
-                                                'Erro ao carregar imagem: $exception');
-                                          }
-                                          return const Text(
-                                              'Erro ao carregar imagem');
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 35,
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.zero),
-                                      // color: Colors.green
-                                    ),
-                                    child: ElevatedButton(
-                                      style: ButtonStyle(
-                                        shape: MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10))),
-                                        backgroundColor: MaterialStateProperty.all(
-                                            const Color(0xFF4D73F1)),
-                                      ),
-                                      onPressed: () {},
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          PhosphorIcon(
-                                            PhosphorIcons.regular.pencil,
-                                            color: Colors.white,
-                                            size: 25,
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            'Selecionar imagem',
-                                            style: GoogleFonts.getFont('Poppins',
-                                                color: Colors.white,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          const SizedBox(
-                                            width: 20,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    height: 35,
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.zero),
-                                      // color: Colors.green
-                                    ),
-                                    child: ElevatedButton(
-                                      style: ButtonStyle(
-                                        shape: MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10))),
-                                        backgroundColor: MaterialStateProperty.all(
-                                            const Color(0xffF14D4D)),
-                                      ),
-                                      onPressed: () {
-                                        final itemId = dados[index]['_id'];
-                                        deleteItem(itemId);
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          PhosphorIcon(
-                                            PhosphorIcons.regular.trash,
-                                            color: Colors.white,
-                                            size: 25,
-                                          ),
-                                          const SizedBox(
-                                            width: 20,
-                                          ),
-                                          Text(
-                                            'Deletar imagem',
-                                            style: GoogleFonts.getFont('Poppins',
-                                                color: Colors.white,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          const SizedBox(
-                                            width: 35,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        height: 50,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.zero),
-                        ),
-                        
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10))),
-                            backgroundColor: MaterialStateProperty.all(
-                                const Color(0xff46964A)),
-                          ),
-                          onPressed: () {
-                            ApiSlider().uploadImage("plans");
-                          },
-                          child: Text(
-                            maxLines: 2,
-                            'Adicionar Imagem',
-                            style: GoogleFonts.getFont('Poppins',
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    )),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
