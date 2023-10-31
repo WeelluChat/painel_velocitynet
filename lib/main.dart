@@ -1,10 +1,16 @@
 import 'dart:ui';
-
+import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:painel_velocitynet/pages/home.dart';
+import 'package:painel_velocitynet/pages/login.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+   String? authToken = html.window.localStorage['authToken'];
+
+  Widget initialScreen = (authToken != null) ? const MyTabbedPanel() : const Login();
+   runApp(MaterialApp(
+    home: initialScreen,
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -25,7 +31,7 @@ class MyApp extends StatelessWidget {
       // theme: ThemeData(
       //   useMaterial3: true,
       // ),
-      home: const MyTabbedPanel(),
+      home: const Login(),
     );
   }
 }

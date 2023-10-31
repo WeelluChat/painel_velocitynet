@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:html' as html;
 import 'package:painel_velocitynet/modules/login/auth_maneger.dart';
 import 'package:painel_velocitynet/pages/home.dart';
 import 'package:painel_velocitynet/modules/login/api_service.dart';
@@ -34,12 +35,18 @@ class AuthService extends ApiService {
       final Map<String, dynamic> responseData = json.decode(response.body);
       final String token = responseData['token'];
       await AuthManager.setToken(token);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
+       String authToken = json.decode(response.body)['token'];
+       html.window.localStorage['authToken'] = authToken;
+
+       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => const MyTabbedPanel(),
-        ),
-      );
+        ));
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => const MyTabbedPanel(),
+      //   ),
+      // );
       controlerEmail.clear();
       controllerPassword.clear();
 

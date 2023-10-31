@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:painel_velocitynet/pages/exit.dart';
+import 'package:painel_velocitynet/pages/footer.dart';
+import 'package:painel_velocitynet/pages/login.dart';
 import 'package:painel_velocitynet/pages/ofertas.dart';
 import 'package:painel_velocitynet/pages/descricao.dart';
 import 'package:painel_velocitynet/modules/plans/widget/plans.dart';
 import 'package:painel_velocitynet/modules/slider/widget/slide.dart';
+import 'package:painel_velocitynet/pages/perguntas.dart';
 import 'package:painel_velocitynet/pages/tv.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'dart:html' as html;
 
 class MyTabbedPanel extends StatefulWidget {
   const MyTabbedPanel({super.key});
@@ -160,14 +165,22 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                 icon: PhosphorIcon(
                   PhosphorIcons.regular.signOut,
                   size: 25,
-                  color: const Color(0xff969696),
+                  color: Colors.red
                 ),
-                label: Text(
-                  'Sair',
-                  style: GoogleFonts.getFont(
-                    'Poppins',
-                    color: Colors.white,
-                    fontSize: 20,
+                label: InkWell(
+                  onTap: () {
+                    html.window.localStorage.remove('authToken');
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => const Login(),
+                    ));
+                  },
+                  child: Text(
+                    'Sair',
+                    style: GoogleFonts.getFont(
+                      'Poppins',
+                      color: Colors.red,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
               ),
@@ -181,12 +194,15 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                   _currentIndex = index;
                 });
               },
-              children: const [
+              children:  const [
                 Slide(),
                 Plans(),
                 Planos(),
                 Ofertas(),
                 TV(),
+                Perguntas(),
+                Footer(),
+                Exit(),
               ],
             ),
           ),
