@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:painel_velocitynet/constantes/api_url.dart';
 import 'package:painel_velocitynet/service/slider/api_slider.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Slide extends StatefulWidget {
   const Slide({super.key});
@@ -17,7 +18,11 @@ class Slide extends StatefulWidget {
 
 class _SlideState extends State<Slide> {
   List<dynamic> dados = [];
-
+  Future<String> getTokenFromLocalStorage() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    return token ?? '';
+  }
   Future<void> getSlide() async {
     Uri url = Uri.parse("${ApiContants.baseApi}/slider");
     http.Response response = await http.get(url);
@@ -29,13 +34,16 @@ class _SlideState extends State<Slide> {
     }
   }
 
-  void deleteItem(String itemId) async {
+  void deleteItem(String itemId, String token) async {
     final url = Uri.parse("${ApiContants.baseApi}/slider");
 
     try {
       final response = await http.delete(
         url,
-        headers: {"Content-Type": "application/json"},
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
         body: jsonEncode({"id": itemId}),
       );
 
@@ -112,9 +120,10 @@ class _SlideState extends State<Slide> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  height: MediaQuery.of(context).size.width < 600
-                                        ? 51
-                                        : 50,
+                                  height:
+                                      MediaQuery.of(context).size.width < 600
+                                          ? 51
+                                          : 50,
                                   decoration: const BoxDecoration(
                                     borderRadius: BorderRadius.all(Radius.zero),
                                   ),
@@ -130,8 +139,10 @@ class _SlideState extends State<Slide> {
                                           MaterialStateProperty.all(
                                               const Color(0xff46964A)),
                                     ),
-                                    onPressed: () {
-                                      ApiSlider().uploadImage("slider");
+                                    onPressed: () async {
+                                       final token =
+                                                          await getTokenFromLocalStorage();
+                                      ApiSlider().uploadImage("slider", token);
                                       getSlide();
                                     },
                                     child: Text(
@@ -166,8 +177,8 @@ class _SlideState extends State<Slide> {
                                           width: 300,
                                           child: Image.network(
                                             '${ApiContants.baseApi}/uploads/$imageUrl',
-                                            errorBuilder: (context,
-                                                exception, stackTrace) {
+                                            errorBuilder: (context, exception,
+                                                stackTrace) {
                                               if (kDebugMode) {
                                                 print(
                                                     'Erro ao carregar imagem: $exception');
@@ -191,15 +202,14 @@ class _SlideState extends State<Slide> {
                                         ),
                                         child: ElevatedButton(
                                           style: ButtonStyle(
-                                            shape: MaterialStateProperty
-                                                .all(RoundedRectangleBorder(
+                                            shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
                                                     borderRadius:
-                                                        BorderRadius
-                                                            .circular(10))),
+                                                        BorderRadius.circular(
+                                                            10))),
                                             backgroundColor:
                                                 MaterialStateProperty.all(
-                                                    const Color(
-                                                        0xFF4D73F1)),
+                                                    const Color(0xFF4D73F1)),
                                           ),
                                           onPressed: () {},
                                           child: Row(
@@ -207,8 +217,7 @@ class _SlideState extends State<Slide> {
                                                 MainAxisAlignment.center,
                                             children: [
                                               PhosphorIcon(
-                                                PhosphorIcons
-                                                    .regular.pencil,
+                                                PhosphorIcons.regular.pencil,
                                                 color: Colors.white,
                                                 size: 25,
                                               ),
@@ -244,20 +253,20 @@ class _SlideState extends State<Slide> {
                                         ),
                                         child: ElevatedButton(
                                           style: ButtonStyle(
-                                            shape: MaterialStateProperty
-                                                .all(RoundedRectangleBorder(
+                                            shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
                                                     borderRadius:
-                                                        BorderRadius
-                                                            .circular(10))),
+                                                        BorderRadius.circular(
+                                                            10))),
                                             backgroundColor:
                                                 MaterialStateProperty.all(
-                                                    const Color(
-                                                        0xffF14D4D)),
+                                                    const Color(0xffF14D4D)),
                                           ),
-                                          onPressed: () {
-                                            final itemId =
-                                                dados[index]['_id'];
-                                            deleteItem(itemId);
+                                          onPressed: () async {
+                                            final token =
+                                                          await getTokenFromLocalStorage();
+                                            final itemId = dados[index]['_id'];
+                                            deleteItem(itemId, token);
                                           },
                                           child: Row(
                                             mainAxisAlignment:

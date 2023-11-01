@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:painel_velocitynet/constantes/api_url.dart';
 import 'package:painel_velocitynet/service/slider/api_slider.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Plans extends StatefulWidget {
   const Plans({super.key});
@@ -18,7 +19,11 @@ class Plans extends StatefulWidget {
 
 class _PlansState extends State<Plans> {
   List<dynamic> dados = [];
-
+  Future<String> getTokenFromLocalStorage() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    return token ?? '';
+  }
   Future<void> getSlide() async {
     Uri url = Uri.parse("${ApiContants.baseApi}/plans");
     http.Response response = await http.get(url);
@@ -30,13 +35,13 @@ class _PlansState extends State<Plans> {
     }
   }
 
-  void deleteItem(String itemId) async {
+  void deleteItem(String itemId, String token) async {
     final url = Uri.parse("${ApiContants.baseApi}/plans");
 
     try {
       final response = await http.delete(
         url,
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json", 'Authorization': 'Bearer $token',},
         body: jsonEncode({"id": itemId}),
       );
 
@@ -199,7 +204,7 @@ class _PlansState extends State<Plans> {
                                         const Color(0xff46964A)),
                                   ),
                                   onPressed: () {
-                                    ApiSlider().uploadImage("plans");
+                                    ApiSlider().uploadImage("plans", ApiContants.baseApi);
                                   },
                                   child: Text(
                                     maxLines: 2,
@@ -312,9 +317,11 @@ class _PlansState extends State<Plans> {
                                               MaterialStateProperty.all(
                                                   const Color(0xffF14D4D)),
                                         ),
-                                        onPressed: () {
+                                        onPressed: () async {
+                                           final token =
+                                                          await getTokenFromLocalStorage();
                                           final itemId = dados[index]['_id'];
-                                          deleteItem(itemId);
+                                          deleteItem(itemId, token);
                                         },
                                         child: Row(
                                           mainAxisAlignment:

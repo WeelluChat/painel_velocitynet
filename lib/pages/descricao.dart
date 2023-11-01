@@ -648,19 +648,4 @@ class _PlanosState extends State<Planos> {
   }
 }
 
-class ItemCriarCard {
-  final String titulo;
-  final String texto;
 
-  ItemCriarCard({
-    required this.titulo,
-    required this.texto,
-  });
-
-  factory ItemCriarCard.fromJson(Map<String, dynamic> json) {
-    return ItemCriarCard(
-      titulo: json['name'],
-      texto: json['description'],
-    );
-  }
-}
