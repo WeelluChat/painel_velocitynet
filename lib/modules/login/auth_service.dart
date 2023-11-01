@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:painel_velocitynet/constantes/api_url.dart';
 import 'dart:html' as html;
 import 'package:painel_velocitynet/modules/login/auth_maneger.dart';
 import 'package:painel_velocitynet/pages/home.dart';
@@ -19,8 +20,6 @@ class AuthService extends ApiService {
   });
 
   Future<void> autentication() async {
-    const String url = 'http://10.0.0.149:3000/api/v1/auth/login';
-    var parse = Uri.parse(url);
     Map<String, String> headers = {
       'Content-Type': 'application/json',
     };
@@ -30,7 +29,7 @@ class AuthService extends ApiService {
     };
 
     http.Response response =
-        await http.post(parse, headers: headers, body: jsonEncode(body));
+        await http.post(Uri.parse("${ApiContants.baseApi}/auth/login"), headers: headers, body: jsonEncode(body));
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       final String token = responseData['token'];

@@ -232,7 +232,7 @@ class _PlansState extends State<Plans> {
                                         height: 290,
                                         width: 320,
                                         child: Image.network(
-                                          'http://10.0.0.149:3000/api/v1/uploads/$imageUrl',
+                                          '${ApiContants.baseApi}/uploads/$imageUrl',
                                           errorBuilder:
                                               (context, exception, stackTrace) {
                                             if (kDebugMode) {

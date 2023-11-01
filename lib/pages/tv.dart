@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:painel_velocitynet/constantes/api_url.dart';
 import 'package:painel_velocitynet/tv_classes/item_tv.dart';
 
 class TV extends StatefulWidget {
@@ -24,7 +25,7 @@ class _TVState extends State<TV> {
   List<ItemTv> dadosTV = [];
 
   Future receberDadosTv() async {
-    Uri url = Uri.parse('http://10.0.0.149:3000/api/v1/tv');
+    Uri url = Uri.parse('${ApiContants.baseApi}/tv');
     http.Response response = await http.get(url);
     if (response.statusCode == 200) {
       final List<dynamic> decodedData = json.decode(response.body);
@@ -51,7 +52,7 @@ class _TVState extends State<TV> {
 
   Future atualizarDadosTv(String id, String novoTitulo, String novaDescricao,
       String novoValor) async {
-    Uri url = Uri.parse('http://10.0.0.149:3000/api/v1/tv');
+    Uri url = Uri.parse('${ApiContants.baseApi}/tv');
 
     Map<String, String> body = {
       'id': id,

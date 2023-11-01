@@ -9,6 +9,14 @@ void main() async {
 
   Widget initialScreen = (authToken != null) ? const MyTabbedPanel() : const Login();
    runApp(MaterialApp(
+    scrollBehavior: const MaterialScrollBehavior().copyWith(
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+          PointerDeviceKind.stylus,
+          PointerDeviceKind.unknown
+        },
+      ),
     home: initialScreen,
   ));
 }

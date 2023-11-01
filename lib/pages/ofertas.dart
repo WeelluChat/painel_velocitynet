@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:painel_velocitynet/constantes/api_url.dart';
 import 'package:painel_velocitynet/ofertas_classes/item.dart';
 
 class Ofertas extends StatefulWidget {
@@ -25,7 +26,7 @@ class _OfertasState extends State<Ofertas> {
   List<Item> dadosOfertas = [];
 
   Future receberDadosOfertas() async {
-    Uri url = Uri.parse('http://10.0.0.149:3000/api/v1/offer');
+    Uri url = Uri.parse('${ApiContants.baseApi}/offer');
     http.Response response = await http.get(url);
     if (response.statusCode == 200) {
       final List<dynamic> decodedData = json.decode(response.body);
@@ -56,7 +57,7 @@ class _OfertasState extends State<Ofertas> {
     String novaDescricao,
     String novoValor,
   ) async {
-    Uri url = Uri.parse('http://10.0.0.149:3000/api/v1/offer');
+    Uri url = Uri.parse('${ApiContants.baseApi}/offer');
 
     Map<String, String> body = {
       'id': id,
