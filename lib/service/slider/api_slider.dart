@@ -5,6 +5,7 @@ import 'package:painel_velocitynet/constantes/api_url.dart';
 
 class ApiSlider {
   Future uploadImage(String route,String token) async {
+    
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.any,
       allowMultiple: false,

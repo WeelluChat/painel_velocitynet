@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:js_interop';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:painel_velocitynet/constantes/api_url.dart';
 import 'package:painel_velocitynet/service/slider/api_slider.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class Slide extends StatefulWidget {
   const Slide({super.key});
@@ -17,18 +19,69 @@ class Slide extends StatefulWidget {
 }
 
 class _SlideState extends State<Slide> {
+  DateTime _dateTime = DateTime.now();
+  //FUNÇÃO PARA ATUALIZAR A DATA DE CADA ITEM DO JSON
+  Future<void> atualizarDataSlider(
+      String itemId, String novaData, String token) async {
+    Uri url = Uri.parse('${ApiContants.baseApi}/slider');
+    novaData = DateFormat('dd/MM/yyyy').format(_dateTime);
+
+    Map<String, String> headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      final response = await http.patch(
+        url,
+        headers: headers,
+        body: jsonEncode({"id": itemId, "date": novaData}),
+      );
+      if (response.statusCode == 200) {
+        print('DataSlider do item $itemId atualizado com sucesso!');
+      } else {
+        print(
+            'Erro ao atualizar DataSlider do item $itemId, status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Erro ao atualizar DataSlider do item $itemId: $error');
+    }
+  }
+  //FUNÇÃO PARA ABRIR O CALENDARIO 
+  _showDatePicker(int index) {
+    showDatePicker(
+      context: context,
+      initialDate: _dateTime,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    ).then((value) async {
+      if (value != null) {
+        setState(() {
+          _dateTime = value;
+        });
+
+        final token = await getTokenFromLocalStorage();
+        final itemId = dados[index]['_id'];
+        final novaData = _dateTime.toString();
+        atualizarDataSlider(itemId, novaData, token);
+      }
+    });
+  }
+  //PEGAR O TOKEN DO LOCAL STORAGE
   List<dynamic> dados = [];
   Future<String> getTokenFromLocalStorage() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     return token ?? '';
   }
-  Future<void> getSlide() async {
-    Uri url = Uri.parse("${ApiContants.baseApi}/slider");
+  //GET PARA RECEBER OS DADOS DA API SLIDER-ALL
+  Future getSlide() async {
+    Uri url = Uri.parse("${ApiContants.baseApi}/slider-all");
     http.Response response = await http.get(url);
 
     if (response.statusCode == 200) {
       setState(() {
+        getSlide();
         dados = jsonDecode(response.body);
       });
     }
@@ -61,10 +114,33 @@ class _SlideState extends State<Slide> {
     }
   }
 
+  // Future atualizarImagem(
+  //   String id,
+  // ) async {
+  //   Uri url = Uri.parse('${ApiContants.baseApi}/slider');
+
+  //   Map<String, String> body = {
+  //     'id': id,
+  //   };
+  //   Map<String, String> headers = {
+  //     'Content-Type': 'application/json',
+  //   };
+
+  //   http.Response response =
+  //       await http.patch(url, headers: headers, body: jsonEncode(body));
+  //   if (response.statusCode == 200) {
+  //     print('A imagem foi atualizada com sucesso!');
+  //     print(response.body);
+  //   } else {
+  //     print('Erro ao atualizar a imagem. Status code: ${response.statusCode}');
+  //   }
+  // }
+
   @override
   void initState() {
     super.initState();
     getSlide();
+    // formatDate(formatarData);
   }
 
   @override
@@ -140,8 +216,8 @@ class _SlideState extends State<Slide> {
                                               const Color(0xff46964A)),
                                     ),
                                     onPressed: () async {
-                                       final token =
-                                                          await getTokenFromLocalStorage();
+                                      final token =
+                                          await getTokenFromLocalStorage();
                                       ApiSlider().uploadImage("slider", token);
                                       getSlide();
                                     },
@@ -160,15 +236,28 @@ class _SlideState extends State<Slide> {
                             const SizedBox(
                               height: 25,
                             ),
+                            // Text(DateFormat('dd/MM/yyyy').format(_dateTime),
+                            //     style: const TextStyle(
+                            //         color: Colors.white, fontSize: 22)),
                             SizedBox(
-                              height: 400,
+                              height: 300,
                               // color: Colors.cyan,
-                              child: ListView.builder(
+                              child: ReorderableListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: dados.length,
+                                onReorder: (int oldIndex, int newIndex) {
+                                  setState(() {
+                                    if (oldIndex < newIndex) {
+                                      newIndex -= 1;
+                                    }
+                                    final item = dados.removeAt(oldIndex);
+                                    dados.insert(newIndex, item);
+                                  });
+                                },
                                 itemBuilder: (context, index) {
                                   final imageUrl = dados[index]['name'];
                                   return Column(
+                                    key: Key(imageUrl),
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
@@ -192,6 +281,59 @@ class _SlideState extends State<Slide> {
                                       // const SizedBox(
                                       //   height: 10,
                                       // ),
+                                      // Container(
+                                      //   height: 35,
+                                      //   width: 300,
+                                      //   decoration: const BoxDecoration(
+                                      //     borderRadius:
+                                      //         BorderRadius.all(Radius.zero),
+                                      //     // color: Colors.green
+                                      //   ),
+                                      //   child: ElevatedButton(
+                                      //     style: ButtonStyle(
+                                      //       shape: MaterialStateProperty.all(
+                                      //           RoundedRectangleBorder(
+                                      //               borderRadius:
+                                      //                   BorderRadius.circular(
+                                      //                       10))),
+                                      //       backgroundColor:
+                                      //           MaterialStateProperty.all(
+                                      //               const Color(0xFF4D73F1)),
+                                      //     ),
+                                      //     onPressed: () {
+                                            
+                                      //     },
+                                      //     child: Row(
+                                      //       mainAxisAlignment:
+                                      //           MainAxisAlignment.center,
+                                      //       children: [
+                                      //         PhosphorIcon(
+                                      //           PhosphorIcons.regular.pencil,
+                                      //           color: Colors.white,
+                                      //           size: 25,
+                                      //         ),
+                                      //         const SizedBox(
+                                      //           width: 10,
+                                      //         ),
+                                      //         Text(
+                                      //           'Selecionar imagem',
+                                      //           style: GoogleFonts.getFont(
+                                      //               'Poppins',
+                                      //               color: Colors.white,
+                                      //               fontSize: 15,
+                                      //               fontWeight:
+                                      //                   FontWeight.w500),
+                                      //         ),
+                                      //         const SizedBox(
+                                      //           width: 20,
+                                      //         ),
+                                      //       ],
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
                                       Container(
                                         height: 35,
                                         width: 300,
@@ -209,15 +351,30 @@ class _SlideState extends State<Slide> {
                                                             10))),
                                             backgroundColor:
                                                 MaterialStateProperty.all(
-                                                    const Color(0xFF4D73F1)),
+                                                    Colors.green),
                                           ),
-                                          onPressed: () {},
+                                          onPressed: () async {
+                                            final token =
+                                                await getTokenFromLocalStorage();
+                                            final itemId = dados[index]['_id'];
+
+                                            final selectedDate =
+                                                _showDatePicker(index);
+                                            if (selectedDate != null) {
+                                              final novaData =
+                                                  DateFormat('dd/MM/yyyy')
+                                                      .format(selectedDate);
+
+                                              atualizarDataSlider(
+                                                  itemId, novaData, token);
+                                            }
+                                          },
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
                                               PhosphorIcon(
-                                                PhosphorIcons.regular.pencil,
+                                                PhosphorIcons.regular.alarm,
                                                 color: Colors.white,
                                                 size: 25,
                                               ),
@@ -225,7 +382,7 @@ class _SlideState extends State<Slide> {
                                                 width: 10,
                                               ),
                                               Text(
-                                                'Selecionar imagem',
+                                                'Tempo',
                                                 style: GoogleFonts.getFont(
                                                     'Poppins',
                                                     color: Colors.white,
@@ -236,6 +393,7 @@ class _SlideState extends State<Slide> {
                                               const SizedBox(
                                                 width: 20,
                                               ),
+                                             
                                             ],
                                           ),
                                         ),
@@ -264,7 +422,7 @@ class _SlideState extends State<Slide> {
                                           ),
                                           onPressed: () async {
                                             final token =
-                                                          await getTokenFromLocalStorage();
+                                                await getTokenFromLocalStorage();
                                             final itemId = dados[index]['_id'];
                                             deleteItem(itemId, token);
                                           },
