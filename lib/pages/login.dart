@@ -12,8 +12,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController controlerEmail = TextEditingController(text: "velocitynet@gmail.com");
-  TextEditingController controllerPassword = TextEditingController(text: "Velocitynet@123");
+  TextEditingController controlerEmail = TextEditingController();
+  TextEditingController controllerPassword = TextEditingController();
 
   late AuthService authService = AuthService(
       controlerEmail: controlerEmail,
@@ -92,7 +92,6 @@ class _LoginState extends State<Login> {
                             // obscureText: true,
                             decoration: InputDecoration(
                               fillColor: Colors.red,
-                              hintText: 'Example@gmail.com',
                               hintStyle: GoogleFonts.getFont('Poppins',
                                   color: const Color(0xff969696),
                                   fontSize: 15,
@@ -127,7 +126,6 @@ class _LoginState extends State<Login> {
                             obscureText: true,
                             decoration: InputDecoration(
                               fillColor: Colors.red,
-                              hintText: '••••••••••••••••',
                               hintStyle: GoogleFonts.getFont('Poppins',
                                   color: const Color(0xff969696),
                                   fontSize: 15,
