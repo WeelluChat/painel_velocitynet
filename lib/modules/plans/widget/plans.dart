@@ -24,7 +24,7 @@ class _PlansState extends State<Plans> {
     final token = prefs.getString('token');
     return token ?? '';
   }
-  Future<void> getSlide() async {
+  Future<void> getPlanos() async {
     Uri url = Uri.parse("${ApiContants.baseApi}/plans");
     http.Response response = await http.get(url);
 
@@ -46,7 +46,7 @@ class _PlansState extends State<Plans> {
       );
 
       if (response.statusCode == 200) {
-        getSlide();
+        getPlanos();
       } else {
         if (kDebugMode) {
           print('Erro ao excluir o item: ${response.statusCode}');
@@ -62,7 +62,7 @@ class _PlansState extends State<Plans> {
   @override
   void initState() {
     super.initState();
-    getSlide();
+    getPlanos();
   }
 
   @override

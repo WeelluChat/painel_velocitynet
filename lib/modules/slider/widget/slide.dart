@@ -81,7 +81,6 @@ class _SlideState extends State<Slide> {
 
     if (response.statusCode == 200) {
       setState(() {
-        getSlide();
         dados = jsonDecode(response.body);
       });
     }
@@ -142,7 +141,10 @@ class _SlideState extends State<Slide> {
     getSlide();
     // formatDate(formatarData);
   }
-
+  @override
+  void dispose(){
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
