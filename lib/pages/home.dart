@@ -34,10 +34,13 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text(
-          "Painel - Velocitynet",
-          style: GoogleFonts.getFont('Poppins',
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
+        title: Padding(
+          padding: const EdgeInsets.only(left:25),
+          child: Text(
+            "Painel - Velocitynet",
+            style: GoogleFonts.getFont('Poppins',
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
+          ),
         ),
         backgroundColor: Colors.black
       ),
@@ -49,7 +52,9 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
               width: 350,
               height: 800,
               child: NavigationRail(
-                backgroundColor: const Color(0xff212121),
+                backgroundColor: const Color(
+                    0xff181919,
+                  ),
                 extended: true,
                 selectedIndex: _currentIndex,
                 labelType: NavigationRailLabelType.none,
