@@ -32,181 +32,195 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff212121),
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text(
           "Painel - Velocitynet",
           style: GoogleFonts.getFont('Poppins',
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
         ),
-        backgroundColor: const Color(0xff212121),
+        backgroundColor: Colors.black
       ),
-      body: Row(
-        children: [
-          // Barra de navegação lateral
-          NavigationRail(
-            backgroundColor: const Color(0xff212121),
-            extended: true,
-            selectedIndex: _currentIndex,
-            labelType: NavigationRailLabelType.none,
-            onDestinationSelected: (int index) {
-              setState(() {
-                _currentIndex = index;
-                _pageController.animateToPage(
-                  index,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.ease,
-                );
-              });
-            },
-            destinations: [
-              NavigationRailDestination(
-                  icon: PhosphorIcon(
-                    PhosphorIcons.regular.slideshow,
-                    size: 25,
-                    color: const Color(0xff969696),
-                  ),
-                  label: Text(
-                    'Slide',
-                    style: GoogleFonts.getFont(
-                      'Poppins',
-                      color: Colors.white,
-                      fontSize: 20,
+      body: Padding(
+        padding: const EdgeInsets.only(left:40),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 350,
+              height: 800,
+              child: NavigationRail(
+                backgroundColor: const Color(0xff212121),
+                extended: true,
+                selectedIndex: _currentIndex,
+                labelType: NavigationRailLabelType.none,
+                onDestinationSelected: (int index) {
+                  setState(() {
+                    _currentIndex = index;
+                    _pageController.animateToPage(
+                      index,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.ease,
+                    );
+                  });
+                },
+                destinations: [
+                  NavigationRailDestination(
+                      icon: Image.asset('images/slides.png', color: Colors.white, width: 40,),
+                      // PhosphorIcon(
+                      //   PhosphorIcons.regular.slideshow,
+                      //   size: 25,
+                      //   color: const Color(0xff969696),
+                      // ),
+                      label: Text(
+                        'Slide',
+                        style: GoogleFonts.getFont(
+                          'Poppins',
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      )),
+                  NavigationRailDestination(
+                    icon: Image.asset('images/plano.png', color: Colors.white, width: 30,),
+                      // icon: PhosphorIcon(
+                      //   PhosphorIcons.regular.globe,
+                      //   size: 25,
+                      //   color: const Color(0xff969696),
+                      // ),
+                      label: Text(
+                        'Planos',
+                        style: GoogleFonts.getFont(
+                          'Poppins',
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      )),
+                  NavigationRailDestination(
+                    icon: Image.asset('images/descricao.png', color: Colors.white, width: 30,),
+                      // icon: PhosphorIcon(
+                      //   PhosphorIcons.regular.scroll,
+                      //   size: 25,
+                      //   color: const Color(0xff969696),
+                      // ),
+                      label: Text(
+                        'Descrição',
+                        style: GoogleFonts.getFont(
+                          'Poppins',
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      )),
+                  NavigationRailDestination(
+                     icon: Image.asset('images/ofertas.png', color: Colors.white, width: 30,),
+                      // icon: PhosphorIcon(
+                      //   PhosphorIcons.regular.tag,
+                      //   size: 25,
+                      //   color: const Color(0xff969696),
+                      // ),
+                      label: Text(
+                        'Ofertas',
+                        style: GoogleFonts.getFont(
+                          'Poppins',
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      )),
+                  NavigationRailDestination(
+                    icon: Image.asset('images/ofertas.png', color: Colors.white, width: 30,),
+                    // icon: PhosphorIcon(
+                    //   PhosphorIcons.regular.televisionSimple,
+                    //   color: const Color(0xff969696),
+                    //   size: 25,
+                    // ),
+                    label: Text(
+                      'TV',
+                      style: GoogleFonts.getFont(
+                        'Poppins',
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
                     ),
-                  )),
-              NavigationRailDestination(
-                  icon: PhosphorIcon(
-                    PhosphorIcons.regular.globe,
-                    size: 25,
-                    color: const Color(0xff969696),
                   ),
-                  label: Text(
-                    'Planos',
-                    style: GoogleFonts.getFont(
-                      'Poppins',
-                      color: Colors.white,
-                      fontSize: 20,
+                  NavigationRailDestination(
+                    icon: Image.asset('images/perguntas.png', color: Colors.white, width: 30,),
+                    // icon: PhosphorIcon(
+                    //   PhosphorIcons.regular.chatCircleDots,
+                    //   color: const Color(0xff969696),
+                    //   size: 25,
+                    // ),
+                    label: Text(
+                      'Perguntas',
+                      style: GoogleFonts.getFont(
+                        'Poppins',
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
                     ),
-                  )),
-              NavigationRailDestination(
-                  icon: PhosphorIcon(
-                    PhosphorIcons.regular.scroll,
-                    size: 25,
-                    color: const Color(0xff969696),
                   ),
-                  label: Text(
-                    'Descrição',
-                    style: GoogleFonts.getFont(
-                      'Poppins',
-                      color: Colors.white,
-                      fontSize: 20,
+                  NavigationRailDestination(
+                     icon: Image.asset('images/rodape.png', color: Colors.white, width: 30,),
+                    // icon: PhosphorIcon(
+                    //   PhosphorIcons.regular.stackSimple,
+                    //   color: const Color(0xff969696),
+                    //   size: 25,
+                    // ),
+                    label: Text(
+                      'Rodapé',
+                      style: GoogleFonts.getFont(
+                        'Poppins',
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
                     ),
-                  )),
-              NavigationRailDestination(
-                  icon: PhosphorIcon(
-                    PhosphorIcons.regular.tag,
-                    size: 25,
-                    color: const Color(0xff969696),
                   ),
-                  label: Text(
-                    'Ofertas',
-                    style: GoogleFonts.getFont(
-                      'Poppins',
-                      color: Colors.white,
-                      fontSize: 20,
+
+                  NavigationRailDestination(
+                    icon: PhosphorIcon(
+                      PhosphorIcons.regular.signOut,
+                      size: 25,
+                      color: Colors.red
                     ),
-                  )),
-              NavigationRailDestination(
-                icon: PhosphorIcon(
-                  PhosphorIcons.regular.televisionSimple,
-                  color: const Color(0xff969696),
-                  size: 25,
-                ),
-                label: Text(
-                  'TV',
-                  style: GoogleFonts.getFont(
-                    'Poppins',
-                    color: Colors.white,
-                    fontSize: 20,
+                    label: InkWell(
+                      onTap: () {
+                        html.window.localStorage.remove('authToken');
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => const Login(),
+                        ));
+                      },
+                      child: Text(
+                        'Sair',
+                        style: GoogleFonts.getFont(
+                          'Poppins',
+                          color: Colors.red,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-              NavigationRailDestination(
-                icon: PhosphorIcon(
-                  PhosphorIcons.regular.chatCircleDots,
-                  color: const Color(0xff969696),
-                  size: 25,
-                ),
-                label: Text(
-                  'Perguntas',
-                  style: GoogleFonts.getFont(
-                    'Poppins',
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              NavigationRailDestination(
-                icon: PhosphorIcon(
-                  PhosphorIcons.regular.stackSimple,
-                  color: const Color(0xff969696),
-                  size: 25,
-                ),
-                label: Text(
-                  'Rodapé',
-                  style: GoogleFonts.getFont(
-                    'Poppins',
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              NavigationRailDestination(
-                icon: PhosphorIcon(
-                  PhosphorIcons.regular.signOut,
-                  size: 25,
-                  color: Colors.red
-                ),
-                label: InkWell(
-                  onTap: () {
-                    html.window.localStorage.remove('authToken');
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => const Login(),
-                    ));
-                  },
-                  child: Text(
-                    'Sair',
-                    style: GoogleFonts.getFont(
-                      'Poppins',
-                      color: Colors.red,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: PageView(
-              controller: _pageController,
-              onPageChanged: (index) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
-              children:  const [
-                Slide(),
-                Plans(),
-                Planos(),
-                Ofertas(),
-                TV(),
-                Perguntas(),
-                Footer(),
-                Exit(),
-              ],
             ),
-          ),
-        ],
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+                children:  const [
+                  Slide(),
+                  Plans(),
+                  Planos(),
+                  Ofertas(),
+                  TV(),
+                  Perguntas(),
+                  Footer(),
+                  Exit(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

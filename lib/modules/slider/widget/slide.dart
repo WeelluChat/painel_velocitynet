@@ -19,6 +19,13 @@ class Slide extends StatefulWidget {
 }
 
 class _SlideState extends State<Slide> {
+  //função para converter a data limite e retornar true ou false caso a data limite for excedida
+  bool dataLimite(String dataLimite) {
+    final dataAtual = DateTime.now();
+    final limitDate = DateFormat('dd/MM/yyyy').parse(dataLimite);
+    return dataAtual.isAfter(limitDate);
+  }
+
   DateTime _dateTime = DateTime.now();
   //FUNÇÃO PARA ATUALIZAR A DATA DE CADA ITEM DO JSON
   Future<void> atualizarDataSlider(
@@ -47,7 +54,8 @@ class _SlideState extends State<Slide> {
       print('Erro ao atualizar DataSlider do item $itemId: $error');
     }
   }
-  //FUNÇÃO PARA ABRIR O CALENDARIO 
+
+  //FUNÇÃO PARA ABRIR O CALENDARIO
   _showDatePicker(int index) {
     showDatePicker(
       context: context,
@@ -67,6 +75,7 @@ class _SlideState extends State<Slide> {
       }
     });
   }
+
   //PEGAR O TOKEN DO LOCAL STORAGE
   List<dynamic> dados = [];
   Future<String> getTokenFromLocalStorage() async {
@@ -74,6 +83,7 @@ class _SlideState extends State<Slide> {
     final token = prefs.getString('token');
     return token ?? '';
   }
+
   //GET PARA RECEBER OS DADOS DA API SLIDER-ALL
   Future getSlide() async {
     Uri url = Uri.parse("${ApiContants.baseApi}/slider-all");
@@ -134,17 +144,18 @@ class _SlideState extends State<Slide> {
   //     print('Erro ao atualizar a imagem. Status code: ${response.statusCode}');
   //   }
   // }
-
   @override
   void initState() {
     super.initState();
     getSlide();
     // formatDate(formatarData);
   }
+
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -166,14 +177,14 @@ class _SlideState extends State<Slide> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: const Color(
-                    0xff292929,
+                    0xff181919,
                   ),
                   // color: Colors.cyan,
                 ),
                 child: Column(
                   children: [
                     Text(
-                      'Gerenciamento de configurações',
+                      'Gerenciamento de slides',
                       textAlign: TextAlign.center,
                       maxLines: 3,
                       style: GoogleFonts.getFont(
@@ -198,24 +209,28 @@ class _SlideState extends State<Slide> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
+                                  width: 1200,
                                   height:
                                       MediaQuery.of(context).size.width < 600
                                           ? 51
-                                          : 50,
+                                          : 90,
                                   decoration: const BoxDecoration(
                                     borderRadius: BorderRadius.all(Radius.zero),
                                   ),
                                   child: ElevatedButton(
                                     style: ButtonStyle(
                                       padding: const MaterialStatePropertyAll(
-                                          EdgeInsets.only(left: 20, right: 20)),
+                                          EdgeInsets.only(
+                                              left: 20, right: 20, top: 15)),
                                       shape: MaterialStateProperty.all(
                                           RoundedRectangleBorder(
+                                              side: const BorderSide(
+                                                  color: Colors.white),
                                               borderRadius:
                                                   BorderRadius.circular(10))),
                                       backgroundColor:
                                           MaterialStateProperty.all(
-                                              const Color(0xff46964A)),
+                                              const Color(0xff181919)),
                                     ),
                                     onPressed: () async {
                                       final token =
@@ -223,13 +238,20 @@ class _SlideState extends State<Slide> {
                                       ApiSlider().uploadImage("slider", token);
                                       getSlide();
                                     },
-                                    child: Text(
-                                      maxLines: 2,
-                                      'Adicionar imagem',
-                                      style: GoogleFonts.getFont('Poppins',
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        const Icon(Icons.add, size: 45),
+                                        Text(
+                                          maxLines: 2,
+                                          'Adicionar imagem',
+                                          style: GoogleFonts.getFont('Poppins',
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -242,20 +264,26 @@ class _SlideState extends State<Slide> {
                             //     style: const TextStyle(
                             //         color: Colors.white, fontSize: 22)),
                             SizedBox(
-                              height: 300,
+                              height: 800,
                               // color: Colors.cyan,
-                              child: ReorderableListView.builder(
-                                scrollDirection: Axis.horizontal,
+                              child: GridView.builder(
+                                scrollDirection: Axis.vertical,
                                 itemCount: dados.length,
-                                onReorder: (int oldIndex, int newIndex) {
-                                  setState(() {
-                                    if (oldIndex < newIndex) {
-                                      newIndex -= 1;
-                                    }
-                                    final item = dados.removeAt(oldIndex);
-                                    dados.insert(newIndex, item);
-                                  });
-                                },
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 4,
+                                  mainAxisSpacing: 8.0,
+                                  crossAxisSpacing: 8.0,
+                                ),
+                                // onReorder: (int oldIndex, int newIndex) {
+                                //   setState(() {
+                                //     if (oldIndex < newIndex) {
+                                //       newIndex -= 1;
+                                //     }
+                                //     final item = dados.removeAt(oldIndex);
+                                //     dados.insert(newIndex, item);
+                                //   });
+                                // },
                                 itemBuilder: (context, index) {
                                   final imageUrl = dados[index]['name'];
                                   return Column(
@@ -303,7 +331,7 @@ class _SlideState extends State<Slide> {
                                       //               const Color(0xFF4D73F1)),
                                       //     ),
                                       //     onPressed: () {
-                                            
+
                                       //     },
                                       //     child: Row(
                                       //       mainAxisAlignment:
@@ -338,7 +366,7 @@ class _SlideState extends State<Slide> {
                                       ),
                                       Container(
                                         height: 35,
-                                        width: 300,
+                                        width: 280,
                                         decoration: const BoxDecoration(
                                           borderRadius:
                                               BorderRadius.all(Radius.zero),
@@ -347,19 +375,23 @@ class _SlideState extends State<Slide> {
                                         child: ElevatedButton(
                                           style: ButtonStyle(
                                             shape: MaterialStateProperty.all(
-                                                RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10))),
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                            ),
                                             backgroundColor:
                                                 MaterialStateProperty.all(
-                                                    Colors.green),
+                                              dataLimite(dados[index]
+                                                      ['dateSlider'])
+                                                  ? const Color(0xffF14D4D)
+                                                  : const Color(0xff008d69),
+                                            ),
                                           ),
                                           onPressed: () async {
                                             final token =
                                                 await getTokenFromLocalStorage();
                                             final itemId = dados[index]['_id'];
-
                                             final selectedDate =
                                                 _showDatePicker(index);
                                             if (selectedDate != null) {
@@ -384,7 +416,7 @@ class _SlideState extends State<Slide> {
                                                 width: 10,
                                               ),
                                               Text(
-                                                'Tempo',
+                                                dados[index]['dateSlider'],
                                                 style: GoogleFonts.getFont(
                                                     'Poppins',
                                                     color: Colors.white,
@@ -395,7 +427,6 @@ class _SlideState extends State<Slide> {
                                               const SizedBox(
                                                 width: 20,
                                               ),
-                                             
                                             ],
                                           ),
                                         ),
@@ -405,7 +436,7 @@ class _SlideState extends State<Slide> {
                                       ),
                                       Container(
                                         height: 35,
-                                        width: 300,
+                                        width: 280,
                                         decoration: const BoxDecoration(
                                           borderRadius:
                                               BorderRadius.all(Radius.zero),
