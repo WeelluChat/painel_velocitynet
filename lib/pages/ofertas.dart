@@ -115,11 +115,13 @@ class _OfertasState extends State<Ofertas> {
                 ),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: const Color(0xff292929)),
+                    color: const Color(
+                    0xff181919,
+                  ),),
                 child: Column(
                   children: [
                     Text(
-                      'Gerenciamento de configurações',
+                      'Gerenciamento de ofertas',
                       textAlign: TextAlign.center,
                       maxLines: 3,
                       style: GoogleFonts.getFont(
@@ -135,11 +137,60 @@ class _OfertasState extends State<Ofertas> {
                     ),
                     Flexible(
                       child: SizedBox(
-                        width: 900,
+                        width: 1200,
                         // color: Colors.red,
                         child: ListView(
                           padding: const EdgeInsets.all(16.0),
                           children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 1200,
+                                  height:
+                                      MediaQuery.of(context).size.width < 600
+                                          ? 51
+                                          : 90,
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                  ),
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      padding: const MaterialStatePropertyAll(
+                                          EdgeInsets.only(left: 20, right: 20, top:15)),
+                                      shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                              side: const BorderSide(
+                                                  color: Colors.white),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),),),
+                                      backgroundColor:
+                                           MaterialStateProperty.all(
+                                              const Color(0xff181919)),
+                                    ),
+                                    onPressed: () {},
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        const Icon(Icons.add, size: 45),
+                                        Text(
+                                          textAlign: TextAlign.center,
+                                          'Adicionar imagem',
+                                          style: GoogleFonts.getFont('Poppins',
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -159,7 +210,7 @@ class _OfertasState extends State<Ofertas> {
                                     borderRadius: BorderRadius.circular(10),
                                     color: const Color(0xff3D3D3D),
                                   ),
-                                  width: 912,
+                                  width: double.infinity,
                                   child: TextField(
                                     controller: titulo,
                                     style: const TextStyle(color: Colors.white),
@@ -198,7 +249,7 @@ class _OfertasState extends State<Ofertas> {
                                     borderRadius: BorderRadius.circular(10),
                                     color: const Color(0xff3D3D3D),
                                   ),
-                                  width: 912,
+                                  width: double.infinity,
                                   child: TextField(
                                     controller: descricao,
                                     style: const TextStyle(color: Colors.white),
@@ -233,106 +284,72 @@ class _OfertasState extends State<Ofertas> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Container(
-                                  height: 61,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: const Color(0xff3D3D3D),
-                                  ),
-                                  width: 500,
-                                  child: TextField(
-                                    controller: valor,
-                                    style: const TextStyle(color: Colors.white),
-                                    // obscureText: true,
-                                    decoration: InputDecoration(
-                                      // fillColor: Colors.red,
-                                      hintText: '',
-                                      hintStyle: GoogleFonts.getFont('Poppins',
-                                          color: const Color(0xff969696),
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w600),
-                                      border: const OutlineInputBorder(
-                                          borderSide: BorderSide.none),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        height: 61,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                          color: const Color(0xff3D3D3D),
+                                        ),
+                                        width: 950,
+                                        child: TextField(
+                                          controller: valor,
+                                          style: const TextStyle(color: Colors.white),
+                                          // obscureText: true,
+                                          decoration: InputDecoration(
+                                            // fillColor: Colors.red,
+                                            hintText: '',
+                                            hintStyle: GoogleFonts.getFont('Poppins',
+                                                color: const Color(0xff969696),
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w600),
+                                            border: const OutlineInputBorder(
+                                                borderSide: BorderSide.none),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    const SizedBox(width: 20,),
+                                    Container(
+                              height: MediaQuery.of(context).size.width < 800
+                                  ? 61
+                                  : 61,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.zero),
+                              ),
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  padding: const MaterialStatePropertyAll(
+                                      EdgeInsets.only(left: 40, right: 40)),
+                                  shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10))),
+                                  backgroundColor: MaterialStateProperty.all(
+                                      const Color(0xff46964A)),
                                 ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 51,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height:
-                                      MediaQuery.of(context).size.width < 600
-                                          ? 51
-                                          : 61,
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.zero),
-                                  ),
-                                  child: ElevatedButton(
-                                    style: ButtonStyle(
-                                      padding: const MaterialStatePropertyAll(
-                                          EdgeInsets.only(left: 20, right: 20)),
-                                      shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10))),
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              const Color(0xff46964A)),
-                                    ),
-                                    onPressed: () {},
-                                    child: Text(
-                                      textAlign: TextAlign.center,
-                                      'Adicionar imagem',
-                                      style: GoogleFonts.getFont('Poppins',
-                                          color: Colors.white,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 45,
-                            ),
-                            Center(
-                              child: Container(
-                                height: MediaQuery.of(context).size.width < 800
-                                    ? 51
-                                    : 61,
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.zero),
-                                ),
-                                child: ElevatedButton(
-                                  style: ButtonStyle(
-                                    padding: const MaterialStatePropertyAll(
-                                        EdgeInsets.only(left: 70, right: 70)),
-                                    shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10))),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        const Color(0xff46964A)),
-                                  ),
-                                  onPressed: () {
-                                    atualizarDadosOfertas(id, titulo.text,
-                                        descricao.text, valor.text);
-                                  },
-                                  child: Text(
-                                    'Salvar',
-                                    style: GoogleFonts.getFont('Poppins',
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
-                                  ),
+                                onPressed: () {
+                                  atualizarDadosOfertas(id, titulo.text,
+                                      descricao.text, valor.text);
+                                },
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  'Salvar',
+
+                                  style: GoogleFonts.getFont('Poppins',
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500),
                                 ),
                               ),
                             ),
+                                  ],
+                                ),
+                              ],
+                            ),                          
+                            
                           ],
                         ),
                       ),
