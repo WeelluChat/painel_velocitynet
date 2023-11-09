@@ -192,7 +192,7 @@ class _TVState extends State<TV> {
                                   'Título',
                                   style: GoogleFonts.getFont('Poppins',
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: 22,
                                       fontWeight: FontWeight.w600),
                                 ),
                                 const SizedBox(
@@ -231,7 +231,7 @@ class _TVState extends State<TV> {
                                   'Descrição',
                                   style: GoogleFonts.getFont('Poppins',
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: 22,
                                       fontWeight: FontWeight.w600),
                                 ),
                                 const SizedBox(
@@ -272,7 +272,7 @@ class _TVState extends State<TV> {
                                   'Valor',
                                   style: GoogleFonts.getFont('Poppins',
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: 22,
                                       fontWeight: FontWeight.w600),
                                 ),
                                 const SizedBox(

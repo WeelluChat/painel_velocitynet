@@ -130,12 +130,12 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                         ),
                       )),
                   NavigationRailDestination(
-                    icon: Image.asset('images/ofertas.png', color: Colors.white, width: 30,),
-                    // icon: PhosphorIcon(
-                    //   PhosphorIcons.regular.televisionSimple,
-                    //   color: const Color(0xff969696),
-                    //   size: 25,
-                    // ),
+                    // icon: Image.asset('images/ofertas.png', color: Colors.white, width: 30,),
+                    icon: PhosphorIcon(
+                      PhosphorIcons.regular.televisionSimple,
+                      color: Colors.white,
+                      size: 36,
+                    ),
                     label: Text(
                       'TV',
                       style: GoogleFonts.getFont(

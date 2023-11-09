@@ -198,7 +198,7 @@ class _OfertasState extends State<Ofertas> {
                                   'Título',
                                   style: GoogleFonts.getFont('Poppins',
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: 22,
                                       fontWeight: FontWeight.w600),
                                 ),
                                 const SizedBox(
@@ -237,7 +237,7 @@ class _OfertasState extends State<Ofertas> {
                                   'Descrição',
                                   style: GoogleFonts.getFont('Poppins',
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: 22,
                                       fontWeight: FontWeight.w600),
                                 ),
                                 const SizedBox(
@@ -278,7 +278,7 @@ class _OfertasState extends State<Ofertas> {
                                   'Valor',
                                   style: GoogleFonts.getFont('Poppins',
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: 22,
                                       fontWeight: FontWeight.w600),
                                 ),
                                 const SizedBox(

@@ -131,8 +131,8 @@ class _PlanosState extends State<Planos> {
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: const Color(
-                    0xff292929,
+                  color:const Color(
+                    0xff181919,
                   ),
                 ),
                 child: Column(
@@ -162,7 +162,7 @@ class _PlanosState extends State<Planos> {
                               'Título',
                               style: GoogleFonts.getFont('Poppins',
                                   color: Colors.white,
-                                  fontSize: 20,
+                                  fontSize: 22,
                                   fontWeight: FontWeight.w600),
                             ),
                             const SizedBox(
