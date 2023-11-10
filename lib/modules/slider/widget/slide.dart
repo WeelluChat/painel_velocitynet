@@ -159,17 +159,16 @@ class _SlideState extends State<Slide> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 40, bottom: 40),
       child: Flex(
         mainAxisAlignment: MainAxisAlignment.start,
         direction: Axis.vertical,
         children: [
           Flexible(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(left: 20),
               child: Container(
                 width: 1416,
-                height: 802,
+                // height: 802,
                 padding: const EdgeInsets.only(
                   top: 27,
                   bottom: 50,
@@ -270,8 +269,8 @@ class _SlideState extends State<Slide> {
                                 scrollDirection: Axis.vertical,
                                 itemCount: dados.length,
                                 gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 4,
+                                     SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: MediaQuery.of(context).size.width < 1400 ? 3 : 4,
                                   mainAxisSpacing: 8.0,
                                   crossAxisSpacing: 8.0,
                                 ),
@@ -415,14 +414,16 @@ class _SlideState extends State<Slide> {
                                               const SizedBox(
                                                 width: 10,
                                               ),
-                                              Text(
-                                                dados[index]['dateSlider'],
-                                                style: GoogleFonts.getFont(
-                                                    'Poppins',
-                                                    color: Colors.white,
-                                                    fontSize: 15,
-                                                    fontWeight:
-                                                        FontWeight.w500),
+                                              Flexible(
+                                                child: Text(
+                                                  dados[index]['dateSlider'],
+                                                  style: GoogleFonts.getFont(
+                                                      'Poppins',
+                                                      color: Colors.white,
+                                                      fontSize: MediaQuery.of(context).size.width < 1200 ? 13 : 15,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
                                               ),
                                               const SizedBox(
                                                 width: 20,
@@ -471,14 +472,16 @@ class _SlideState extends State<Slide> {
                                               const SizedBox(
                                                 width: 20,
                                               ),
-                                              Text(
-                                                'Deletar imagem',
-                                                style: GoogleFonts.getFont(
-                                                    'Poppins',
-                                                    color: Colors.white,
-                                                    fontSize: 15,
-                                                    fontWeight:
-                                                        FontWeight.w500),
+                                              Flexible(
+                                                child: Text(
+                                                  'Deletar imagem',
+                                                  style: GoogleFonts.getFont(
+                                                      'Poppins',
+                                                      color: Colors.white,
+                                                      fontSize: MediaQuery.of(context).size.width < 1400 ? 13 : 15,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
                                               ),
                                               const SizedBox(
                                                 width: 35,

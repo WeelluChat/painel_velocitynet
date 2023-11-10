@@ -45,12 +45,12 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
         backgroundColor: Colors.black
       ),
       body: Padding(
-        padding: const EdgeInsets.only(left:40),
+        padding: const EdgeInsets.only(left:40, bottom: 50, right: 20, top: 10),
         child: Row(
           children: [
             SizedBox(
               width: 350,
-              height: 800,
+              // height: 800,
               child: NavigationRail(
                 backgroundColor: const Color(
                     0xff181919,
