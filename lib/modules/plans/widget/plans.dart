@@ -1,14 +1,13 @@
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-
 import 'package:google_fonts/google_fonts.dart';
 import 'package:painel_velocitynet/constantes/api_url.dart';
+import 'package:painel_velocitynet/helpers/token.dart';
+import 'package:painel_velocitynet/modules/plans/controller/plans_controller.dart';
+import 'package:painel_velocitynet/modules/plans/model/plans_model.dart';
 import 'package:painel_velocitynet/service/slider/api_slider.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Plans extends StatefulWidget {
   const Plans({super.key});
@@ -18,62 +17,33 @@ class Plans extends StatefulWidget {
 }
 
 class _PlansState extends State<Plans> {
-  List<dynamic> dados = [];
-  Future<String> getTokenFromLocalStorage() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
-    return token ?? '';
-  }
+  List<PlansModel> dados = [];
 
-  Future<void> getPlanos() async {
-    Uri url = Uri.parse("${ApiContants.baseApi}/plans");
-    http.Response response = await http.get(url);
+  getPlans() async {
+    var plans = await PlansController().getPlans();
+    var jsonData = json.decode(plans);
 
-    if (response.statusCode == 200) {
-      setState(() {
-        dados = jsonDecode(response.body);
-      });
+    List<PlansModel> novosDados = [];
+
+    for (var item in jsonData) {
+      novosDados.add(PlansModel.fromJson(item));
     }
-  }
 
-  void deleteItem(String itemId, String token) async {
-    final url = Uri.parse("${ApiContants.baseApi}/plans");
-
-    try {
-      final response = await http.delete(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': 'Bearer $token',
-        },
-        body: jsonEncode({"id": itemId}),
-      );
-
-      if (response.statusCode == 200) {
-        getPlanos();
-      } else {
-        if (kDebugMode) {
-          print('Erro ao excluir o item: ${response.statusCode}');
-        }
-      }
-    } catch (error) {
-      if (kDebugMode) {
-        print('Erro na solicitação DELETE: $error');
-      }
-    }
+    setState(() {
+      dados = novosDados;
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    getPlanos();
+    getPlans();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 40, bottom: 40),
-      // color: Colors.pinkAccent,
       child: Flex(
         mainAxisAlignment: MainAxisAlignment.start,
         direction: Axis.vertical,
@@ -93,7 +63,6 @@ class _PlansState extends State<Plans> {
                   color: const Color(
                     0xff181919,
                   ),
-                  // color: Colors.cyan,
                 ),
                 child: Column(
                   children: [
@@ -171,11 +140,14 @@ class _PlansState extends State<Plans> {
                                   child: ElevatedButton(
                                     style: ButtonStyle(
                                       padding: const MaterialStatePropertyAll(
-                                          EdgeInsets.only(left: 20, right: 20)),
+                                        EdgeInsets.only(left: 20, right: 20),
+                                      ),
                                       shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10))),
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
                                       backgroundColor:
                                           MaterialStateProperty.all(
                                               const Color(0xff46964A)),
@@ -195,199 +167,214 @@ class _PlansState extends State<Plans> {
                             const SizedBox(
                               height: 45,
                             ),
-                            SizedBox(
-                              height: 400,
-                              //  color: Colors.green,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: dados.length + 1,
-                                itemBuilder: (context, index) {
-                                  if (index == 0) {
-                                    return Container(
-                                      width: 200,
-                                      height:
-                                          MediaQuery.of(context).size.width <
-                                                  600
-                                              ? 400
-                                              : 400,
-                                      decoration: const BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.all(Radius.zero),
-                                      ),
-                                      child: ElevatedButton(
-                                        style: ButtonStyle(
-                                          padding:
-                                              const MaterialStatePropertyAll(
-                                                  EdgeInsets.only(
-                                                      left: 20, right: 20)),
-                                          shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                  side: const BorderSide(
-                                                      color: Colors.white),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10))),
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                  Colors.transparent),
-                                        ),
-                                        onPressed: () {
-                                          ApiSlider().uploadImage(
-                                              "plans", ApiContants.baseApi);
-                                        },
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Icon(
-                                              Icons.add,
-                                              size: 45,
-                                            ),
-                                            Text(
-                                              maxLines: 2,
-                                              'Adicionar\n Imagem',
-                                              style: GoogleFonts.getFont(
-                                                  'Poppins',
-                                                  color: Colors.white,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          ],
+                            Row(
+                              children: [
+                                Container(
+                                  width: 200,
+                                  height:
+                                      MediaQuery.of(context).size.width < 600
+                                          ? 400
+                                          : 400,
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                  ),
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      padding: const MaterialStatePropertyAll(
+                                          EdgeInsets.only(left: 20, right: 20)),
+                                      shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                          side: const BorderSide(
+                                              color: Colors.white),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                       ),
-                                    );
-                                  } else {
-                                    final itemIndex = index - 1;
-                                    final imageUrl = dados[itemIndex]['name'];
-                                    return Column(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.transparent),
+                                    ),
+                                    onPressed: () async {
+                                      ApiSlider().uploadImage(
+                                        "plans",
+                                        await GetToken()
+                                            .getTokenFromLocalStorage(),
+                                      );
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
-                                        Expanded(
-                                          child: SizedBox(
-                                            // color: Colors.amber,
-                                            height: 290,
-                                            width: 320,
-                                            child: Image.network(
-                                              '${ApiContants.baseApi}/uploads/$imageUrl',
-                                              errorBuilder: (context, exception,
-                                                  stackTrace) {
-                                                if (kDebugMode) {
-                                                  print(
-                                                      'Erro ao carregar imagem: $exception');
-                                                }
-                                                return const Text(
-                                                    'Erro ao carregar imagem');
-                                              },
-                                            ),
-                                          ),
+                                        const Icon(
+                                          Icons.add,
+                                          size: 45,
                                         ),
-                                        Container(
-                                          height: 35,
-                                          decoration: const BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.all(Radius.zero),
-                                            // color: Colors.green
-                                          ),
-                                          child: ElevatedButton(
-                                            style: ButtonStyle(
-                                              shape: MaterialStateProperty.all(
-                                                  RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10))),
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      const Color(0xFF4D73F1)),
-                                            ),
-                                            onPressed: () {},
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                PhosphorIcon(
-                                                  PhosphorIcons.regular.pencil,
-                                                  color: Colors.white,
-                                                  size: 25,
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                  'Selecionar imagem',
-                                                  style: GoogleFonts.getFont(
-                                                      'Poppins',
-                                                      color: Colors.white,
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                ),
-                                                const SizedBox(
-                                                  width: 20,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Container(
-                                          height: 35,
-                                          decoration: const BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.all(Radius.zero),
-                                            // color: Colors.green
-                                          ),
-                                          child: ElevatedButton(
-                                            style: ButtonStyle(
-                                              shape: MaterialStateProperty.all(
-                                                  RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10))),
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      const Color(0xffF14D4D)),
-                                            ),
-                                            onPressed: () async {
-                                              final token =
-                                                  await getTokenFromLocalStorage();
-                                              final itemId =
-                                                  dados[index]['_id'];
-                                              deleteItem(itemId, token);
-                                            },
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                PhosphorIcon(
-                                                  PhosphorIcons.regular.trash,
-                                                  color: Colors.white,
-                                                  size: 25,
-                                                ),
-                                                const SizedBox(
-                                                  width: 20,
-                                                ),
-                                                Text(
-                                                  'Deletar imagem',
-                                                  style: GoogleFonts.getFont(
-                                                      'Poppins',
-                                                      color: Colors.white,
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                ),
-                                                const SizedBox(
-                                                  width: 35,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                                        Text(
+                                          maxLines: 2,
+                                          'Adicionar\n Imagem',
+                                          style: GoogleFonts.getFont('Poppins',
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500),
                                         ),
                                       ],
-                                    );
-                                  }
-                                },
-                              ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.only(left: 50),
+                                  width: 950,
+                                  height: 400,
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: dados.length,
+                                      itemBuilder: (context, index) {
+                                        var plano = dados[index];
+                                        return Column(
+                                          children: [
+                                            Expanded(
+                                              child: SizedBox(
+                                                // color: Colors.amber,
+                                                height: 290,
+                                                width: 320,
+                                                child: Image.network(
+                                                  '${ApiContants.baseApi}/uploads/${plano.name}',
+                                                  errorBuilder: (context,
+                                                      exception, stackTrace) {
+                                                    if (kDebugMode) {
+                                                      print(
+                                                          'Erro ao carregar imagem: $exception');
+                                                    }
+                                                    return const Text(
+                                                        'Erro ao carregar imagem');
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              height: 35,
+                                              decoration: const BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.zero),
+                                                // color: Colors.green
+                                              ),
+                                              child: ElevatedButton(
+                                                style: ButtonStyle(
+                                                  shape:
+                                                      MaterialStateProperty.all(
+                                                    RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                  ),
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          const Color(
+                                                              0xFF4D73F1)),
+                                                ),
+                                                onPressed: () {},
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    PhosphorIcon(
+                                                      PhosphorIcons
+                                                          .regular.pencil,
+                                                      color: Colors.white,
+                                                      size: 25,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Text(
+                                                      'Selecionar imagem',
+                                                      style:
+                                                          GoogleFonts.getFont(
+                                                              'Poppins',
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 20,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Container(
+                                              height: 35,
+                                              decoration: const BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.zero),
+                                                // color: Colors.green
+                                              ),
+                                              child: ElevatedButton(
+                                                style: ButtonStyle(
+                                                  shape:
+                                                      MaterialStateProperty.all(
+                                                    RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                  ),
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                    const Color(0xffF14D4D),
+                                                  ),
+                                                ),
+                                                onPressed: () async {
+                                                  // final itemId = dados[0].id;
+                                                  PlansController().deletePlans(
+                                                      plano.id,
+                                                      await GetToken()
+                                                          .getTokenFromLocalStorage());
+                                                },
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    PhosphorIcon(
+                                                      PhosphorIcons
+                                                          .regular.trash,
+                                                      color: Colors.white,
+                                                      size: 25,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 20,
+                                                    ),
+                                                    Text(
+                                                      'Deletar imagem',
+                                                      style:
+                                                          GoogleFonts.getFont(
+                                                              'Poppins',
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 35,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      }),
+                                ),
+                              ],
                             ),
                           ],
                         ),
