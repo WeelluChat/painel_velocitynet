@@ -140,7 +140,7 @@ class _TVState extends State<TV> {
                                     height:
                                         MediaQuery.of(context).size.width <
                                                 600
-                                            ? 51
+                                            ? 90
                                             : 90,
                                     decoration: const BoxDecoration(
                                       borderRadius:

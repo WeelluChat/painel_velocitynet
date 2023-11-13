@@ -467,25 +467,23 @@ class _SlideState extends State<Slide> {
                                               PhosphorIcon(
                                                 PhosphorIcons.regular.trash,
                                                 color: Colors.white,
-                                                size: 25,
+                                                size: MediaQuery.of(context).size.width < 1300 ? 20 : 25,
                                               ),
-                                              const SizedBox(
-                                                width: 20,
-                                              ),
+                                             const SizedBox(width: 10,),
                                               Flexible(
                                                 child: Text(
-                                                  'Deletar imagem',
+                                                  maxLines: 1,
+                                                  textAlign: TextAlign.center,
+                                                  MediaQuery.of(context).size.width < 1300 ? 'Deletar' : 'Deletar imagem',
                                                   style: GoogleFonts.getFont(
                                                       'Poppins',
                                                       color: Colors.white,
-                                                      fontSize: MediaQuery.of(context).size.width < 1400 ? 13 : 15,
+                                                      fontSize: MediaQuery.of(context).size.width < 1400 ? 14 : 15,
                                                       fontWeight:
                                                           FontWeight.w500),
                                                 ),
                                               ),
-                                              const SizedBox(
-                                                width: 35,
-                                              ),
+                                             
                                             ],
                                           ),
                                         ),
