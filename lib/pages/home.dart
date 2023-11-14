@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:painel_velocitynet/pages/exit.dart';
 import 'package:painel_velocitynet/pages/footer.dart';
 import 'package:painel_velocitynet/pages/login.dart';
-import 'package:painel_velocitynet/pages/ofertas.dart';
+import 'package:painel_velocitynet/modules/offer/widget/offer.dart';
 import 'package:painel_velocitynet/pages/descricao.dart';
 import 'package:painel_velocitynet/modules/plans/widget/plans.dart';
 import 'package:painel_velocitynet/modules/slider/widget/slide.dart';
@@ -34,18 +34,20 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.only(left:25),
-          child: Text(
-            "Painel - Velocitynet",
-            style: GoogleFonts.getFont('Poppins',
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
+          title: Padding(
+            padding: const EdgeInsets.only(left: 25),
+            child: Text(
+              "Painel - Velocitynet",
+              style: GoogleFonts.getFont('Poppins',
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600),
+            ),
           ),
-        ),
-        backgroundColor: Colors.black
-      ),
+          backgroundColor: Colors.black),
       body: Padding(
-        padding: const EdgeInsets.only(left:40, bottom: 50, right: 20, top: 10),
+        padding:
+            const EdgeInsets.only(left: 40, bottom: 50, right: 20, top: 10),
         child: Row(
           children: [
             SizedBox(
@@ -53,8 +55,8 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
               // height: 800,
               child: NavigationRail(
                 backgroundColor: const Color(
-                    0xff181919,
-                  ),
+                  0xff181919,
+                ),
                 extended: true,
                 selectedIndex: _currentIndex,
                 labelType: NavigationRailLabelType.none,
@@ -70,7 +72,11 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                 },
                 destinations: [
                   NavigationRailDestination(
-                      icon: Image.asset('images/slides.png', color: Colors.white, width: 40,),
+                      icon: Image.asset(
+                        'images/slides.png',
+                        color: Colors.white,
+                        width: 40,
+                      ),
                       // PhosphorIcon(
                       //   PhosphorIcons.regular.slideshow,
                       //   size: 25,
@@ -85,7 +91,11 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                         ),
                       )),
                   NavigationRailDestination(
-                    icon: Image.asset('images/plano.png', color: Colors.white, width: 30,),
+                      icon: Image.asset(
+                        'images/plano.png',
+                        color: Colors.white,
+                        width: 30,
+                      ),
                       // icon: PhosphorIcon(
                       //   PhosphorIcons.regular.globe,
                       //   size: 25,
@@ -100,7 +110,11 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                         ),
                       )),
                   NavigationRailDestination(
-                    icon: Image.asset('images/descricao.png', color: Colors.white, width: 30,),
+                      icon: Image.asset(
+                        'images/descricao.png',
+                        color: Colors.white,
+                        width: 30,
+                      ),
                       // icon: PhosphorIcon(
                       //   PhosphorIcons.regular.scroll,
                       //   size: 25,
@@ -115,7 +129,11 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                         ),
                       )),
                   NavigationRailDestination(
-                     icon: Image.asset('images/ofertas.png', color: Colors.white, width: 30,),
+                      icon: Image.asset(
+                        'images/ofertas.png',
+                        color: Colors.white,
+                        width: 30,
+                      ),
                       // icon: PhosphorIcon(
                       //   PhosphorIcons.regular.tag,
                       //   size: 25,
@@ -146,7 +164,11 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                     ),
                   ),
                   NavigationRailDestination(
-                    icon: Image.asset('images/perguntas.png', color: Colors.white, width: 30,),
+                    icon: Image.asset(
+                      'images/perguntas.png',
+                      color: Colors.white,
+                      width: 30,
+                    ),
                     // icon: PhosphorIcon(
                     //   PhosphorIcons.regular.chatCircleDots,
                     //   color: const Color(0xff969696),
@@ -162,7 +184,11 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                     ),
                   ),
                   NavigationRailDestination(
-                     icon: Image.asset('images/rodape.png', color: Colors.white, width: 30,),
+                    icon: Image.asset(
+                      'images/rodape.png',
+                      color: Colors.white,
+                      width: 30,
+                    ),
                     // icon: PhosphorIcon(
                     //   PhosphorIcons.regular.stackSimple,
                     //   color: const Color(0xff969696),
@@ -177,13 +203,9 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                       ),
                     ),
                   ),
-
                   NavigationRailDestination(
-                    icon: PhosphorIcon(
-                      PhosphorIcons.regular.signOut,
-                      size: 25,
-                      color: Colors.red
-                    ),
+                    icon: PhosphorIcon(PhosphorIcons.regular.signOut,
+                        size: 25, color: Colors.red),
                     label: InkWell(
                       onTap: () {
                         html.window.localStorage.remove('authToken');
@@ -212,11 +234,11 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                     _currentIndex = index;
                   });
                 },
-                children:  const [
+                children: const [
+                  Ofertas(),
                   Slide(),
                   Plans(),
-                  Planos(),
-                  Ofertas(),
+                  Description(),
                   TV(),
                   Perguntas(),
                   Footer(),

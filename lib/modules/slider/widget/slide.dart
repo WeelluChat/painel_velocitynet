@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:painel_velocitynet/constantes/api_url.dart';
-import 'package:painel_velocitynet/service/slider/api_slider.dart';
+import 'package:painel_velocitynet/service/slider/image_service.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
@@ -234,7 +234,8 @@ class _SlideState extends State<Slide> {
                                     onPressed: () async {
                                       final token =
                                           await getTokenFromLocalStorage();
-                                      ApiSlider().uploadImage("slider", token);
+                                      ImageService().uploadImage(
+                                          "slider", token, 'POST', '');
                                       getSlide();
                                     },
                                     child: Column(
@@ -269,8 +270,11 @@ class _SlideState extends State<Slide> {
                                 scrollDirection: Axis.vertical,
                                 itemCount: dados.length,
                                 gridDelegate:
-                                     SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: MediaQuery.of(context).size.width < 1400 ? 3 : 4,
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount:
+                                      MediaQuery.of(context).size.width < 1400
+                                          ? 3
+                                          : 4,
                                   mainAxisSpacing: 8.0,
                                   crossAxisSpacing: 8.0,
                                 ),
@@ -420,7 +424,13 @@ class _SlideState extends State<Slide> {
                                                   style: GoogleFonts.getFont(
                                                       'Poppins',
                                                       color: Colors.white,
-                                                      fontSize: MediaQuery.of(context).size.width < 1200 ? 13 : 15,
+                                                      fontSize:
+                                                          MediaQuery.of(context)
+                                                                      .size
+                                                                      .width <
+                                                                  1200
+                                                              ? 13
+                                                              : 15,
                                                       fontWeight:
                                                           FontWeight.w500),
                                                 ),
@@ -478,7 +488,13 @@ class _SlideState extends State<Slide> {
                                                   style: GoogleFonts.getFont(
                                                       'Poppins',
                                                       color: Colors.white,
-                                                      fontSize: MediaQuery.of(context).size.width < 1400 ? 13 : 15,
+                                                      fontSize:
+                                                          MediaQuery.of(context)
+                                                                      .size
+                                                                      .width <
+                                                                  1400
+                                                              ? 13
+                                                              : 15,
                                                       fontWeight:
                                                           FontWeight.w500),
                                                 ),

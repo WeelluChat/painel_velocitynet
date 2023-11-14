@@ -3,8 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:painel_velocitynet/constantes/api_url.dart';
 
-class ApiSlider {
-  Future uploadImage(String route, String token) async {
+class ImageService {
+  Future uploadImage(
+      String route, String token, String method, String imageId) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.any,
       allowMultiple: false,
@@ -15,7 +16,8 @@ class ApiSlider {
       final fileName = result.files.first.name;
 
       var request = http.MultipartRequest(
-          'POST', Uri.parse("${ApiContants.baseApi}/$route"));
+          method, Uri.parse("${ApiContants.baseApi}/$route/$imageId"));
+
       request.headers['Authorization'] = 'Bearer $token';
       request.files.add(http.MultipartFile.fromBytes('image', fileBytes!,
           filename: fileName));

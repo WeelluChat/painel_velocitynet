@@ -1,11 +1,13 @@
 import 'dart:convert';
+import 'dart:js_interop';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:painel_velocitynet/constantes/api_url.dart';
-import 'package:painel_velocitynet/ofertas_classes/item.dart';
+import 'package:painel_velocitynet/helpers/token.dart';
+import 'package:painel_velocitynet/modules/offer/controller/offer_controller.dart';
+import 'package:painel_velocitynet/modules/offer/model/offer_model.dart';
+import 'package:painel_velocitynet/service/slider/image_service.dart';
 
 class Ofertas extends StatefulWidget {
   const Ofertas({super.key});
@@ -15,90 +17,46 @@ class Ofertas extends StatefulWidget {
 }
 
 class _OfertasState extends State<Ofertas> {
-  late Item itemApi = Item(
-      id: id, titulo: titulo.text, decricao: descricao.text, valor: valor.text);
+  List<OfferModel> offer = [];
+
   TextEditingController titulo = TextEditingController();
   TextEditingController descricao = TextEditingController();
   TextEditingController valor = TextEditingController();
   TextEditingController textoPreco = TextEditingController();
   late String id;
+  dynamic imagem = '';
 
-  List<Item> dadosOfertas = [];
-
-  Future receberDadosOfertas() async {
-    Uri url = Uri.parse('${ApiContants.baseApi}/offer');
-    http.Response response = await http.get(url);
-    if (response.statusCode == 200) {
-      final List<dynamic> decodedData = json.decode(response.body);
-      final List<Item> ofertas =
-          decodedData.map((item) => Item.fromJson(item)).toList();
-
-      if (ofertas.isNotEmpty) {
-        titulo.text = ofertas[0].titulo;
-        descricao.text = ofertas[0].decricao;
-        valor.text = ofertas[0].valor;
-        id = ofertas[0].id;
-      }
-
-      setState(() {
-        dadosOfertas = ofertas;
-      });
-    } else {
-      if (kDebugMode) {
-        print(
-            'Erro ao buscar os dados das ofertas. Código de status: ${response.statusCode}');
-      }
+  getOffer() async {
+    var offerGet = await OfferController().getOffer();
+    var jsonOffer = json.decode(offerGet);
+    List<OfferModel> newJson = [];
+    for (var item in jsonOffer) {
+      newJson.add(OfferModel.fromJson(item));
     }
-  }
 
-  Future atualizarDadosOfertas(
-    String id,
-    String novoTitulo,
-    String novaDescricao,
-    String novoValor,
-  ) async {
-    Uri url = Uri.parse('${ApiContants.baseApi}/offer');
+    setState(() {
+      offer = newJson;
+    });
 
-    Map<String, String> body = {
-      'id': id,
-      'title': novoTitulo,
-      'description': novaDescricao,
-      'value': novoValor,
-    };
-
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-    };
-
-    http.Response response =
-        await http.patch(url, headers: headers, body: jsonEncode(body));
-    if (response.statusCode == 200) {
-      if (kDebugMode) {
-        print('Dados da oferta atualizados com sucesso!');
-      }
-      if (kDebugMode) {
-        print(response.body);
-      }
-      receberDadosOfertas();
-    } else {
-      if (kDebugMode) {
-        print(
-            'Erro ao atualizar os dados da oferta. Status code: ${response.statusCode}');
-      }
+    if (newJson.isNotEmpty && newJson.isNotEmpty) {
+      titulo.text = newJson[0].titulo;
+      descricao.text = newJson[0].decricao;
+      valor.text = newJson[0].valor;
+      id = newJson[0].id;
+      imagem = newJson[0].imagem;
     }
   }
 
   @override
   void initState() {
     super.initState();
-    receberDadosOfertas();
+    getOffer();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left:20),
-      // color: Colors.pinkAccent,
+      padding: const EdgeInsets.only(left: 20),
       child: Flex(
         mainAxisAlignment: MainAxisAlignment.start,
         direction: Axis.vertical,
@@ -112,10 +70,11 @@ class _OfertasState extends State<Ofertas> {
                 bottom: 50,
               ),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color(
+                borderRadius: BorderRadius.circular(10),
+                color: const Color(
                   0xff181919,
-                ),),
+                ),
+              ),
               child: Column(
                 children: [
                   Text(
@@ -145,28 +104,40 @@ class _OfertasState extends State<Ofertas> {
                             children: [
                               Container(
                                 width: 1200,
-                                height:
-                                    MediaQuery.of(context).size.width < 600
-                                        ? 51
-                                        : 90,
+                                height: MediaQuery.of(context).size.width < 600
+                                    ? 51
+                                    : 90,
                                 decoration: const BoxDecoration(
                                   borderRadius: BorderRadius.all(Radius.zero),
                                 ),
                                 child: ElevatedButton(
                                   style: ButtonStyle(
                                     padding: const MaterialStatePropertyAll(
-                                        EdgeInsets.only(left: 20, right: 20, top:15)),
+                                      EdgeInsets.only(
+                                          left: 20, right: 20, top: 15),
+                                    ),
                                     shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                            side: const BorderSide(
-                                                color: Colors.white),
-                                            borderRadius:
-                                                BorderRadius.circular(10),),),
-                                    backgroundColor:
-                                         MaterialStateProperty.all(
-                                            const Color(0xff181919)),
+                                      RoundedRectangleBorder(
+                                        side: const BorderSide(
+                                          color: Colors.white,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all(
+                                      const Color(0xff181919),
+                                    ),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    var token = await GetToken()
+                                        .getTokenFromLocalStorage();
+                                    ImageService().uploadImage(
+                                      "offer",
+                                      token,
+                                      'PATCH',
+                                      id,
+                                    );
+                                  },
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
@@ -192,6 +163,13 @@ class _OfertasState extends State<Ofertas> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              SizedBox(
+                                width: 250,
+                                child: imageWdiget(),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
                               Text(
                                 'Título',
                                 style: GoogleFonts.getFont('Poppins',
@@ -294,12 +272,14 @@ class _OfertasState extends State<Ofertas> {
                                       width: 950,
                                       child: TextField(
                                         controller: valor,
-                                        style: const TextStyle(color: Colors.white),
+                                        style: const TextStyle(
+                                            color: Colors.white),
                                         // obscureText: true,
                                         decoration: InputDecoration(
                                           // fillColor: Colors.red,
                                           hintText: '',
-                                          hintStyle: GoogleFonts.getFont('Poppins',
+                                          hintStyle: GoogleFonts.getFont(
+                                              'Poppins',
                                               color: const Color(0xff969696),
                                               fontSize: 15,
                                               fontWeight: FontWeight.w600),
@@ -309,45 +289,56 @@ class _OfertasState extends State<Ofertas> {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 20,),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
                                   Container(
-                            height: MediaQuery.of(context).size.width < 800
-                                ? 61
-                                : 61,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.zero),
-                            ),
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                padding: const MaterialStatePropertyAll(
-                                    EdgeInsets.only(left: 40, right: 40)),
-                                shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10))),
-                                backgroundColor: MaterialStateProperty.all(
-                                    const Color(0xff46964A)),
-                              ),
-                              onPressed: () {
-                                atualizarDadosOfertas(id, titulo.text,
-                                    descricao.text, valor.text);
-                              },
-                              child: Text(
-                                textAlign: TextAlign.center,
-                                'Salvar',
-
-                                style: GoogleFonts.getFont('Poppins',
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                          ),
+                                    height:
+                                        MediaQuery.of(context).size.width < 800
+                                            ? 61
+                                            : 61,
+                                    decoration: const BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.zero),
+                                    ),
+                                    child: ElevatedButton(
+                                      style: ButtonStyle(
+                                        padding: const MaterialStatePropertyAll(
+                                            EdgeInsets.only(
+                                                left: 40, right: 40)),
+                                        shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                const Color(0xff46964A)),
+                                      ),
+                                      onPressed: () async {
+                                        OfferController().patchOffer(
+                                            id,
+                                            titulo.text,
+                                            descricao.text,
+                                            valor.text,
+                                            await GetToken()
+                                                .getTokenFromLocalStorage());
+                                      },
+                                      child: Text(
+                                        textAlign: TextAlign.center,
+                                        'Salvar',
+                                        style: GoogleFonts.getFont('Poppins',
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],
-                          ),                          
-                          
+                          ),
                         ],
                       ),
                     ),
@@ -360,12 +351,15 @@ class _OfertasState extends State<Ofertas> {
       ),
     );
   }
-}
 
-                         
-                          
-                        
-                          //  SizedBox(
-                          //   height: MediaQuery.of(context).size.width < 600 ? 20 : 61,
-                          // ),
-                          
+  imageWdiget() {
+    if (imagem != '') {
+      return Image.network(
+        "${ApiContants.baseApi}/uploads/$imagem",
+        fit: BoxFit.cover,
+      );
+    } else {
+      const CircularProgressIndicator();
+    }
+  }
+}

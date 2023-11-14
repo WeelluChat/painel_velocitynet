@@ -6,7 +6,7 @@ import 'package:painel_velocitynet/constantes/api_url.dart';
 import 'package:painel_velocitynet/helpers/token.dart';
 import 'package:painel_velocitynet/modules/plans/controller/plans_controller.dart';
 import 'package:painel_velocitynet/modules/plans/model/plans_model.dart';
-import 'package:painel_velocitynet/service/slider/api_slider.dart';
+import 'package:painel_velocitynet/service/slider/image_service.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class Plans extends StatefulWidget {
@@ -23,14 +23,14 @@ class _PlansState extends State<Plans> {
     var plans = await PlansController().getPlans();
     var jsonData = json.decode(plans);
 
-    List<PlansModel> novosDados = [];
+    List<PlansModel> newJson = [];
 
     for (var item in jsonData) {
-      novosDados.add(PlansModel.fromJson(item));
+      newJson.add(PlansModel.fromJson(item));
     }
 
     setState(() {
-      dados = novosDados;
+      dados = newJson;
     });
   }
 
@@ -184,11 +184,10 @@ class _PlansState extends State<Plans> {
                                         Colors.transparent),
                                   ),
                                   onPressed: () async {
-                                    ApiSlider().uploadImage(
-                                      "plans",
-                                      await GetToken()
-                                          .getTokenFromLocalStorage(),
-                                    );
+                                    var token = await GetToken()
+                                        .getTokenFromLocalStorage();
+                                    ImageService().uploadImage(
+                                        "plans", token, 'POST', '');
                                   },
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,

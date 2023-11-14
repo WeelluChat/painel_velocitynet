@@ -9,14 +9,14 @@ import 'package:painel_velocitynet/modules/description_item/description_item.dar
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Planos extends StatefulWidget {
-  const Planos({super.key});
+class Description extends StatefulWidget {
+  const Description({super.key});
 
   @override
-  State<Planos> createState() => _PlanosState();
+  State<Description> createState() => _PlanosState();
 }
 
-class _PlanosState extends State<Planos> {
+class _PlanosState extends State<Description> {
   late ItemDescription itemApi =
       ItemDescription(id: id, titulo: titulo.text, texto: texto.text);
 
@@ -114,7 +114,7 @@ class _PlanosState extends State<Planos> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left:20),
+      padding: const EdgeInsets.only(left: 20),
       child: Flex(
         mainAxisAlignment: MainAxisAlignment.start,
         direction: Axis.vertical,
@@ -129,7 +129,7 @@ class _PlanosState extends State<Planos> {
               ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color:const Color(
+                color: const Color(
                   0xff181919,
                 ),
               ),
@@ -195,10 +195,9 @@ class _PlanosState extends State<Planos> {
                             runSpacing: 20,
                             children: [
                               Container(
-                                height:
-                                    MediaQuery.of(context).size.width < 600
-                                        ? 51
-                                        : 50,
+                                height: MediaQuery.of(context).size.width < 600
+                                    ? 51
+                                    : 50,
                                 decoration: const BoxDecoration(
                                   borderRadius: BorderRadius.all(Radius.zero),
                                 ),
@@ -210,9 +209,8 @@ class _PlanosState extends State<Planos> {
                                         RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10))),
-                                    backgroundColor:
-                                        MaterialStateProperty.all(
-                                            const Color(0xff46964A)),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        const Color(0xff46964A)),
                                   ),
                                   onPressed: () {},
                                   child: Text(
@@ -228,10 +226,9 @@ class _PlanosState extends State<Planos> {
                                 width: 20,
                               ),
                               Container(
-                                height:
-                                    MediaQuery.of(context).size.width < 600
-                                        ? 51
-                                        : 50,
+                                height: MediaQuery.of(context).size.width < 600
+                                    ? 51
+                                    : 50,
                                 decoration: const BoxDecoration(
                                   borderRadius: BorderRadius.all(Radius.zero),
                                 ),
@@ -243,16 +240,14 @@ class _PlanosState extends State<Planos> {
                                         RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10))),
-                                    backgroundColor:
-                                        MaterialStateProperty.all(
-                                            const Color(0xff46964A)),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        const Color(0xff46964A)),
                                   ),
                                   onPressed: () => showDialog<String>(
                                     context: context,
                                     builder: (BuildContext context) =>
                                         AlertDialog(
-                                      backgroundColor:
-                                          const Color(0xff343434),
+                                      backgroundColor: const Color(0xff343434),
                                       title: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -292,8 +287,7 @@ class _PlanosState extends State<Planos> {
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
-                                                color:
-                                                    const Color(0xff3D3D3D),
+                                                color: const Color(0xff3D3D3D),
                                               ),
                                               width: 500,
                                               child: TextField(
@@ -311,13 +305,11 @@ class _PlanosState extends State<Planos> {
                                                               0xff969696),
                                                           fontSize: 15,
                                                           fontWeight:
-                                                              FontWeight
-                                                                  .w600),
+                                                              FontWeight.w600),
                                                   border:
                                                       const OutlineInputBorder(
                                                           borderSide:
-                                                              BorderSide
-                                                                  .none),
+                                                              BorderSide.none),
                                                 ),
                                               ),
                                             ),
@@ -343,8 +335,7 @@ class _PlanosState extends State<Planos> {
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
-                                                color:
-                                                    const Color(0xff3D3D3D),
+                                                color: const Color(0xff3D3D3D),
                                               ),
                                               width: 500,
                                               child: TextField(
@@ -362,13 +353,11 @@ class _PlanosState extends State<Planos> {
                                                               0xff969696),
                                                           fontSize: 15,
                                                           fontWeight:
-                                                              FontWeight
-                                                                  .w600),
+                                                              FontWeight.w600),
                                                   border:
                                                       const OutlineInputBorder(
                                                           borderSide:
-                                                              BorderSide
-                                                                  .none),
+                                                              BorderSide.none),
                                                 ),
                                               ),
                                             ),
@@ -384,13 +373,11 @@ class _PlanosState extends State<Planos> {
                                               bottom: 30),
                                           child: Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Container(
                                                 height: 65,
-                                                decoration:
-                                                    const BoxDecoration(
+                                                decoration: const BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.all(
                                                           Radius.zero),
@@ -398,8 +385,8 @@ class _PlanosState extends State<Planos> {
                                                 width: 200,
                                                 child: ElevatedButton(
                                                   style: ButtonStyle(
-                                                    shape: MaterialStateProperty.all(
-                                                        RoundedRectangleBorder(
+                                                    shape: MaterialStateProperty
+                                                        .all(RoundedRectangleBorder(
                                                             borderRadius:
                                                                 BorderRadius
                                                                     .circular(
@@ -412,10 +399,8 @@ class _PlanosState extends State<Planos> {
                                                   onPressed: () async {
                                                     final token =
                                                         await getTokenFromLocalStorage();
-                                                    criarCard(
-                                                        postTitulo.text,
-                                                        postTexto.text,
-                                                        token);
+                                                    criarCard(postTitulo.text,
+                                                        postTexto.text, token);
                                                     Navigator.pop(
                                                         context, 'Criar');
                                                     postTitulo.clear();
@@ -423,22 +408,18 @@ class _PlanosState extends State<Planos> {
                                                   },
                                                   child: Text(
                                                     'Criar',
-                                                    style:
-                                                        GoogleFonts.getFont(
-                                                            'Poppins',
-                                                            color:
-                                                                Colors.white,
-                                                            fontSize: 20,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
+                                                    style: GoogleFonts.getFont(
+                                                        'Poppins',
+                                                        color: Colors.white,
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w600),
                                                   ),
                                                 ),
                                               ),
                                               Container(
                                                 height: 65,
-                                                decoration:
-                                                    const BoxDecoration(
+                                                decoration: const BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.all(
                                                           Radius.zero),
@@ -446,8 +427,8 @@ class _PlanosState extends State<Planos> {
                                                 width: 200,
                                                 child: ElevatedButton(
                                                   style: ButtonStyle(
-                                                    shape: MaterialStateProperty.all(
-                                                        RoundedRectangleBorder(
+                                                    shape: MaterialStateProperty
+                                                        .all(RoundedRectangleBorder(
                                                             borderRadius:
                                                                 BorderRadius
                                                                     .circular(
@@ -463,15 +444,12 @@ class _PlanosState extends State<Planos> {
                                                   },
                                                   child: Text(
                                                     'Cancelar',
-                                                    style:
-                                                        GoogleFonts.getFont(
-                                                            'Poppins',
-                                                            color:
-                                                                Colors.white,
-                                                            fontSize: 20,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
+                                                    style: GoogleFonts.getFont(
+                                                        'Poppins',
+                                                        color: Colors.white,
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w600),
                                                   ),
                                                 ),
                                               ),
@@ -512,8 +490,8 @@ class _PlanosState extends State<Planos> {
                                           children: [
                                             Container(
                                               decoration: BoxDecoration(
-                                                  color: const Color(
-                                                      0xff343434),
+                                                  color:
+                                                      const Color(0xff343434),
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           10)),
@@ -521,8 +499,7 @@ class _PlanosState extends State<Planos> {
                                               width: 270,
                                               child: Padding(
                                                 padding:
-                                                    const EdgeInsets.all(
-                                                        20.0),
+                                                    const EdgeInsets.all(20.0),
                                                 child: Column(
                                                   children: [
                                                     const SizedBox(
@@ -530,11 +507,9 @@ class _PlanosState extends State<Planos> {
                                                     ),
                                                     Text(
                                                       item.titulo,
-                                                      style:
-                                                          const TextStyle(
-                                                              color: Colors
-                                                                  .white,
-                                                              fontSize: 20),
+                                                      style: const TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 20),
                                                     ),
                                                     const SizedBox(
                                                       height: 20,
@@ -544,12 +519,11 @@ class _PlanosState extends State<Planos> {
                                                           TextAlign.justify,
                                                       item.texto,
                                                       maxLines: 7,
-                                                      overflow: TextOverflow.ellipsis,
-                                                      style:
-                                                          const TextStyle(
-                                                              color: Colors
-                                                                  .white,
-                                                              fontSize: 20),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: const TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 20),
                                                     ),
                                                   ],
                                                 ),
@@ -561,24 +535,23 @@ class _PlanosState extends State<Planos> {
                                             Container(
                                               height: 35,
                                               width: 270,
-                                              decoration:
-                                                  const BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.all(
-                                                        Radius.zero),
+                                              decoration: const BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.zero),
                                                 // color: Colors.green
                                               ),
                                               child: ElevatedButton(
                                                 style: ButtonStyle(
-                                                  shape: MaterialStateProperty.all(
-                                                      RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10))),
+                                                  shape:
+                                                      MaterialStateProperty.all(
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10))),
                                                   backgroundColor:
-                                                      MaterialStateProperty
-                                                          .all(const Color(
+                                                      MaterialStateProperty.all(
+                                                          const Color(
                                                               0xffF14D4D)),
                                                 ),
                                                 onPressed: () async {
@@ -591,8 +564,7 @@ class _PlanosState extends State<Planos> {
                                                 },
                                                 child: Row(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .center,
+                                                      MainAxisAlignment.center,
                                                   children: [
                                                     PhosphorIcon(
                                                       PhosphorIcons
@@ -605,11 +577,11 @@ class _PlanosState extends State<Planos> {
                                                     ),
                                                     Text(
                                                       'Deletar card',
-                                                      style: GoogleFonts
-                                                          .getFont(
+                                                      style:
+                                                          GoogleFonts.getFont(
                                                               'Poppins',
-                                                              color: Colors
-                                                                  .white,
+                                                              color:
+                                                                  Colors.white,
                                                               fontSize: 15,
                                                               fontWeight:
                                                                   FontWeight
@@ -644,5 +616,3 @@ class _PlanosState extends State<Planos> {
     );
   }
 }
-
-
