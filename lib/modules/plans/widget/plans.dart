@@ -324,6 +324,7 @@ class _PlansState extends State<Plans> {
                                                       await GetToken()
                                                           .getTokenFromLocalStorage());
                                                 },
+                                                
                                                 child: Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
