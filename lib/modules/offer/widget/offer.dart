@@ -19,11 +19,10 @@ class Ofertas extends StatefulWidget {
 class _OfertasState extends State<Ofertas> {
   List<OfferModel> offer = [];
 
+  late String id;
   TextEditingController titulo = TextEditingController();
   TextEditingController descricao = TextEditingController();
   TextEditingController valor = TextEditingController();
-  TextEditingController textoPreco = TextEditingController();
-  late String id;
   dynamic imagem = '';
 
   getOffer() async {
@@ -317,13 +316,14 @@ class _OfertasState extends State<Ofertas> {
                                                 const Color(0xff46964A)),
                                       ),
                                       onPressed: () async {
+                                        var token = await GetToken()
+                                            .getTokenFromLocalStorage();
                                         OfferController().patchOffer(
                                             id,
                                             titulo.text,
                                             descricao.text,
                                             valor.text,
-                                            await GetToken()
-                                                .getTokenFromLocalStorage());
+                                            token.toString());
                                       },
                                       child: Text(
                                         textAlign: TextAlign.center,

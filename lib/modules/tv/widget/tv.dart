@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:painel_velocitynet/constantes/api_url.dart';
-import 'package:painel_velocitynet/tv_classes/item_tv.dart';
+import 'package:painel_velocitynet/helpers/token.dart';
+import 'package:painel_velocitynet/modules/tv/controller/tv_controller.dart';
+import 'package:painel_velocitynet/modules/tv/model/tv_model.dart';
+import 'package:painel_velocitynet/service/slider/image_service.dart';
 
 class TV extends StatefulWidget {
   const TV({super.key});
@@ -15,78 +18,45 @@ class TV extends StatefulWidget {
 }
 
 class _TVState extends State<TV> {
-  late ItemTv itemTv = ItemTv(
-      id: id, titulo: titulo.text, decricao: descricao.text, valor: valor.text);
+  List<TvModel> tv = [];
+
+  late String id;
   TextEditingController titulo = TextEditingController();
   TextEditingController descricao = TextEditingController();
   TextEditingController valor = TextEditingController();
-  late String id;
+  dynamic imagem = '';
 
-  List<ItemTv> dadosTV = [];
-
-  Future receberDadosTv() async {
-    Uri url = Uri.parse('${ApiContants.baseApi}/tv');
-    http.Response response = await http.get(url);
-    if (response.statusCode == 200) {
-      final List<dynamic> decodedData = json.decode(response.body);
-      final List<ItemTv> tv =
-          decodedData.map((item) => ItemTv.fromJson(item)).toList();
-
-      if (tv.isNotEmpty) {
-        titulo.text = tv[0].titulo;
-        descricao.text = tv[0].decricao;
-        valor.text = tv[0].valor;
-        id = tv[0].id;
-      }
-
-      setState(() {
-        dadosTV = tv;
-      });
-    } else {
-      if (kDebugMode) {
-        print(
-            'Erro ao buscar os dados das ofertas. Código de status: ${response.statusCode}');
-      }
+  getTv() async {
+    var tvGet = await TvController().getTv();
+    var jsonTv = json.decode(tvGet);
+    List<TvModel> newJson = [];
+    for (var item in jsonTv) {
+      newJson.add(TvModel.fromJson(item));
     }
-  }
 
-  Future atualizarDadosTv(String id, String novoTitulo, String novaDescricao,
-      String novoValor) async {
-    Uri url = Uri.parse('${ApiContants.baseApi}/tv');
+    setState(() {
+      tv = newJson;
+    });
 
-    Map<String, String> body = {
-      'id': id,
-      'title': novoTitulo,
-      'description': novaDescricao,
-      'value': novoValor
-    };
-
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-    };
-
-    http.Response response =
-        await http.patch(url, headers: headers, body: jsonEncode(body));
-    if (response.statusCode == 200) {
-      receberDadosTv();
-    } else {
-      if (kDebugMode) {
-        print(
-            'Erro ao atualizar os dados da tv, Status code: ${response.statusCode}');
-      }
+    if (newJson.isNotEmpty && newJson.isNotEmpty) {
+      titulo.text = newJson[0].titulo;
+      descricao.text = newJson[0].decricao;
+      valor.text = newJson[0].valor;
+      id = newJson[0].id;
+      imagem = newJson[0].imagem;
     }
   }
 
   @override
   void initState() {
     super.initState();
-    receberDadosTv();
+    getTv();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left:20),
+      padding: const EdgeInsets.only(left: 20),
       child: Flex(
         mainAxisAlignment: MainAxisAlignment.start,
         direction: Axis.vertical,
@@ -125,7 +95,6 @@ class _TVState extends State<TV> {
                   Flexible(
                     child: SizedBox(
                       width: 1200,
-                      // color: Colors.red,
                       child: ListView(
                         padding: const EdgeInsets.all(16.0),
                         children: [
@@ -138,8 +107,7 @@ class _TVState extends State<TV> {
                                   Container(
                                     width: 1200,
                                     height:
-                                        MediaQuery.of(context).size.width <
-                                                600
+                                        MediaQuery.of(context).size.width < 600
                                             ? 90
                                             : 90,
                                     decoration: const BoxDecoration(
@@ -148,31 +116,39 @@ class _TVState extends State<TV> {
                                     ),
                                     child: ElevatedButton(
                                       style: ButtonStyle(
-                                        padding:
-                                            const MaterialStatePropertyAll(
-                                                EdgeInsets.only(
-                                                    left: 20, right: 20, top:15)),
+                                        padding: const MaterialStatePropertyAll(
+                                          EdgeInsets.only(
+                                              left: 20, right: 20, top: 15),
+                                        ),
                                         shape: MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
-                                              side: const BorderSide(
+                                          RoundedRectangleBorder(
+                                            side: const BorderSide(
                                                 color: Colors.white),
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        10))),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ),
                                         backgroundColor:
                                             MaterialStateProperty.all(
-                                            const Color(0xff181919)),
+                                          const Color(0xff181919),
+                                        ),
                                       ),
-                                      onPressed: () {},
+                                      onPressed: () async {
+                                        var token = await GetToken()
+                                            .getTokenFromLocalStorage();
+                                        ImageService().uploadImage(
+                                            "tv", token, "PATCH", id);
+                                      },
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                            CrossAxisAlignment.center,
                                         children: [
                                           const Icon(Icons.add, size: 45),
                                           Text(
                                             textAlign: TextAlign.center,
                                             'Adicionar imagem',
-                                            style: GoogleFonts.getFont('Poppins',
+                                            style: GoogleFonts.getFont(
+                                                'Poppins',
                                                 color: Colors.white,
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w500),
@@ -184,8 +160,15 @@ class _TVState extends State<TV> {
                                 ],
                               ),
                               const SizedBox(
-                            height: 20,
-                          ),
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: 250,
+                                child: imageWdiget(),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
                               Text(
                                 'Título',
                                 style: GoogleFonts.getFont('Poppins',
@@ -288,12 +271,14 @@ class _TVState extends State<TV> {
                                       width: 500,
                                       child: TextField(
                                         controller: valor,
-                                        style: const TextStyle(color: Colors.white),
+                                        style: const TextStyle(
+                                            color: Colors.white),
                                         // obscureText: true,
                                         decoration: InputDecoration(
                                           // fillColor: Colors.red,
                                           hintText: '',
-                                          hintStyle: GoogleFonts.getFont('Poppins',
+                                          hintStyle: GoogleFonts.getFont(
+                                              'Poppins',
                                               color: const Color(0xff969696),
                                               fontSize: 15,
                                               fontWeight: FontWeight.w600),
@@ -303,43 +288,54 @@ class _TVState extends State<TV> {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 20,),
-                                   Container(
-                            height: MediaQuery.of(context).size.width < 800
-                                ? 61
-                                : 61,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.zero),
-                            ),
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                padding: const MaterialStatePropertyAll(
-                                    EdgeInsets.only(left: 40, right: 40)),
-                                shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10))),
-                                backgroundColor: MaterialStateProperty.all(
-                                    const Color(0xff46964A)),
-                              ),
-                              onPressed: () {
-                                atualizarDadosTv(id, titulo.text,
-                                    descricao.text, valor.text);
-                              },
-                              child: Text(
-                                'Salvar',
-                                style: GoogleFonts.getFont('Poppins',
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                          ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  Container(
+                                    height:
+                                        MediaQuery.of(context).size.width < 800
+                                            ? 61
+                                            : 61,
+                                    decoration: const BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.zero),
+                                    ),
+                                    child: ElevatedButton(
+                                      style: ButtonStyle(
+                                        padding: const MaterialStatePropertyAll(
+                                            EdgeInsets.only(
+                                                left: 40, right: 40)),
+                                        shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10))),
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                const Color(0xff46964A)),
+                                      ),
+                                      onPressed: () async {
+                                        var token = await GetToken()
+                                            .getTokenFromLocalStorage();
+                                        TvController().patchTv(
+                                            id,
+                                            titulo.text,
+                                            descricao.text,
+                                            valor.text,
+                                            token.toString());
+                                      },
+                                      child: Text(
+                                        'Salvar',
+                                        style: GoogleFonts.getFont('Poppins',
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],
                           ),
-                         
                         ],
                       ),
                     ),
@@ -351,5 +347,16 @@ class _TVState extends State<TV> {
         ],
       ),
     );
+  }
+
+  imageWdiget() {
+    if (imagem != '') {
+      return Image.network(
+        "${ApiContants.baseApi}/uploads/$imagem",
+        fit: BoxFit.cover,
+      );
+    } else {
+      const CircularProgressIndicator();
+    }
   }
 }
