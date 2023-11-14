@@ -208,151 +208,154 @@ class _PlansState extends State<Plans> {
                                   ),
                                 ),
                               ),
-                              Container(
-                                padding: const EdgeInsets.only(left: 50),
-                                width: 900,
-                                height: 400,
-                                child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: dados.length,
-                                    itemBuilder: (context, index) {
-                                      var plano = dados[index];
-                                      return Column(
-                                        children: [
-                                          Expanded(
-                                            child: SizedBox(
-                                              // color: Colors.amber,
-                                              height: 290,
-                                              width: 320,
-                                              child: Image.network(
-                                                '${ApiContants.baseApi}/uploads/${plano.name}',
-                                                errorBuilder: (context,
-                                                    exception, stackTrace) {
-                                                  if (kDebugMode) {
-                                                    print(
-                                                        'Erro ao carregar imagem: $exception');
-                                                  }
-                                                  return const Text(
-                                                      'Erro ao carregar imagem');
+                              Expanded(
+                                child: Container(
+                                  // color: Colors.red,
+                                  padding: const EdgeInsets.only(left: 50),
+                                  width: 900,
+                                  height: 400,
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: dados.length,
+                                      itemBuilder: (context, index) {
+                                        var plano = dados[index];
+                                        return Column(
+                                          children: [
+                                            Expanded(
+                                              child: SizedBox(
+                                                // color: Colors.amber,
+                                                height: 290,
+                                                width: 320,
+                                                child: Image.network(
+                                                  '${ApiContants.baseApi}/uploads/${plano.name}',
+                                                  errorBuilder: (context,
+                                                      exception, stackTrace) {
+                                                    if (kDebugMode) {
+                                                      print(
+                                                          'Erro ao carregar imagem: $exception');
+                                                    }
+                                                    return const Text(
+                                                        'Erro ao carregar imagem');
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              height: 35,
+                                              decoration: const BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.all(Radius.zero),
+                                                // color: Colors.green
+                                              ),
+                                              child: ElevatedButton(
+                                                style: ButtonStyle(
+                                                  shape:
+                                                      MaterialStateProperty.all(
+                                                    RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                  ),
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          const Color(
+                                                              0xFF4D73F1)),
+                                                ),
+                                                onPressed: () {},
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    PhosphorIcon(
+                                                      PhosphorIcons
+                                                          .regular.pencil,
+                                                      color: Colors.white,
+                                                      size: 25,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Text(
+                                                      'Selecionar imagem',
+                                                      style: GoogleFonts.getFont(
+                                                          'Poppins',
+                                                          color: Colors.white,
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 20,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Container(
+                                              height: 35,
+                                              decoration: const BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.all(Radius.zero),
+                                                // color: Colors.green
+                                              ),
+                                              child: ElevatedButton(
+                                                style: ButtonStyle(
+                                                  shape:
+                                                      MaterialStateProperty.all(
+                                                    RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                  ),
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                    const Color(0xffF14D4D),
+                                                  ),
+                                                ),
+                                                onPressed: () async {
+                                                  // final itemId = dados[0].id;
+                                                  PlansController().deletePlans(
+                                                      plano.id,
+                                                      await GetToken()
+                                                          .getTokenFromLocalStorage());
                                                 },
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            height: 35,
-                                            decoration: const BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.all(Radius.zero),
-                                              // color: Colors.green
-                                            ),
-                                            child: ElevatedButton(
-                                              style: ButtonStyle(
-                                                shape:
-                                                    MaterialStateProperty.all(
-                                                  RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                ),
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                        const Color(
-                                                            0xFF4D73F1)),
-                                              ),
-                                              onPressed: () {},
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  PhosphorIcon(
-                                                    PhosphorIcons
-                                                        .regular.pencil,
-                                                    color: Colors.white,
-                                                    size: 25,
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Text(
-                                                    'Selecionar imagem',
-                                                    style: GoogleFonts.getFont(
-                                                        'Poppins',
-                                                        color: Colors.white,
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 20,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Container(
-                                            height: 35,
-                                            decoration: const BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.all(Radius.zero),
-                                              // color: Colors.green
-                                            ),
-                                            child: ElevatedButton(
-                                              style: ButtonStyle(
-                                                shape:
-                                                    MaterialStateProperty.all(
-                                                  RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                ),
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                  const Color(0xffF14D4D),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    PhosphorIcon(
+                                                      PhosphorIcons.regular.trash,
+                                                      color: Colors.white,
+                                                      size: 25,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 20,
+                                                    ),
+                                                    Text(
+                                                      'Deletar imagem',
+                                                      style: GoogleFonts.getFont(
+                                                          'Poppins',
+                                                          color: Colors.white,
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 35,
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                              onPressed: () async {
-                                                // final itemId = dados[0].id;
-                                                PlansController().deletePlans(
-                                                    plano.id,
-                                                    await GetToken()
-                                                        .getTokenFromLocalStorage());
-                                              },
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  PhosphorIcon(
-                                                    PhosphorIcons.regular.trash,
-                                                    color: Colors.white,
-                                                    size: 25,
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 20,
-                                                  ),
-                                                  Text(
-                                                    'Deletar imagem',
-                                                    style: GoogleFonts.getFont(
-                                                        'Poppins',
-                                                        color: Colors.white,
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 35,
-                                                  ),
-                                                ],
-                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      );
-                                    }),
+                                          ],
+                                        );
+                                      }),
+                                ),
                               ),
                             ],
                           ),

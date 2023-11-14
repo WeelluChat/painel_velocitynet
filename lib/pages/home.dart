@@ -49,9 +49,10 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
         padding:
             const EdgeInsets.only(left: 40, bottom: 50, right: 20, top: 10),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              width: 350,
+              width: MediaQuery.of(context).size.width < 1300 ? 200 : 350,
               // height: 800,
               child: NavigationRail(
                 backgroundColor: const Color(
