@@ -1,9 +1,6 @@
 import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:painel_velocitynet/constantes/api_url.dart';
 import 'package:painel_velocitynet/helpers/token.dart';
 import 'package:painel_velocitynet/modules/tv/controller/tv_controller.dart';
