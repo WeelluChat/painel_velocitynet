@@ -21,7 +21,7 @@ class ImageService {
       request.headers['Authorization'] = 'Bearer $token';
       request.files.add(http.MultipartFile.fromBytes('image', fileBytes!,
           filename: fileName));
-
+      
       try {
         await request.send();
       } catch (e) {

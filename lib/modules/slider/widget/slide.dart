@@ -45,6 +45,7 @@ class _SlideState extends State<Slide> {
         body: jsonEncode({"id": itemId, "date": novaData}),
       );
       if (response.statusCode == 200) {
+        getSlide();
         print('DataSlider do item $itemId atualizado com sucesso!');
       } else {
         print(
@@ -236,7 +237,6 @@ class _SlideState extends State<Slide> {
                                           await getTokenFromLocalStorage();
                                       ImageService().uploadImage(
                                           "slider", token, 'POST', '');
-                                      getSlide();
                                     },
                                     child: Column(
                                       crossAxisAlignment:
@@ -260,9 +260,6 @@ class _SlideState extends State<Slide> {
                             const SizedBox(
                               height: 25,
                             ),
-                            // Text(DateFormat('dd/MM/yyyy').format(_dateTime),
-                            //     style: const TextStyle(
-                            //         color: Colors.white, fontSize: 22)),
                             SizedBox(
                               height: 800,
                               // color: Colors.cyan,
