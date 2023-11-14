@@ -236,11 +236,11 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                   });
                 },
                 children: const [
-                  TV(),
                   Slide(),
                   Plans(),
                   Description(),
                   Ofertas(),
+                  TV(),
                   Perguntas(),
                   Footer(),
                   Exit(),
