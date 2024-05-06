@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:painel_velocitynet/modules/offer/widget/offer.dart';
+import 'package:painel_velocitynet/modules/plans/widget/plans.dart';
 import 'package:painel_velocitynet/modules/slider/widget/slide.dart';
 import 'package:painel_velocitynet/pages/descricao.dart';
+import 'package:painel_velocitynet/pages/planos_abas/create_category_alert_dialog.dart';
 import 'package:painel_velocitynet/pages/planos_abas/create_plans.dart';
+import 'package:painel_velocitynet/pages/planos_abas/teste.dart';
 import 'package:painel_velocitynet/pages/tv.dart';
 
 class PlansConfig extends StatefulWidget {
@@ -26,6 +29,7 @@ class _PlansConfigState extends State<PlansConfig>
     );
   }
 
+  final List<String> tabNames = ['Inicio', 'Sobre', 'Contact'];
   int _currentIndex = 0;
   final PageController _pageController = PageController();
 
@@ -64,7 +68,11 @@ class _PlansConfigState extends State<PlansConfig>
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent),
-                    onPressed: () {},
+                    onPressed: () => showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              const CreateCategoryAlertDialog(),
+                        ),
                     child: const Text(
                       '+ Criar Categoria',
                       style: TextStyle(color: Colors.green),
@@ -460,10 +468,8 @@ class _PlansConfigState extends State<PlansConfig>
                   ],
                 ),
               ),
-              Container(
-                color: Colors.amber,
-              ),
-              Container(color: Colors.green),
+              const Plans(),
+              const Testando(),
               Container(color: Colors.red),
               Container(color: Colors.orange),
               Container(color: Colors.deepOrangeAccent),
