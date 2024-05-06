@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:painel_velocitynet/constantes/api_url.dart';
 import 'package:painel_velocitynet/helpers/token.dart';
 import 'package:painel_velocitynet/modules/create_category/create_category_model.dart';
@@ -21,7 +24,8 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
   List<CreateCategoryModel> dataCategoryModel = [];
   TextEditingController nomePlano = TextEditingController();
   TextEditingController subTitulo = TextEditingController();
-
+  FilePickerResult? result;
+  late Uint8List resultBytes;
   String? selectedValue;
   final List<String> items = [
     'Site',
@@ -30,48 +34,51 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
   ];
   String? selectedImage;
   uploadImage() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.any,
+    result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
       allowMultiple: false,
     );
 
     if (result != null) {
-      setState(() {});
+      setState(() {
+        resultBytes = result!.files.first.bytes!;
+      });
     }
   }
 
   createCategoryPlan(
     nome,
     subtutlo,
-    image,
     selectVisualizacao,
     token,
   ) async {
     try {
-      // var token = await GetToken.token();
-      var response = await http.post(
+      var request = http.MultipartRequest(
+        "POST",
         Uri.parse('${ApiContants.baseApi}/category-plan/create'),
-        body: jsonEncode({
-          "nome": nome,
-          "subTitulo": subtutlo,
-          "logo": selectedImage,
-          "visualizacao": selectVisualizacao
-        }),
-        headers: {
-          'authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
       );
+      request.headers['Authorization'] = 'Bearer $token';
+      request.files.add(
+        http.MultipartFile.fromBytes('image', resultBytes,
+            filename: result!.files.first.name,
+            contentType: MediaType('image', 'jpeg')),
+      );
+      request.fields.addAll({
+        'nome': nome,
+        'subTitulo': subtutlo,
+        'visualizacao': selectVisualizacao
+      });
 
-      if (response.statusCode == 200) {
-        print('Categoria criada com sucesso');
-        return response.body;
-      } else {
-        print("Erro na requisição: ${response.statusCode}");
-        return null;
-      }
+      await request.send();
+
+      // if (response.statusCode == 200) {
+      //   print('Categoria criada com sucesso');
+      //   return response.body;
+      // } else {
+      //   print("Erro na requisição: ${response.statusCode}");
+      //   return null;
+      // }
     } catch (error) {
-      // Trate erros gerais aqui.
       print("Erro na requisição: $error");
       return null;
     }
@@ -105,23 +112,24 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
                         uploadImage();
                       },
                       child: Container(
-                        width: 130,
-                        height: 200,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Colors.white)),
-                        child: const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Adicionar\nicone da categoria',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.white),
-                            )
-                          ],
-                        ),
-                      ),
+                          width: 130,
+                          height: 200,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white)),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              result == null
+                                  ? const Text(
+                                      'Adicionar\nicone da categoria',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.white),
+                                    )
+                                  : Image.memory(resultBytes)
+                            ],
+                          )),
                     ),
                     const SizedBox(
                       width: 20,
@@ -315,7 +323,6 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
                           createCategoryPlan(
                               nomePlano.text,
                               subTitulo.text,
-                              selectedImage,
                               selectedValue,
                               await GetToken().getTokenFromLocalStorage());
                           Navigator.pop(context, 'OK');
