@@ -242,7 +242,11 @@ class _SlideState extends State<Slide> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        const Icon(Icons.add, size: 45),
+                                        const Icon(
+                                          Icons.add,
+                                          size: 45,
+                                          color: Colors.white,
+                                        ),
                                         Text(
                                           maxLines: 2,
                                           'Adicionar imagem',

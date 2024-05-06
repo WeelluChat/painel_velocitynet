@@ -64,7 +64,7 @@ class _PlansState extends State<Plans> {
               child: Column(
                 children: [
                   Text(
-                    'Gerenciamento de planos',
+                    'Connect',
                     textAlign: TextAlign.center,
                     maxLines: 3,
                     style: GoogleFonts.getFont(
@@ -85,80 +85,80 @@ class _PlansState extends State<Plans> {
                       child: ListView(
                         padding: const EdgeInsets.all(16.0),
                         children: [
-                          Text(
-                            'Título',
-                            style: GoogleFonts.getFont('Poppins',
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: const Color(0xff3D3D3D),
-                                  ),
-                                  width: double.infinity,
-                                  child: TextField(
-                                    style: const TextStyle(color: Colors.white),
-                                    // obscureText: true,
-                                    decoration: InputDecoration(
-                                      // fillColor: Colors.red,
-                                      hintText: '',
-                                      hintStyle: GoogleFonts.getFont('Poppins',
-                                          color: const Color(0xff969696),
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w600),
-                                      border: const OutlineInputBorder(
-                                          borderSide: BorderSide.none),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Container(
-                                height: MediaQuery.of(context).size.width < 600
-                                    ? 51
-                                    : 50,
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.zero),
-                                ),
-                                child: ElevatedButton(
-                                  style: ButtonStyle(
-                                    padding: const MaterialStatePropertyAll(
-                                      EdgeInsets.only(left: 20, right: 20),
-                                    ),
-                                    shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        const Color(0xff46964A)),
-                                  ),
-                                  onPressed: () {},
-                                  child: Text(
-                                    'Salvar',
-                                    style: GoogleFonts.getFont('Poppins',
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 45,
-                          ),
+                          // Text(
+                          //   'Título',
+                          //   style: GoogleFonts.getFont('Poppins',
+                          //       color: Colors.white,
+                          //       fontSize: 22,
+                          //       fontWeight: FontWeight.w600),
+                          // ),
+                          // const SizedBox(
+                          //   height: 10,
+                          // ),
+                          // Row(
+                          //   children: [
+                          //     Expanded(
+                          //       child: Container(
+                          //         height: 50,
+                          //         decoration: BoxDecoration(
+                          //           borderRadius: BorderRadius.circular(10),
+                          //           color: const Color(0xff3D3D3D),
+                          //         ),
+                          //         width: double.infinity,
+                          //         child: TextField(
+                          //           style: const TextStyle(color: Colors.white),
+                          //           // obscureText: true,
+                          //           decoration: InputDecoration(
+                          //             // fillColor: Colors.red,
+                          //             hintText: '',
+                          //             hintStyle: GoogleFonts.getFont('Poppins',
+                          //                 color: const Color(0xff969696),
+                          //                 fontSize: 15,
+                          //                 fontWeight: FontWeight.w600),
+                          //             border: const OutlineInputBorder(
+                          //                 borderSide: BorderSide.none),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     const SizedBox(
+                          //       width: 20,
+                          //     ),
+                          //     Container(
+                          //       height: MediaQuery.of(context).size.width < 600
+                          //           ? 51
+                          //           : 50,
+                          //       decoration: const BoxDecoration(
+                          //         borderRadius: BorderRadius.all(Radius.zero),
+                          //       ),
+                          //       child: ElevatedButton(
+                          //         style: ButtonStyle(
+                          //           padding: const MaterialStatePropertyAll(
+                          //             EdgeInsets.only(left: 20, right: 20),
+                          //           ),
+                          //           shape: MaterialStateProperty.all(
+                          //             RoundedRectangleBorder(
+                          //               borderRadius: BorderRadius.circular(10),
+                          //             ),
+                          //           ),
+                          //           backgroundColor: MaterialStateProperty.all(
+                          //               const Color(0xff46964A)),
+                          //         ),
+                          //         onPressed: () {},
+                          //         child: Text(
+                          //           'Salvar',
+                          //           style: GoogleFonts.getFont('Poppins',
+                          //               color: Colors.white,
+                          //               fontSize: 18,
+                          //               fontWeight: FontWeight.w500),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+                          // const SizedBox(
+                          //   height: 45,
+                          // ),
                           Row(
                             children: [
                               Container(
@@ -243,8 +243,8 @@ class _PlansState extends State<Plans> {
                                             Container(
                                               height: 35,
                                               decoration: const BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.all(Radius.zero),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.zero),
                                                 // color: Colors.green
                                               ),
                                               child: ElevatedButton(
@@ -278,12 +278,15 @@ class _PlansState extends State<Plans> {
                                                     ),
                                                     Text(
                                                       'Selecionar imagem',
-                                                      style: GoogleFonts.getFont(
-                                                          'Poppins',
-                                                          color: Colors.white,
-                                                          fontSize: 15,
-                                                          fontWeight:
-                                                              FontWeight.w500),
+                                                      style:
+                                                          GoogleFonts.getFont(
+                                                              'Poppins',
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
                                                     ),
                                                     const SizedBox(
                                                       width: 20,
@@ -298,8 +301,8 @@ class _PlansState extends State<Plans> {
                                             Container(
                                               height: 35,
                                               decoration: const BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.all(Radius.zero),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.zero),
                                                 // color: Colors.green
                                               ),
                                               child: ElevatedButton(
@@ -330,7 +333,8 @@ class _PlansState extends State<Plans> {
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     PhosphorIcon(
-                                                      PhosphorIcons.regular.trash,
+                                                      PhosphorIcons
+                                                          .regular.trash,
                                                       color: Colors.white,
                                                       size: 25,
                                                     ),
@@ -339,12 +343,15 @@ class _PlansState extends State<Plans> {
                                                     ),
                                                     Text(
                                                       'Deletar imagem',
-                                                      style: GoogleFonts.getFont(
-                                                          'Poppins',
-                                                          color: Colors.white,
-                                                          fontSize: 15,
-                                                          fontWeight:
-                                                              FontWeight.w500),
+                                                      style:
+                                                          GoogleFonts.getFont(
+                                                              'Poppins',
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
                                                     ),
                                                     const SizedBox(
                                                       width: 35,
