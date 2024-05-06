@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,11 +28,22 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
     'Simulador',
     'Ambos',
   ];
+  String? selectedImage;
+  uploadImage() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.any,
+      allowMultiple: false,
+    );
+
+    if (result != null) {
+      setState(() {});
+    }
+  }
 
   createCategoryPlan(
     nome,
     subtutlo,
-    // image,
+    image,
     selectVisualizacao,
     token,
   ) async {
@@ -42,7 +54,7 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
         body: jsonEncode({
           "nome": nome,
           "subTitulo": subtutlo,
-          // "logo": image,
+          "logo": selectedImage,
           "visualizacao": selectVisualizacao
         }),
         headers: {
@@ -89,7 +101,9 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        uploadImage();
+                      },
                       child: Container(
                         width: 130,
                         height: 200,
@@ -101,7 +115,7 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              'Adicionar\nlogo do plano',
+                              'Adicionar\nicone da categoria',
                               textAlign: TextAlign.center,
                               style: TextStyle(color: Colors.white),
                             )
@@ -301,6 +315,7 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
                           createCategoryPlan(
                               nomePlano.text,
                               subTitulo.text,
+                              selectedImage,
                               selectedValue,
                               await GetToken().getTokenFromLocalStorage());
                           Navigator.pop(context, 'OK');
