@@ -49,7 +49,7 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              width: MediaQuery.of(context).size.width < 1300 ? 200 : 350,
+              // width: MediaQuery.of(context).size.width < 1300 ? 200 : 350,
               // height: 800,
               child: NavigationRail(
                 indicatorColor: Colors.transparent,
@@ -76,7 +76,7 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                     icon: Image.asset(
                       'images/slides.png',
                       color: Colors.white,
-                      width: 40,
+                      width: 30,
                     ),
 
                     // PhosphorIcon(
@@ -90,16 +90,16 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                       style: GoogleFonts.getFont(
                         'Poppins',
                         color: Colors.white,
-                        fontSize: 20,
+                        fontSize: 18,
                       ),
                     ),
                   ),
                   NavigationRailDestination(
                       padding: const EdgeInsets.only(bottom: 10, top: 10),
-                      icon: Image.asset(
-                        'images/plano.png',
+                      icon: const Icon(
+                        Icons.settings,
+                        size: 25,
                         color: Colors.white,
-                        width: 30,
                       ),
                       // icon: PhosphorIcon(
                       //   PhosphorIcons.regular.globe,
@@ -108,10 +108,11 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                       // ),
                       label: Text(
                         'Configurações',
+                        overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.getFont(
                           'Poppins',
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: 18,
                         ),
                       )),
                   NavigationRailDestination(
@@ -119,7 +120,7 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                       icon: Image.asset(
                         'images/descricao.png',
                         color: Colors.white,
-                        width: 30,
+                        width: 20,
                       ),
                       // icon: PhosphorIcon(
                       //   PhosphorIcons.regular.scroll,
@@ -131,7 +132,7 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                         style: GoogleFonts.getFont(
                           'Poppins',
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: 18,
                         ),
                       )),
                   NavigationRailDestination(
@@ -139,7 +140,7 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                       icon: Image.asset(
                         'images/ofertas.png',
                         color: Colors.white,
-                        width: 30,
+                        width: 20,
                       ),
                       // icon: PhosphorIcon(
                       //   PhosphorIcons.regular.tag,
@@ -160,14 +161,14 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                     icon: PhosphorIcon(
                       PhosphorIcons.regular.televisionSimple,
                       color: Colors.white,
-                      size: 36,
+                      size: 25,
                     ),
                     label: Text(
                       'TV',
                       style: GoogleFonts.getFont(
                         'Poppins',
                         color: Colors.white,
-                        fontSize: 20,
+                        fontSize: 18,
                       ),
                     ),
                   ),
@@ -176,7 +177,7 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                     icon: Image.asset(
                       'images/perguntas.png',
                       color: Colors.white,
-                      width: 30,
+                      width: 20,
                     ),
                     // icon: PhosphorIcon(
                     //   PhosphorIcons.regular.chatCircleDots,
@@ -188,7 +189,7 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                       style: GoogleFonts.getFont(
                         'Poppins',
                         color: Colors.white,
-                        fontSize: 20,
+                        fontSize: 18,
                       ),
                     ),
                   ),
@@ -197,7 +198,7 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                     icon: Image.asset(
                       'images/rodape.png',
                       color: Colors.white,
-                      width: 30,
+                      width: 20,
                     ),
                     // icon: PhosphorIcon(
                     //   PhosphorIcons.regular.stackSimple,
@@ -209,7 +210,7 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                       style: GoogleFonts.getFont(
                         'Poppins',
                         color: Colors.white,
-                        fontSize: 20,
+                        fontSize: 18,
                       ),
                     ),
                   ),
@@ -222,7 +223,7 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                       style: GoogleFonts.getFont(
                         'Poppins',
                         color: Colors.red,
-                        fontSize: 20,
+                        fontSize: 18,
                       ),
                     ),
                   ),

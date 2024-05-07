@@ -26,6 +26,7 @@ class _LoginState extends State<Login> {
     super.initState();
   }
 
+  bool isVisible = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,12 +37,12 @@ class _LoginState extends State<Login> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              height: 640,
-              width: 550,
+              height: 500,
+              width: 400,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20), color: Colors.white),
               child: Padding(
-                padding: const EdgeInsets.only(left: 30, top: 20, right: 30),
+                padding: const EdgeInsets.only(left: 30, right: 30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -55,7 +56,7 @@ class _LoginState extends State<Login> {
                           style: GoogleFonts.getFont('Poppins',
                               color: Colors.black,
                               fontWeight: FontWeight.w600,
-                              fontSize: 40),
+                              fontSize: 30),
                         ),
                       ],
                     ),
@@ -65,7 +66,7 @@ class _LoginState extends State<Login> {
                       color: const Color(0xff46964A),
                     ),
                     const SizedBox(
-                      height: 55,
+                      height: 45,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,23 +76,23 @@ class _LoginState extends State<Login> {
                           style: GoogleFonts.getFont('Poppins',
                               color: Colors.black,
                               fontWeight: FontWeight.w600,
-                              fontSize: 20),
+                              fontSize: 18),
                         ),
                         const SizedBox(
                           height: 10,
                         ),
                         Container(
-                          height: 65,
+                          height: 45,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: const Color(0xffF5F5F5),
+                            borderRadius: BorderRadius.circular(5),
+                            color: const Color(0xFFEBEBEB),
                           ),
                           width: double.infinity,
                           child: TextField(
                             controller: controlerEmail,
                             // obscureText: true,
                             decoration: InputDecoration(
-                              fillColor: Colors.red,
+                              contentPadding: const EdgeInsets.only(left: 20),
                               hintStyle: GoogleFonts.getFont('Poppins',
                                   color: const Color(0xff969696),
                                   fontSize: 15,
@@ -109,23 +110,34 @@ class _LoginState extends State<Login> {
                           style: GoogleFonts.getFont('Poppins',
                               color: Colors.black,
                               fontWeight: FontWeight.w600,
-                              fontSize: 20),
+                              fontSize: 18),
                         ),
                         const SizedBox(
                           height: 10,
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            color: const Color(0xffF5F5F5),
-                            borderRadius: BorderRadius.circular(10),
+                            color: const Color(0xFFEBEBEB),
+                            borderRadius: BorderRadius.circular(5),
                           ),
                           width: double.infinity,
-                          height: 65,
-                          child: TextField(
+                          height: 45,
+                          child: TextFormField(
                             controller: controllerPassword,
-                            obscureText: true,
+                            obscureText: isVisible == true ? true : false,
                             decoration: InputDecoration(
-                              fillColor: Colors.red,
+                              contentPadding: const EdgeInsets.only(
+                                left: 20,
+                              ),
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      isVisible = !isVisible;
+                                    });
+                                  },
+                                  icon: isVisible != true
+                                      ? const Icon(Icons.visibility)
+                                      : const Icon(Icons.visibility_off)),
                               hintStyle: GoogleFonts.getFont('Poppins',
                                   color: const Color(0xff969696),
                                   fontSize: 15,
@@ -136,10 +148,10 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                         const SizedBox(
-                          height: 60,
+                          height: 50,
                         ),
                         Container(
-                          height: 65,
+                          height: 60,
                           decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.zero),
                           ),
@@ -153,12 +165,8 @@ class _LoginState extends State<Login> {
                                   const Color(0xff46964A)),
                             ),
                             onPressed: () async {
-                              // print(controlerEmail.text);
-                              // print(controllerPassword.text);
-                              await authService
-                                  .autentication(); // Espera a autenticação ser concluída
-                              final token = await AuthManager
-                                  .getToken(); // Obtém o token armazenado
+                              await authService.autentication();
+                              final token = await AuthManager.getToken();
                               if (token != null) {
                                 ApiService.fazerRequisicaoAutenticada(token);
                               }
@@ -167,7 +175,7 @@ class _LoginState extends State<Login> {
                               'Entrar',
                               style: GoogleFonts.getFont('Poppins',
                                   color: Colors.white,
-                                  fontSize: 20,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.w600),
                             ),
                           ),
