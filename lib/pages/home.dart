@@ -35,20 +35,16 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-          title: Padding(
-            padding: const EdgeInsets.only(left: 25),
-            child: Text(
-              "Painel - Velocitynet",
-              style: GoogleFonts.getFont('Poppins',
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600),
-            ),
+          title: Text(
+            "Painel - Velocitynet",
+            style: GoogleFonts.getFont('Poppins',
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
           ),
           backgroundColor: Colors.black),
       body: Padding(
-        padding:
-            const EdgeInsets.only(left: 40, bottom: 50, right: 20, top: 10),
+        padding: const EdgeInsets.only(
+          right: 10,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -111,7 +107,7 @@ class MyTabbedPanelState extends State<MyTabbedPanel> {
                       //   color: const Color(0xff969696),
                       // ),
                       label: Text(
-                        'Planos',
+                        'Configurações',
                         style: GoogleFonts.getFont(
                           'Poppins',
                           color: Colors.white,

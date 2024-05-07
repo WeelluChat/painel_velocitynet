@@ -70,14 +70,6 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
       });
 
       await request.send();
-
-      // if (response.statusCode == 200) {
-      //   print('Categoria criada com sucesso');
-      //   return response.body;
-      // } else {
-      //   print("Erro na requisição: ${response.statusCode}");
-      //   return null;
-      // }
     } catch (error) {
       print("Erro na requisição: $error");
       return null;
@@ -117,19 +109,25 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(color: Colors.white)),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              result == null
-                                  ? const Text(
-                                      'Adicionar\nicone da categoria',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(color: Colors.white),
-                                    )
-                                  : Image.memory(resultBytes)
-                            ],
-                          )),
+                          child: result == null
+                              ? const Center(
+                                  child: Text(
+                                    'Adicionar\nicone da categoria',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                )
+                              : SizedBox(
+                                  width: 130,
+                                  height: 200,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.memory(
+                                      resultBytes,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                )),
                     ),
                     const SizedBox(
                       width: 20,

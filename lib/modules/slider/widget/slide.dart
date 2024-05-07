@@ -45,7 +45,6 @@ class _SlideState extends State<Slide> {
         body: jsonEncode({"id": itemId, "date": novaData}),
       );
       if (response.statusCode == 200) {
-        getSlide();
         print('DataSlider do item $itemId atualizado com sucesso!');
       } else {
         print(
@@ -124,27 +123,6 @@ class _SlideState extends State<Slide> {
     }
   }
 
-  // Future atualizarImagem(
-  //   String id,
-  // ) async {
-  //   Uri url = Uri.parse('${ApiContants.baseApi}/slider');
-
-  //   Map<String, String> body = {
-  //     'id': id,
-  //   };
-  //   Map<String, String> headers = {
-  //     'Content-Type': 'application/json',
-  //   };
-
-  //   http.Response response =
-  //       await http.patch(url, headers: headers, body: jsonEncode(body));
-  //   if (response.statusCode == 200) {
-  //     print('A imagem foi atualizada com sucesso!');
-  //     print(response.body);
-  //   } else {
-  //     print('Erro ao atualizar a imagem. Status code: ${response.statusCode}');
-  //   }
-  // }
   @override
   void initState() {
     super.initState();
@@ -159,382 +137,297 @@ class _SlideState extends State<Slide> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Flex(
-        mainAxisAlignment: MainAxisAlignment.start,
-        direction: Axis.vertical,
-        children: [
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Container(
-                width: 1416,
-                // height: 802,
-                padding: const EdgeInsets.only(
-                  top: 27,
-                  bottom: 50,
+    return Flex(
+      mainAxisAlignment: MainAxisAlignment.start,
+      direction: Axis.vertical,
+      children: [
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.only(
+                top: 27,
+                bottom: 50,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: const Color(
+                  0xff181919,
                 ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color(
-                    0xff181919,
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    'Gerenciamento de slides',
+                    textAlign: TextAlign.center,
+                    maxLines: 3,
+                    style: GoogleFonts.getFont(
+                      'Poppins',
+                      color: Colors.white,
+                      fontSize:
+                          MediaQuery.of(context).size.width < 800 ? 18 : 22,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  // color: Colors.cyan,
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      'Gerenciamento de slides',
-                      textAlign: TextAlign.center,
-                      maxLines: 3,
-                      style: GoogleFonts.getFont(
-                        'Poppins',
-                        color: Colors.white,
-                        fontSize:
-                            MediaQuery.of(context).size.width < 800 ? 22 : 28,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    Flexible(
-                      child: SizedBox(
-                        width: 1200,
-                        // color: Colors.red,
-                        child: ListView(
-                          padding: const EdgeInsets.all(16.0),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Flexible(
+                    child: ListView(
+                      padding: const EdgeInsets.all(16.0),
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 1200,
-                                  height:
-                                      MediaQuery.of(context).size.width < 600
-                                          ? 51
-                                          : 90,
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.zero),
-                                  ),
-                                  child: ElevatedButton(
-                                    style: ButtonStyle(
-                                      padding: const MaterialStatePropertyAll(
-                                          EdgeInsets.only(
-                                              left: 20, right: 20, top: 15)),
-                                      shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                              side: const BorderSide(
-                                                  color: Colors.white),
-                                              borderRadius:
-                                                  BorderRadius.circular(10))),
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              const Color(0xff181919)),
-                                    ),
-                                    onPressed: () async {
-                                      final token =
-                                          await getTokenFromLocalStorage();
-                                      ImageService().uploadImage(
-                                          "slider", token, 'POST', '');
-                                    },
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        const Icon(
-                                          Icons.add,
-                                          size: 45,
-                                          color: Colors.white,
-                                        ),
-                                        Text(
-                                          maxLines: 2,
-                                          'Adicionar imagem',
-                                          style: GoogleFonts.getFont('Poppins',
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 25,
-                            ),
-                            SizedBox(
-                              height: 800,
-                              // color: Colors.cyan,
-                              child: GridView.builder(
-                                scrollDirection: Axis.vertical,
-                                itemCount: dados.length,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount:
-                                      MediaQuery.of(context).size.width < 1400
-                                          ? 3
-                                          : 4,
-                                  mainAxisSpacing: 8.0,
-                                  crossAxisSpacing: 8.0,
-                                ),
-                                // onReorder: (int oldIndex, int newIndex) {
-                                //   setState(() {
-                                //     if (oldIndex < newIndex) {
-                                //       newIndex -= 1;
-                                //     }
-                                //     final item = dados.removeAt(oldIndex);
-                                //     dados.insert(newIndex, item);
-                                //   });
-                                // },
-                                itemBuilder: (context, index) {
-                                  final imageUrl = dados[index]['name'];
-                                  return Column(
-                                    key: Key(imageUrl),
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                          color: Colors.green,
-                                          width: 300,
-                                          child: Image.network(
-                                            '${ApiContants.baseApi}/uploads/$imageUrl',
-                                            errorBuilder: (context, exception,
-                                                stackTrace) {
-                                              if (kDebugMode) {
-                                                print(
-                                                    'Erro ao carregar imagem: $exception');
-                                              }
-                                              return const Text(
-                                                  'Erro ao carregar imagem');
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                      // const SizedBox(
-                                      //   height: 10,
-                                      // ),
-                                      // Container(
-                                      //   height: 35,
-                                      //   width: 300,
-                                      //   decoration: const BoxDecoration(
-                                      //     borderRadius:
-                                      //         BorderRadius.all(Radius.zero),
-                                      //     // color: Colors.green
-                                      //   ),
-                                      //   child: ElevatedButton(
-                                      //     style: ButtonStyle(
-                                      //       shape: MaterialStateProperty.all(
-                                      //           RoundedRectangleBorder(
-                                      //               borderRadius:
-                                      //                   BorderRadius.circular(
-                                      //                       10))),
-                                      //       backgroundColor:
-                                      //           MaterialStateProperty.all(
-                                      //               const Color(0xFF4D73F1)),
-                                      //     ),
-                                      //     onPressed: () {
-
-                                      //     },
-                                      //     child: Row(
-                                      //       mainAxisAlignment:
-                                      //           MainAxisAlignment.center,
-                                      //       children: [
-                                      //         PhosphorIcon(
-                                      //           PhosphorIcons.regular.pencil,
-                                      //           color: Colors.white,
-                                      //           size: 25,
-                                      //         ),
-                                      //         const SizedBox(
-                                      //           width: 10,
-                                      //         ),
-                                      //         Text(
-                                      //           'Selecionar imagem',
-                                      //           style: GoogleFonts.getFont(
-                                      //               'Poppins',
-                                      //               color: Colors.white,
-                                      //               fontSize: 15,
-                                      //               fontWeight:
-                                      //                   FontWeight.w500),
-                                      //         ),
-                                      //         const SizedBox(
-                                      //           width: 20,
-                                      //         ),
-                                      //       ],
-                                      //     ),
-                                      //   ),
-                                      // ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        height: 35,
-                                        width: 280,
-                                        decoration: const BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.all(Radius.zero),
-                                          // color: Colors.green
-                                        ),
-                                        child: ElevatedButton(
-                                          style: ButtonStyle(
-                                            shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                            ),
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                              dataLimite(dados[index]
-                                                      ['dateSlider'])
-                                                  ? const Color(0xffF14D4D)
-                                                  : const Color(0xff008d69),
-                                            ),
-                                          ),
-                                          onPressed: () async {
-                                            final token =
-                                                await getTokenFromLocalStorage();
-                                            final itemId = dados[index]['_id'];
-                                            final selectedDate =
-                                                _showDatePicker(index);
-                                            if (selectedDate != null) {
-                                              final novaData =
-                                                  DateFormat('dd/MM/yyyy')
-                                                      .format(selectedDate);
-
-                                              atualizarDataSlider(
-                                                  itemId, novaData, token);
-                                            }
-                                          },
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              PhosphorIcon(
-                                                PhosphorIcons.regular.alarm,
-                                                color: Colors.white,
-                                                size: 25,
-                                              ),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              Flexible(
-                                                child: Text(
-                                                  dados[index]['dateSlider'],
-                                                  style: GoogleFonts.getFont(
-                                                      'Poppins',
-                                                      color: Colors.white,
-                                                      fontSize:
-                                                          MediaQuery.of(context)
-                                                                      .size
-                                                                      .width <
-                                                                  1200
-                                                              ? 13
-                                                              : 15,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                width: 20,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        height: 35,
-                                        width: 280,
-                                        decoration: const BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.all(Radius.zero),
-                                          // color: Colors.green
-                                        ),
-                                        child: ElevatedButton(
-                                          style: ButtonStyle(
-                                            shape: MaterialStateProperty.all(
-                                                RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10))),
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    const Color(0xffF14D4D)),
-                                          ),
-                                          onPressed: () async {
-                                            final token =
-                                                await getTokenFromLocalStorage();
-                                            final itemId = dados[index]['_id'];
-                                            deleteItem(itemId, token);
-                                          },
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              PhosphorIcon(
-                                                PhosphorIcons.regular.trash,
-                                                color: Colors.white,
-                                                size: MediaQuery.of(context)
-                                                            .size
-                                                            .width <
-                                                        1300
-                                                    ? 20
-                                                    : 25,
-                                              ),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              Flexible(
-                                                child: Text(
-                                                  maxLines: 1,
-                                                  textAlign: TextAlign.center,
-                                                  MediaQuery.of(context)
-                                                              .size
-                                                              .width <
-                                                          1300
-                                                      ? 'Deletar'
-                                                      : 'Deletar imagem',
-                                                  style: GoogleFonts.getFont(
-                                                      'Poppins',
-                                                      color: Colors.white,
-                                                      fontSize:
-                                                          MediaQuery.of(context)
-                                                                      .size
-                                                                      .width <
-                                                                  1400
-                                                              ? 14
-                                                              : 15,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
+                            Container(
+                              width: double.infinity,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.zero),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 30,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  padding: const MaterialStatePropertyAll(
+                                    EdgeInsets.all(20),
+                                  ),
+                                  shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                          side: const BorderSide(
+                                              color: Colors.white),
+                                          borderRadius:
+                                              BorderRadius.circular(10))),
+                                  backgroundColor: MaterialStateProperty.all(
+                                      const Color(0xff181919)),
+                                ),
+                                onPressed: () async {
+                                  final token =
+                                      await getTokenFromLocalStorage();
+                                  ImageService()
+                                      .uploadImage("slider", token, 'POST', '');
+                                  getSlide();
+                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.add,
+                                      size: 45,
+                                      color: Colors.white,
+                                    ),
+                                    Text(
+                                      maxLines: 2,
+                                      'Adicionar imagem',
+                                      style: GoogleFonts.getFont('Poppins',
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                      ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        SizedBox(
+                          height: 800,
+                          // color: Colors.cyan,
+                          child: GridView.builder(
+                            scrollDirection: Axis.vertical,
+                            itemCount: dados.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount:
+                                  MediaQuery.of(context).size.width < 1400
+                                      ? 3
+                                      : 4,
+                              mainAxisSpacing: 8.0,
+                              crossAxisSpacing: 8.0,
+                            ),
+                            itemBuilder: (context, index) {
+                              final imageUrl = dados[index]['name'];
+                              return Column(
+                                key: Key(imageUrl),
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      color: Colors.green,
+                                      width: 300,
+                                      child: Image.network(
+                                        '${ApiContants.baseApi}/uploads/$imageUrl',
+                                        errorBuilder:
+                                            (context, exception, stackTrace) {
+                                          if (kDebugMode) {
+                                            print(
+                                                'Erro ao carregar imagem: $exception');
+                                          }
+                                          return const Text(
+                                              'Erro ao carregar imagem');
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    height: 35,
+                                    width: 280,
+                                    decoration: const BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.zero),
+                                      // color: Colors.green
+                                    ),
+                                    child: ElevatedButton(
+                                      style: ButtonStyle(
+                                        shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                          dataLimite(dados[index]['dateSlider'])
+                                              ? const Color(0xffF14D4D)
+                                              : const Color(0xff008d69),
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        final token =
+                                            await getTokenFromLocalStorage();
+                                        final itemId = dados[index]['_id'];
+                                        final selectedDate =
+                                            _showDatePicker(index);
+                                        if (selectedDate != null) {
+                                          final novaData =
+                                              DateFormat('dd/MM/yyyy')
+                                                  .format(selectedDate);
+
+                                          atualizarDataSlider(
+                                              itemId, novaData, token);
+                                        }
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          PhosphorIcon(
+                                            PhosphorIcons.regular.alarm,
+                                            color: Colors.white,
+                                            size: 25,
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Flexible(
+                                            child: Text(
+                                              dados[index]['dateSlider'],
+                                              style: GoogleFonts.getFont(
+                                                  'Poppins',
+                                                  color: Colors.white,
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                                  .size
+                                                                  .width <
+                                                              1200
+                                                          ? 13
+                                                          : 15,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    height: 35,
+                                    width: 280,
+                                    decoration: const BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.zero),
+                                      // color: Colors.green
+                                    ),
+                                    child: ElevatedButton(
+                                      style: ButtonStyle(
+                                        shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10))),
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                const Color(0xffF14D4D)),
+                                      ),
+                                      onPressed: () async {
+                                        final token =
+                                            await getTokenFromLocalStorage();
+                                        final itemId = dados[index]['_id'];
+                                        deleteItem(itemId, token);
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          PhosphorIcon(
+                                            PhosphorIcons.regular.trash,
+                                            color: Colors.white,
+                                            size: MediaQuery.of(context)
+                                                        .size
+                                                        .width <
+                                                    1300
+                                                ? 20
+                                                : 25,
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Flexible(
+                                            child: Text(
+                                              maxLines: 1,
+                                              textAlign: TextAlign.center,
+                                              MediaQuery.of(context)
+                                                          .size
+                                                          .width <
+                                                      1300
+                                                  ? 'Deletar'
+                                                  : 'Deletar imagem',
+                                              style: GoogleFonts.getFont(
+                                                  'Poppins',
+                                                  color: Colors.white,
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                                  .size
+                                                                  .width <
+                                                              1400
+                                                          ? 14
+                                                          : 15,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
