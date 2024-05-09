@@ -13,9 +13,6 @@ class ApiService {
         headers: headers,
       );
       if (response.statusCode == 200) {
-        if (kDebugMode) {
-          print("Token: $token");
-        }
       } else {
         if (kDebugMode) {
           print("Erro na API: ${response.statusCode}");

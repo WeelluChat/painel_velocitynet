@@ -10,7 +10,9 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:painel_velocitynet/constantes/api_url.dart';
 import 'package:painel_velocitynet/helpers/token.dart';
-import 'package:painel_velocitynet/modules/create_category/create_category_model.dart';
+import 'package:painel_velocitynet/modules/config/config_provider/config_provider.dart';
+import 'package:painel_velocitynet/modules/config/model/category_model.dart';
+import 'package:provider/provider.dart';
 
 class CreateCategoryAlertDialog extends StatefulWidget {
   const CreateCategoryAlertDialog({super.key});
@@ -21,7 +23,7 @@ class CreateCategoryAlertDialog extends StatefulWidget {
 }
 
 class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
-  List<CreateCategoryModel> dataCategoryModel = [];
+  List<CategoryModel> dataCategoryModel = [];
   TextEditingController nomePlano = TextEditingController();
   TextEditingController subTitulo = TextEditingController();
   FilePickerResult? result;
@@ -107,8 +109,9 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
                           width: 130,
                           height: 200,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.white)),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.white),
+                          ),
                           child: result == null
                               ? const Center(
                                   child: Text(
@@ -159,17 +162,19 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
                                   style: const TextStyle(
                                       fontSize: 12, color: Colors.white),
                                   decoration: const InputDecoration(
-                                      hintText: 'Plano Connect',
-                                      hintStyle: TextStyle(
-                                          fontSize: 12,
-                                          color: Color(0xffCFCFCF)),
-                                      contentPadding: EdgeInsets.only(
-                                          left: 10,
-                                          right: 10,
-                                          top: 5,
-                                          bottom: 10),
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide.none)),
+                                    hintText: 'Plano Connect',
+                                    hintStyle: TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xffCFCFCF),
+                                    ),
+                                    contentPadding: EdgeInsets.only(
+                                        left: 10,
+                                        right: 10,
+                                        top: 5,
+                                        bottom: 10),
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide.none),
+                                  ),
                                 ),
                               ),
                             ],
@@ -202,17 +207,19 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
                                   style: const TextStyle(
                                       fontSize: 12, color: Colors.white),
                                   decoration: const InputDecoration(
-                                      hintText: 'Texto Exemplo',
-                                      hintStyle: TextStyle(
-                                          fontSize: 12,
-                                          color: Color(0xffCFCFCF)),
-                                      contentPadding: EdgeInsets.only(
-                                          left: 10,
-                                          right: 10,
-                                          top: 5,
-                                          bottom: 10),
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide.none)),
+                                    hintText: 'Texto Exemplo',
+                                    hintStyle: TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xffCFCFCF),
+                                    ),
+                                    contentPadding: EdgeInsets.only(
+                                        left: 10,
+                                        right: 10,
+                                        top: 5,
+                                        bottom: 10),
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide.none),
+                                  ),
                                 ),
                               ),
                               const SizedBox(
@@ -230,9 +237,10 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton2<String>(
                                     dropdownStyleData: const DropdownStyleData(
-                                        decoration: BoxDecoration(
-                                      color: Color(0xff5F5F5F),
-                                    )),
+                                      decoration: BoxDecoration(
+                                        color: Color(0xff5F5F5F),
+                                      ),
+                                    ),
                                     isExpanded: true,
                                     iconStyleData: const IconStyleData(
                                       icon: Icon(
@@ -314,16 +322,20 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
                           padding: const EdgeInsets.all(20),
                         ),
                         onPressed: () async {
                           createCategoryPlan(
-                              nomePlano.text,
-                              subTitulo.text,
-                              selectedValue,
-                              await GetToken().getTokenFromLocalStorage());
+                            nomePlano.text,
+                            subTitulo.text,
+                            selectedValue,
+                            await GetToken().getTokenFromLocalStorage(),
+                          );
                           Navigator.pop(context, 'OK');
+                          Provider.of<ConfigProvider>(context, listen: false)
+                              .loadCategory();
                         },
                         child: const Text(
                           'Salvar',

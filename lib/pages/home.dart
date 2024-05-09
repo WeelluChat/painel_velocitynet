@@ -9,7 +9,7 @@ import 'package:painel_velocitynet/modules/plans/widget/plans.dart';
 import 'package:painel_velocitynet/modules/slider/widget/slide.dart';
 import 'package:painel_velocitynet/pages/perguntas.dart';
 import 'package:painel_velocitynet/modules/tv/widget/tv.dart';
-import 'package:painel_velocitynet/pages/planos_config.dart';
+import 'package:painel_velocitynet/modules/config/config.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'dart:html' as html;
 
