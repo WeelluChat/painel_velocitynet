@@ -9,6 +9,7 @@ import 'package:painel_velocitynet/constantes/api_url.dart';
 import 'package:painel_velocitynet/modules/offer/widget/offer.dart';
 import 'package:painel_velocitynet/modules/plans/widget/plans.dart';
 import 'package:painel_velocitynet/modules/slider/widget/slide.dart';
+import 'package:painel_velocitynet/pages/complementos/complemento.dart';
 import 'package:painel_velocitynet/pages/descricao.dart';
 import 'package:painel_velocitynet/pages/planos_abas/create_category_alert_dialog.dart';
 import 'package:painel_velocitynet/pages/planos_abas/create_plans.dart';
@@ -453,10 +454,7 @@ class _PlansConfigState extends State<PlansConfig>
                                   'Adicionais',
                                   style: TextStyle(color: Colors.white),
                                 ),
-                                const Text(
-                                  'Complementos',
-                                  style: TextStyle(color: Colors.white),
-                                ),
+                                const Complementos(),
                                 const Text(
                                   'Card',
                                   style: TextStyle(color: Colors.white),
