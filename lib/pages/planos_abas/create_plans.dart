@@ -117,10 +117,32 @@ class _CreatePlansState extends State<CreatePlans> {
     }
   }
 
+  List<dynamic> dataComplemento = [];
+  Future<void> getComplemento() async {
+    final token = await getTokenFromLocalStorage();
+    final response = await http.get(
+      Uri.parse('${ApiContants.baseApi}/additional-information'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      setState(() {
+        dataComplemento = json.decode(response.body);
+      });
+    } else {
+      print('Erro ao buscar dados: ${response.statusCode}');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     CategoryPlans();
+    getComplemento();
   }
 
   @override
@@ -136,7 +158,7 @@ class _CreatePlansState extends State<CreatePlans> {
       actions: <Widget>[
         SizedBox(
           width: 550,
-          height: 450,
+          height: 480,
           child: Row(
             children: [
               InkWell(
@@ -456,10 +478,10 @@ class _CreatePlansState extends State<CreatePlans> {
                                     checkColor: Colors.white,
                                     side: const BorderSide(
                                       width: 2,
-                                      color: Color(0xff5F5F5F),
+                                      color: Color.fromARGB(255, 128, 128, 128),
                                     ),
                                     fillColor: const MaterialStatePropertyAll(
-                                        Colors.transparent),
+                                        Color(0xff5F5F5F)),
                                     value: isChecked,
                                     onChanged: (bool? value) {
                                       setState(() {
@@ -471,150 +493,71 @@ class _CreatePlansState extends State<CreatePlans> {
                               ),
                             ],
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.add_photo_alternate_outlined,
-                                    size: 20,
-                                    color: Colors.white,
+                          SizedBox(
+                            height: 150,
+                            child: ListView.builder(
+                              itemCount: dataComplemento.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
-                                  Text(
-                                    'Instalação grátis',
-                                    style: GoogleFonts.getFont('Poppins',
-                                        fontSize: 12,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(
+                                            width: 30,
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                                color: Colors.grey,
+                                                borderRadius:
+                                                    BorderRadius.circular(100)),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              child: Image.network(
+                                                  fit: BoxFit.cover,
+                                                  '${ApiContants.baseApi}/uploads/${dataComplemento[index]['image']}'),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            dataComplemento[index]['nome'],
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12),
+                                          ),
+                                        ],
+                                      ),
+                                      Checkbox(
+                                        checkColor: Colors.white,
+                                        side: const BorderSide(
+                                          width: 2,
+                                          color: Color.fromARGB(
+                                              255, 128, 128, 128),
+                                        ),
+                                        fillColor:
+                                            const MaterialStatePropertyAll(
+                                                Color(0xff5F5F5F)),
+                                        value: isChecked,
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            isChecked = value!;
+                                          });
+                                        },
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              Checkbox(
-                                checkColor: Colors.white,
-                                side: const BorderSide(
-                                  width: 2,
-                                  color: Color(0xff5F5F5F),
-                                ),
-                                fillColor: const MaterialStatePropertyAll(
-                                    Colors.transparent),
-                                value: isChecked,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    isChecked = value!;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.add_photo_alternate_outlined,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                  Text(
-                                    'Extensor Smash',
-                                    style: GoogleFonts.getFont('Poppins',
-                                        fontSize: 12,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ],
-                              ),
-                              Checkbox(
-                                checkColor: Colors.white,
-                                side: const BorderSide(
-                                  width: 2,
-                                  color: Color(0xff5F5F5F),
-                                ),
-                                fillColor: const MaterialStatePropertyAll(
-                                    Colors.transparent),
-                                value: isChecked,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    isChecked = value!;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.add_photo_alternate_outlined,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                  Text(
-                                    'Ultra Cobertura Wi-fi 5',
-                                    style: GoogleFonts.getFont('Poppins',
-                                        fontSize: 12,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ],
-                              ),
-                              Checkbox(
-                                checkColor: Colors.white,
-                                side: const BorderSide(
-                                  width: 2,
-                                  color: Color(0xff5F5F5F),
-                                ),
-                                fillColor: const MaterialStatePropertyAll(
-                                    Colors.transparent),
-                                value: isChecked,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    isChecked = value!;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.add_photo_alternate_outlined,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                  Text(
-                                    '+60 Canais TV',
-                                    style: GoogleFonts.getFont('Poppins',
-                                        fontSize: 12,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ],
-                              ),
-                              Checkbox(
-                                checkColor: Colors.white,
-                                side: const BorderSide(
-                                  width: 2,
-                                  color: Color(0xff5F5F5F),
-                                ),
-                                fillColor: const MaterialStatePropertyAll(
-                                    Colors.transparent),
-                                value: isChecked,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    isChecked = value!;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
+                                );
+                              },
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -665,10 +608,10 @@ class _CreatePlansState extends State<CreatePlans> {
                             checkColor: Colors.white,
                             side: const BorderSide(
                               width: 2,
-                              color: Color(0xff5F5F5F),
+                              color: Color.fromARGB(255, 128, 128, 128),
                             ),
                             fillColor: const MaterialStatePropertyAll(
-                                Colors.transparent),
+                                Color(0xff5F5F5F)),
                             value: isChecked,
                             onChanged: (bool? value) {
                               setState(() {

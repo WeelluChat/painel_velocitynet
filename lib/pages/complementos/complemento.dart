@@ -86,7 +86,6 @@ class _ComplementosState extends State<Complementos> {
 
     if (response.statusCode == 200) {
       setState(() {
-        print('Conexão feita com sucesso');
         dataComplemento = json.decode(response.body);
       });
     } else {
@@ -94,9 +93,30 @@ class _ComplementosState extends State<Complementos> {
     }
   }
 
+  deletarComplemento(String id, token) async {
+    var url = Uri.parse('${ApiContants.baseApi}/additional-information/delete');
+    try {
+      final token = await getTokenFromLocalStorage();
+
+      var response = await http.delete(url,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          body: jsonEncode({"id": id}));
+      if (response.statusCode == 200) {
+        print("Complemento deletado com sucesso.");
+      } else {
+        print('Falha ao deletar recurso: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erro ao conectar ao servidor: $e');
+    }
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getComplemento();
   }
@@ -200,6 +220,9 @@ class _ComplementosState extends State<Complementos> {
                         await GetToken().getTokenFromLocalStorage());
 
                     nomeComplemento.clear();
+                    setState(() {
+                      result = null;
+                    });
                   },
                   child: const Text(
                     'Enviar',
@@ -239,6 +262,12 @@ class _ComplementosState extends State<Complementos> {
                                   decoration: BoxDecoration(
                                       color: Colors.grey,
                                       borderRadius: BorderRadius.circular(100)),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: Image.network(
+                                        fit: BoxFit.cover,
+                                        '${ApiContants.baseApi}/uploads/${dataComplemento[index]['image']}'),
+                                  ),
                                 ),
                                 const SizedBox(
                                   width: 10,
@@ -251,20 +280,83 @@ class _ComplementosState extends State<Complementos> {
                                 ),
                               ],
                             ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                side: const BorderSide(color: Colors.green),
-                                backgroundColor: Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
+                            Row(
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    side: const BorderSide(color: Colors.green),
+                                    backgroundColor: Colors.transparent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                  ),
+                                  onPressed: () {},
+                                  child: const Text(
+                                    'Editar',
+                                    style: TextStyle(color: Colors.green),
+                                  ),
                                 ),
-                              ),
-                              onPressed: () {},
-                              child: const Text(
-                                'Editar',
-                                style: TextStyle(color: Colors.green),
-                              ),
-                            ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                InkWell(
+                                  onTap: () => showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      backgroundColor: const Color(0xff3D3D3D),
+                                      title: const Text(
+                                        'Deletar',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      content: const Text(
+                                        'Deseja mesmo deletar este item?',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, 'Cancel'),
+                                          child: const Text(
+                                            'Cancel',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            deletarComplemento(
+                                                dataComplemento[index]['_id'],
+                                                GetToken()
+                                                    .getTokenFromLocalStorage);
+                                            Navigator.pop(context, 'Excluir');
+                                          },
+                                          child: const Text(
+                                            'Excluir',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  child: Container(
+                                    width: 35,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    child: const Icon(
+                                      size: 20,
+                                      Icons.delete_rounded,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
                         ),
                       ),
