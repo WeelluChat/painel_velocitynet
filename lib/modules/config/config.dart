@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:painel_velocitynet/modules/config/component/category.dart';
 import 'package:painel_velocitynet/modules/config/component/simulator.dart';
+import 'package:painel_velocitynet/modules/entity/menu_entity.dart';
 
 class PlansConfig extends StatefulWidget {
-  const PlansConfig({super.key});
+  static const route = 'Configurações';
+  final MenuEntity menu;
+
+  const PlansConfig({super.key, required this.menu});
 
   @override
   State<PlansConfig> createState() => _PlansConfigState();

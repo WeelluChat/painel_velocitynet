@@ -1,8 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:painel_velocitynet/modules/entity/menu_entity.dart';
 
 class Footer extends StatefulWidget {
-  const Footer({super.key});
+  static const route = 'Rodapé';
+  final MenuEntity menu;
+  const Footer({super.key, required this.menu});
 
   @override
   State<Footer> createState() => _FooterState();

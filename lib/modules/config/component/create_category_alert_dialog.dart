@@ -144,7 +144,7 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Nome do Plano',
+                                'Nome da categoria',
                                 style: GoogleFonts.getFont('Poppins',
                                     fontSize: 13,
                                     color: Colors.white,
@@ -162,7 +162,7 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
                                   style: const TextStyle(
                                       fontSize: 12, color: Colors.white),
                                   decoration: const InputDecoration(
-                                    hintText: 'Plano Connect',
+                                    hintText: 'Start',
                                     hintStyle: TextStyle(
                                       fontSize: 12,
                                       color: Color(0xffCFCFCF),

@@ -11,14 +11,14 @@ import 'package:painel_velocitynet/helpers/token.dart';
 import 'package:painel_velocitynet/modules/create_complementos/complementos_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Complementos extends StatefulWidget {
-  const Complementos({super.key});
+class Complement extends StatefulWidget {
+  const Complement({super.key});
 
   @override
-  State<Complementos> createState() => _ComplementosState();
+  State<Complement> createState() => _ComplementosState();
 }
 
-class _ComplementosState extends State<Complementos> {
+class _ComplementosState extends State<Complement> {
   String? selectedImage;
   List<CreateComplementoModel> dataComplementoModel = [];
   TextEditingController nomeComplemento = TextEditingController();
@@ -133,7 +133,7 @@ class _ComplementosState extends State<Complementos> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  'Complementos',
+                  'Complement',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.getFont(
                     'Poppins',

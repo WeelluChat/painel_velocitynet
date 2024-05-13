@@ -1,25 +1,27 @@
 import 'dart:convert';
-import 'dart:js_interop';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:painel_velocitynet/constantes/api_url.dart';
+import 'package:painel_velocitynet/modules/entity/menu_entity.dart';
 import 'package:painel_velocitynet/service/slider/image_service.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'dart:math' as math;
 
-class Slide extends StatefulWidget {
-  const Slide({super.key});
+class IdleSlide extends StatefulWidget {
+  static const route = 'Slide';
+
+  const IdleSlide({super.key});
 
   @override
-  State<Slide> createState() => _SlideState();
+  State<IdleSlide> createState() => _SlideState();
 }
 
-class _SlideState extends State<Slide> {
-  //função para converter a data limite e retornar true ou false caso a data limite for excedida
+class _SlideState extends State<IdleSlide> {
   bool dataLimite(String dataLimite) {
     final dataAtual = DateTime.now();
     final limitDate = DateFormat('dd/MM/yyyy').parse(dataLimite);
@@ -27,7 +29,7 @@ class _SlideState extends State<Slide> {
   }
 
   DateTime _dateTime = DateTime.now();
-  //FUNÇÃO PARA ATUALIZAR A DATA DE CADA ITEM DO JSON
+
   Future<void> atualizarDataSlider(
       String itemId, String novaData, String token) async {
     Uri url = Uri.parse('${ApiContants.baseApi}/slider');
@@ -428,6 +430,24 @@ class _SlideState extends State<Slide> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class SliderPage extends StatelessWidget {
+  const SliderPage({
+    Key? key,
+    required this.menu,
+  }) : super(key: key);
+  static const route = '/slide';
+  final MenuEntity menu;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
+          .withOpacity(1.0),
+      body: Center(child: Text(menu.name)),
     );
   }
 }

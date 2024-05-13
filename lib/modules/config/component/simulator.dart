@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:painel_velocitynet/modules/config/component/complement.dart';
 import 'package:painel_velocitynet/pages/planos_abas/create_plans.dart';
 
 class SimulatorComponent extends StatefulWidget {
@@ -240,10 +241,11 @@ class _MyWidgetState extends State<SimulatorComponent> {
                   'Adicionais',
                   style: TextStyle(color: Colors.white),
                 ),
-                const Text(
-                  'Complementos',
-                  style: TextStyle(color: Colors.white),
-                ),
+                // const Text(
+                //   'Complementos',
+                //   style: TextStyle(color: Colors.white),
+                // ),
+                const Complement(),
                 const Text(
                   'Card',
                   style: TextStyle(color: Colors.white),
