@@ -5,8 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:painel_velocitynet/constantes/api_url.dart';
 import 'dart:html' as html;
 import 'package:painel_velocitynet/modules/login/auth_maneger.dart';
-import 'package:painel_velocitynet/pages/home.dart';
 import 'package:painel_velocitynet/modules/login/api_service.dart';
+import 'package:painel_velocitynet/modules/panel/panel.dart';
 
 class AuthService extends ApiService {
   final TextEditingController controlerEmail;
@@ -28,18 +28,20 @@ class AuthService extends ApiService {
       'password': controllerPassword.text,
     };
 
-    http.Response response =
-        await http.post(Uri.parse("${ApiContants.baseApi}/auth/login"), headers: headers, body: jsonEncode(body));
+    http.Response response = await http.post(
+        Uri.parse("${ApiContants.baseApi}/auth/login"),
+        headers: headers,
+        body: jsonEncode(body));
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       final String token = responseData['token'];
       await AuthManager.setToken(token);
-       String authToken = json.decode(response.body)['token'];
-       html.window.localStorage['authToken'] = authToken;
+      String authToken = json.decode(response.body)['token'];
+      html.window.localStorage['authToken'] = authToken;
 
-       Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => const MyTabbedPanel(),
-        ));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => const Panel(),
+      ));
       // Navigator.push(
       //   context,
       //   MaterialPageRoute(

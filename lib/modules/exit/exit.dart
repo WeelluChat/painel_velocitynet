@@ -1,11 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:painel_velocitynet/modules/entity/menu_entity.dart';
 import 'dart:html' as html;
 
 import 'package:painel_velocitynet/pages/login.dart';
 
 class Exit extends StatefulWidget {
-  const Exit({super.key});
+  static const route = 'Sair';
+  final MenuEntity menu;
+  const Exit({super.key, required this.menu});
 
   @override
   State<Exit> createState() => _ExitState();

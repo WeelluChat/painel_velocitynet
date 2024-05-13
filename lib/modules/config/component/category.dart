@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:painel_velocitynet/constantes/api_url.dart';
+import 'package:painel_velocitynet/modules/config/component/category_item.dart';
 import 'package:painel_velocitynet/modules/config/config_provider/config_provider.dart';
-import 'package:painel_velocitynet/pages/planos_abas/create_category_alert_dialog.dart';
+import 'package:painel_velocitynet/modules/config/component/create_category_alert_dialog.dart';
+import 'package:painel_velocitynet/modules/config/model/category_model.dart';
 import 'package:provider/provider.dart';
 
 class CategoryComponent extends StatefulWidget {
@@ -13,6 +14,8 @@ class CategoryComponent extends StatefulWidget {
 }
 
 class _CategoryComponentState extends State<CategoryComponent> {
+  List<CategoryModel> category = [];
+
   @override
   void initState() {
     super.initState();
@@ -38,7 +41,8 @@ class _CategoryComponentState extends State<CategoryComponent> {
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
                       backgroundColor: Colors.green),
                   onPressed: () => showDialog<String>(
                         context: context,
@@ -59,75 +63,7 @@ class _CategoryComponentState extends State<CategoryComponent> {
                 scrollDirection: Axis.vertical,
                 itemCount: controler.category.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                        left: 20.0, right: 20, top: 5, bottom: 5),
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: const Color(
-                          0xff2F2F2F,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                controler.category[index].imageLogoPlano == ""
-                                    ? Container(
-                                        width: 35,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                            color: Colors.grey,
-                                            borderRadius:
-                                                BorderRadius.circular(100)),
-                                      )
-                                    : SizedBox(
-                                        width: 35,
-                                        height: 40,
-                                        child: ClipRRect(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(50)),
-                                          child: Image.network(
-                                            fit: BoxFit.cover,
-                                            '${ApiContants.baseApi}/uploads/${controler.category[index].imageLogoPlano}',
-                                          ),
-                                        ),
-                                      ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  controler.category[index].nomePlano,
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                side: const BorderSide(color: Colors.green),
-                                backgroundColor: Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                              onPressed: () {},
-                              child: const Text(
-                                'Editar',
-                                style: TextStyle(color: Colors.green),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
+                  return CategoryItem(category: controler.category[index]);
                 },
               ),
             );

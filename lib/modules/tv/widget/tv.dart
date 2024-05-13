@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:painel_velocitynet/constantes/api_url.dart';
 import 'package:painel_velocitynet/helpers/token.dart';
+import 'package:painel_velocitynet/modules/entity/menu_entity.dart';
 import 'package:painel_velocitynet/modules/tv/controller/tv_controller.dart';
 import 'package:painel_velocitynet/modules/tv/model/tv_model.dart';
 import 'package:painel_velocitynet/service/slider/image_service.dart';
 
 class TV extends StatefulWidget {
-  const TV({super.key});
+  static const route = 'Tv';
+  final MenuEntity menu;
+  const TV({super.key, required this.menu});
 
   @override
   State<TV> createState() => _TVState();

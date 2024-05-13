@@ -6,11 +6,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:painel_velocitynet/constantes/api_url.dart';
 import 'package:painel_velocitynet/modules/description_item/description_item.dart';
+import 'package:painel_velocitynet/modules/entity/menu_entity.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Description extends StatefulWidget {
-  const Description({super.key});
+  static const route = 'Descrição';
+  final MenuEntity menu;
+  const Description({super.key, required this.menu});
 
   @override
   State<Description> createState() => _PlanosState();
