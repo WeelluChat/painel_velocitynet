@@ -23,9 +23,6 @@ class EditCardPlanCategoryAlertDialog extends StatefulWidget {
       _EditCardPlanCategoryAlertDialogState();
 }
 
-FilePickerResult? result;
-late Uint8List resultBytes;
-
 class _EditCardPlanCategoryAlertDialogState
     extends State<EditCardPlanCategoryAlertDialog> {
   late String? selectedValue = widget.category.selectVisualizacao;
@@ -33,6 +30,9 @@ class _EditCardPlanCategoryAlertDialogState
       TextEditingController(text: widget.category.nomePlano);
   late TextEditingController subTitulo =
       TextEditingController(text: widget.category.subTitulo);
+
+  FilePickerResult? result;
+  Uint8List? resultBytes;
 
   uploadImage() async {
     result = await FilePicker.platform.pickFiles(
@@ -42,7 +42,7 @@ class _EditCardPlanCategoryAlertDialogState
 
     if (result != null) {
       setState(() {
-        resultBytes = result!.files.first.bytes!;
+        resultBytes = result!.files.first.bytes;
       });
     }
   }
@@ -122,11 +122,15 @@ class _EditCardPlanCategoryAlertDialogState
         Uri.parse('${ApiContants.baseApi}/category-plan/patch'),
       );
       request.headers['Authorization'] = 'Bearer $token';
-      request.files.add(
-        http.MultipartFile.fromBytes('image', resultBytes,
-            filename: result!.files.first.name,
-            contentType: MediaType('image', 'jpeg')),
-      );
+
+      if (resultBytes != null) {
+        request.files.add(
+          http.MultipartFile.fromBytes('image', resultBytes!,
+              filename: result!.files.first.name,
+              contentType: MediaType('image', 'jpeg')),
+        );
+      }
+
       request.fields.addAll({
         "id": id,
         "nome": nome,
@@ -139,7 +143,7 @@ class _EditCardPlanCategoryAlertDialogState
       if (response.statusCode == 200) {
         print("Dados atualizados com sucesso");
       } else {
-        print("falha a atualizar os dados: ${response.statusCode}");
+        print("Falha ao atualizar os dados: ${response.statusCode}");
       }
     } catch (error) {
       print("Error in request: $error");
