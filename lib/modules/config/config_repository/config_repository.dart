@@ -17,7 +17,7 @@ class ConfigRepository {
 
   Future<List<CategoryModel>> categoryPlans() async {
     String? token = await GetToken().getTokenFromLocalStorage();
-    final response = await http.get(
+    final response = await http.post(
       Uri.parse('${ApiContants.baseApi}/category-plan'),
       headers: {
         'Content-Type': 'application/json',

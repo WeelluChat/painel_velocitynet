@@ -12,7 +12,7 @@ class CreateComplementoModel {
     return CreateComplementoModel(
       idComplemento: json['_id'],
       nomeComplemento: json['nome'],
-      imageComplemento: json['image'],
+      imageComplemento: json['images'],
     );
   }
 }

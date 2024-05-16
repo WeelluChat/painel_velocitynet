@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:painel_velocitynet/constantes/api_url.dart';
+import 'package:painel_velocitynet/modules/config/component/create_card_category_alertDialog.dart';
+import 'package:painel_velocitynet/modules/config/component/edit_card_plan_category_alertDialog.dart';
 import 'package:painel_velocitynet/modules/config/model/category_model.dart';
 
 class CategoryItem extends StatefulWidget {
@@ -11,6 +13,8 @@ class CategoryItem extends StatefulWidget {
 }
 
 class _CategoryItemState extends State<CategoryItem> {
+  List<CategoryModel> dataCategoryModel = [];
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -60,20 +64,74 @@ class _CategoryItemState extends State<CategoryItem> {
                   ),
                 ],
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  side: const BorderSide(color: Colors.green),
-                  backgroundColor: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
+              Row(
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      side: const BorderSide(color: Colors.green),
+                      backgroundColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    onPressed: () => showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) =>
+                          CreateCardCategoryAlertDialog(
+                              category: CategoryModel(
+                        idCategoryPlan: widget.category.idCategoryPlan,
+                        nomePlano: widget.category.nomePlano,
+                        subTitulo: widget.category.subTitulo,
+                        selectVisualizacao: widget.category.selectVisualizacao,
+                        imageLogoPlano: widget.category.imageLogoPlano,
+                        images: widget.category.images,
+                      )),
+                    ),
+                    child: const Text(
+                      'Criar card',
+                      style: TextStyle(color: Colors.green),
+                    ),
                   ),
-                ),
-                onPressed: () {},
-                child: const Text(
-                  'Editar',
-                  style: TextStyle(color: Colors.green),
-                ),
-              ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      side: const BorderSide(color: Colors.green),
+                      backgroundColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    onPressed: () => showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) =>
+                          EditCardPlanCategoryAlertDialog(
+                        category: CategoryModel(
+                          idCategoryPlan: widget.category.idCategoryPlan,
+                          imageLogoPlano: widget.category.imageLogoPlano,
+                          nomePlano: widget.category.nomePlano,
+                          selectVisualizacao:
+                              widget.category.selectVisualizacao,
+                          subTitulo: widget.category.subTitulo,
+                          images: widget.category.images,
+                        ),
+                      ),
+                    ),
+                    child: const Text(
+                      'Editar',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ),
