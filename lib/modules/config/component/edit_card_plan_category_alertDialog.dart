@@ -169,362 +169,377 @@ class _EditCardPlanCategoryAlertDialogState
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: const Color(
-        0xff2F2F2F,
-      ),
-      title: const Text(
-        textAlign: TextAlign.center,
-        'Cards Enviados',
-        style: TextStyle(color: Colors.white),
-      ),
-      actions: <Widget>[
-        Column(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          uploadImage();
-                        },
-                        child: Container(
-                            width: 130,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.white),
-                            ),
-                            child: SizedBox(
+    return SingleChildScrollView(
+      child: AlertDialog(
+        backgroundColor: const Color(
+          0xff2F2F2F,
+        ),
+        title: const Text(
+          textAlign: TextAlign.center,
+          'Cards Enviados',
+          style: TextStyle(color: Colors.white),
+        ),
+        actions: <Widget>[
+          Column(
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            uploadImage();
+                          },
+                          child: Container(
                               width: 130,
                               height: 200,
-                              child: ClipRRect(
+                              decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  '${ApiContants.baseApi}/uploads/${widget.category.imageLogoPlano}',
-                                  fit: BoxFit.cover,
-                                ),
+                                border: Border.all(color: Colors.white),
                               ),
-                            )),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 260,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Nome da categoria',
-                                  style: GoogleFonts.getFont('Poppins',
-                                      fontSize: 13,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xff5F5F5F),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  height: 40,
-                                  width: 250,
-                                  child: TextFormField(
-                                    controller: nomePlano,
-                                    style: const TextStyle(
-                                        fontSize: 12, color: Colors.white),
-                                    decoration: const InputDecoration(
-                                      hintText: 'Start',
-                                      hintStyle: TextStyle(
-                                        fontSize: 12,
-                                        color: Color(0xffCFCFCF),
-                                      ),
-                                      contentPadding: EdgeInsets.only(
-                                          left: 10,
-                                          right: 10,
-                                          top: 5,
-                                          bottom: 10),
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide.none),
-                                    ),
+                              child: SizedBox(
+                                width: 130,
+                                height: 200,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    '${ApiContants.baseApi}/uploads/${widget.category.imageLogoPlano}',
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          SizedBox(
-                            width: 250,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'SubTítulo',
-                                  style: GoogleFonts.getFont('Poppins',
-                                      fontSize: 13,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xff5F5F5F),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  height: 40,
-                                  width: 250,
-                                  child: TextFormField(
-                                    controller: subTitulo,
-                                    style: const TextStyle(
-                                        fontSize: 12, color: Colors.white),
-                                    decoration: const InputDecoration(
-                                      hintText: 'Texto Exemplo',
-                                      hintStyle: TextStyle(
-                                        fontSize: 12,
-                                        color: Color(0xffCFCFCF),
-                                      ),
-                                      contentPadding: EdgeInsets.only(
-                                          left: 10,
-                                          right: 10,
-                                          top: 5,
-                                          bottom: 10),
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide.none),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  'Visualização',
-                                  style: GoogleFonts.getFont('Poppins',
-                                      fontSize: 13,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                Container(
-                                  color: const Color(0xff5F5F5F),
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton2<String>(
-                                      dropdownStyleData:
-                                          const DropdownStyleData(
-                                        decoration: BoxDecoration(
-                                          color: Color(0xff5F5F5F),
-                                        ),
-                                      ),
-                                      isExpanded: true,
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          Icons.keyboard_arrow_down_outlined,
-                                          color: Colors.green,
-                                        ),
-                                      ),
-                                      hint: const Text(
-                                        'Select',
-                                        style: TextStyle(
-                                            fontSize: 14, color: Colors.white),
-                                      ),
-                                      items: items
-                                          .map((String item) =>
-                                              DropdownMenuItem<String>(
-                                                value: item,
-                                                child: Text(
-                                                  item,
-                                                  style: const TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.white),
-                                                ),
-                                              ))
-                                          .toList(),
-                                      value: selectedValue,
-                                      onChanged: (String? value) {
-                                        setState(() {
-                                          selectedValue = value;
-                                        });
-                                      },
-                                      buttonStyleData: const ButtonStyleData(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 16),
-                                        height: 40,
-                                        width: 140,
-                                      ),
-                                      menuItemStyleData:
-                                          const MenuItemStyleData(
-                                        height: 40,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  listImages.isEmpty
-                      ? const Padding(
-                          padding: EdgeInsets.only(bottom: 10.0),
-                          child: Text(
-                            'Sem cards',
-                            style: TextStyle(
-                                color: Color(0xFF9C9C9C), fontSize: 20),
-                          ),
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: SizedBox(
-                            width: 500,
-                            height: 400,
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: [
-                                Row(
-                                  children: [
-                                    ...listImages.map((imageName) => Stack(
-                                          alignment: Alignment.topRight,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: SizedBox(
-                                                width: 200,
-                                                height: 400,
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  child: Image.network(
-                                                    '${ApiContants.baseApi}/uploads/$imageName',
-                                                    fit: BoxFit.contain,
-                                                    errorBuilder: (context,
-                                                        error, stackTrace) {
-                                                      return const Icon(
-                                                        Icons.error,
-                                                        color: Colors.red,
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 12, top: 5),
-                                              child: IconButton(
-                                                icon: const Icon(Icons.delete,
-                                                    color: Colors.white),
-                                                onPressed: () =>
-                                                    showDialog<String>(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          AlertDialog(
-                                                    backgroundColor:
-                                                        const Color(
-                                                      0xff2F2F2F,
-                                                    ),
-                                                    title: const Text(
-                                                      'Tem certeza de que deseja deletar o card?',
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                        onPressed: () =>
-                                                            Navigator.pop(
-                                                                context,
-                                                                'Cancel'),
-                                                        child: const Text(
-                                                          'Cancelar',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white),
-                                                        ),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () async {
-                                                          final token =
-                                                              await getTokenFromLocalStorage();
-                                                          deleteItem(
-                                                              widget.category
-                                                                  .idCategoryPlan,
-                                                              token,
-                                                              imageName);
-                                                          const snackBar =
-                                                              SnackBar(
-                                                            elevation: 2,
-                                                            content: Text(
-                                                                'Card deletado com sucesso!'),
-                                                            backgroundColor:
-                                                                Colors.green,
-                                                          );
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                                  snackBar);
-                                                          Navigator.pop(
-                                                              context, 'OK');
-                                                        },
-                                                        child: const Text(
-                                                          'Confirmar',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ))
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
+                              )),
                         ),
-                ],
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 260,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Nome da categoria',
+                                    style: GoogleFonts.getFont('Poppins',
+                                        fontSize: 13,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xff5F5F5F),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    height: 40,
+                                    width: 250,
+                                    child: TextFormField(
+                                      controller: nomePlano,
+                                      style: const TextStyle(
+                                          fontSize: 12, color: Colors.white),
+                                      decoration: const InputDecoration(
+                                        hintText: 'Start',
+                                        hintStyle: TextStyle(
+                                          fontSize: 12,
+                                          color: Color(0xffCFCFCF),
+                                        ),
+                                        contentPadding: EdgeInsets.only(
+                                            left: 10,
+                                            right: 10,
+                                            top: 5,
+                                            bottom: 10),
+                                        border: OutlineInputBorder(
+                                            borderSide: BorderSide.none),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                              width: 250,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'SubTítulo',
+                                    style: GoogleFonts.getFont('Poppins',
+                                        fontSize: 13,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xff5F5F5F),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    height: 40,
+                                    width: 250,
+                                    child: TextFormField(
+                                      controller: subTitulo,
+                                      style: const TextStyle(
+                                          fontSize: 12, color: Colors.white),
+                                      decoration: const InputDecoration(
+                                        hintText: 'Texto Exemplo',
+                                        hintStyle: TextStyle(
+                                          fontSize: 12,
+                                          color: Color(0xffCFCFCF),
+                                        ),
+                                        contentPadding: EdgeInsets.only(
+                                            left: 10,
+                                            right: 10,
+                                            top: 5,
+                                            bottom: 10),
+                                        border: OutlineInputBorder(
+                                            borderSide: BorderSide.none),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'Visualização',
+                                    style: GoogleFonts.getFont('Poppins',
+                                        fontSize: 13,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Container(
+                                    color: const Color(0xff5F5F5F),
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton2<String>(
+                                        dropdownStyleData:
+                                            const DropdownStyleData(
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff5F5F5F),
+                                          ),
+                                        ),
+                                        isExpanded: true,
+                                        iconStyleData: const IconStyleData(
+                                          icon: Icon(
+                                            Icons.keyboard_arrow_down_outlined,
+                                            color: Colors.green,
+                                          ),
+                                        ),
+                                        hint: const Text(
+                                          'Select',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.white),
+                                        ),
+                                        items: items
+                                            .map((String item) =>
+                                                DropdownMenuItem<String>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item,
+                                                    style: const TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.white),
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        value: selectedValue,
+                                        onChanged: (String? value) {
+                                          setState(() {
+                                            selectedValue = value;
+                                          });
+                                        },
+                                        buttonStyleData: const ButtonStyleData(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                          height: 40,
+                                          width: 140,
+                                        ),
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
+                                          height: 40,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    listImages.isEmpty
+                        ? const Padding(
+                            padding: EdgeInsets.only(bottom: 10.0),
+                            child: Text(
+                              'Sem cards',
+                              style: TextStyle(
+                                  color: Color(0xFF9C9C9C), fontSize: 20),
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: SizedBox(
+                              width: 500,
+                              height: 400,
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  Row(
+                                    children: [
+                                      ...listImages.map((imageName) => Stack(
+                                            alignment: Alignment.topRight,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: SizedBox(
+                                                  width: 200,
+                                                  height: 400,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    child: Image.network(
+                                                      '${ApiContants.baseApi}/uploads/$imageName',
+                                                      fit: BoxFit.contain,
+                                                      errorBuilder: (context,
+                                                          error, stackTrace) {
+                                                        return const Icon(
+                                                          Icons.error,
+                                                          color: Colors.red,
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 12, top: 5),
+                                                child: IconButton(
+                                                  icon: const Icon(Icons.delete,
+                                                      color: Colors.white),
+                                                  onPressed: () =>
+                                                      showDialog<String>(
+                                                    context: context,
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        AlertDialog(
+                                                      backgroundColor:
+                                                          const Color(
+                                                        0xff2F2F2F,
+                                                      ),
+                                                      title: const Text(
+                                                        'Tem certeza de que deseja deletar o card?',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                      actions: <Widget>[
+                                                        TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context,
+                                                                  'Cancel'),
+                                                          child: const Text(
+                                                            'Cancelar',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () async {
+                                                            final token =
+                                                                await getTokenFromLocalStorage();
+                                                            deleteItem(
+                                                                widget.category
+                                                                    .idCategoryPlan,
+                                                                token,
+                                                                imageName);
+                                                            const snackBar =
+                                                                SnackBar(
+                                                              elevation: 2,
+                                                              content: Text(
+                                                                  'Card deletado com sucesso!'),
+                                                              backgroundColor:
+                                                                  Colors.green,
+                                                            );
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                                    snackBar);
+                                                            Navigator.pop(
+                                                                context, 'OK');
+                                                          },
+                                                          child: const Text(
+                                                            'Confirmar',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ))
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                  ],
+                ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context, 'Cancel'),
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(color: Colors.white),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'Cancel'),
+                    child: const Text(
+                      'Cancel',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    final token = await getTokenFromLocalStorage();
-                    updateDataCategoryPlan(widget.category.idCategoryPlan,
-                        token, nomePlano.text, subTitulo.text, selectedValue!);
-                    Navigator.pop(context, 'Ok');
-                  },
-                  child: const Text(
-                    'Salvar',
-                    style: TextStyle(color: Colors.white),
+                  TextButton(
+                    onPressed: () async {
+                      final token = await getTokenFromLocalStorage();
+                      updateDataCategoryPlan(
+                          widget.category.idCategoryPlan,
+                          token,
+                          nomePlano.text,
+                          subTitulo.text,
+                          selectedValue!);
+                      const snackBar = SnackBar(
+                        elevation: 2,
+                        content: Text('Categoria atualizada com sucesso!'),
+                        backgroundColor: Colors.green,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      Navigator.pop(context, 'Ok');
+                    },
+                    child: const Text(
+                      'Salvar',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                ),
-              ],
-            )
-          ],
-        )
-      ],
+                ],
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 }
