@@ -333,9 +333,9 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
                             selectedValue,
                             await GetToken().getTokenFromLocalStorage(),
                           );
-                          Navigator.pop(context, 'OK');
-                          Provider.of<ConfigProvider>(context, listen: false)
-                              .loadCategory();
+                          context.read<ConfigProvider>().loadCategory();
+
+                          Navigator.pop(context, 'Salvar');
                         },
                         child: const Text(
                           'Salvar',

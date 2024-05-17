@@ -31,6 +31,8 @@ class _ExitState extends State<Exit> {
                   ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
               onPressed: () {
                 html.window.localStorage.remove('authToken');
+                html.window.localStorage.clear();
+                html.window.location.reload();
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) => const Login(),
                 ));

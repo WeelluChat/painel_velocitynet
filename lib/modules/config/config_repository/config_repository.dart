@@ -16,14 +16,14 @@ class ConfigRepository {
   }
 
   Future<List<CategoryModel>> categoryPlans() async {
-    String? token = await GetToken().getTokenFromLocalStorage();
-    final response = await http.post(
+    // String? token = await GetToken().getTokenFromLocalStorage();
+    final response = await http.get(
       Uri.parse('${ApiContants.baseApi}/category-plan'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
+      // headers: {
+      //   'Content-Type': 'application/json',
+      //   'Accept': 'application/json',
+      //   'Authorization': 'Bearer $token',
+      // },
     );
 
     if (response.statusCode == 200) {
