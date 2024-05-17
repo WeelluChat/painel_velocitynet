@@ -1,8 +1,12 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:painel_velocitynet/constantes/api_url.dart';
 import 'package:painel_velocitynet/modules/config/component/create_card_category_alertDialog.dart';
 import 'package:painel_velocitynet/modules/config/component/edit_card_plan_category_alertDialog.dart';
 import 'package:painel_velocitynet/modules/config/model/category_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CategoryItem extends StatefulWidget {
   final CategoryModel category;
@@ -14,6 +18,43 @@ class CategoryItem extends StatefulWidget {
 
 class _CategoryItemState extends State<CategoryItem> {
   List<CategoryModel> dataCategoryModel = [];
+  Future<String> getTokenFromLocalStorage() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    return token ?? '';
+  }
+
+  void deleteItem(
+    String cardId,
+    String token,
+  ) async {
+    final url = Uri.parse("${ApiContants.baseApi}/category-plan/delete");
+
+    try {
+      final response = await http.delete(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          "id": cardId,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {});
+      } else {
+        if (kDebugMode) {
+          print('Erro ao excluir o item: ${response.statusCode}');
+        }
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Erro na solicitação DELETE: $error');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +165,46 @@ class _CategoryItemState extends State<CategoryItem> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () => showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        backgroundColor: const Color(
+                          0xff2F2F2F,
+                        ),
+                        title: const Text(
+                          'Deseja excluir esta categoria?',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'Cancel'),
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              final token = await getTokenFromLocalStorage();
+                              deleteItem(widget.category.idCategoryPlan, token);
+                              const snackBar = SnackBar(
+                                elevation: 2,
+                                content:
+                                    Text('Categoria excluida com sucesso!'),
+                                backgroundColor: Colors.green,
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                              Navigator.pop(context, 'Ok');
+                            },
+                            child: const Text(
+                              'Excluir',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     icon: const Icon(
                       Icons.delete,
                       color: Colors.red,
