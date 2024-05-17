@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:painel_velocitynet/constantes/api_url.dart';
-import 'package:painel_velocitynet/helpers/token.dart';
 import 'package:http/http.dart' as http;
 import 'package:painel_velocitynet/modules/config/model/category_model.dart';
 
