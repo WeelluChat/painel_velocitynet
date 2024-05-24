@@ -195,23 +195,36 @@ class _EditCardPlanCategoryAlertDialogState
                             uploadImage();
                           },
                           child: Container(
-                              width: 130,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.white),
-                              ),
-                              child: SizedBox(
-                                width: 130,
-                                height: 200,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    '${ApiContants.baseApi}/uploads/${widget.category.imageLogoPlano}',
-                                    fit: BoxFit.cover,
+                            width: 130,
+                            height: 200,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white),
+                            ),
+                            child: result == null
+                                ? SizedBox(
+                                    width: 130,
+                                    height: 200,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                        '${ApiContants.baseApi}/uploads/${widget.category.imageLogoPlano}',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox(
+                                    width: 130,
+                                    height: 200,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.memory(
+                                        resultBytes!,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              )),
+                          ),
                         ),
                         const SizedBox(
                           width: 20,

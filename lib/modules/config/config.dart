@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:painel_velocitynet/modules/config/component/category.dart';
-import 'package:painel_velocitynet/modules/config/component/simulator.dart';
+import 'package:painel_velocitynet/modules/config/component/Planos.dart';
 import 'package:painel_velocitynet/modules/entity/menu_entity.dart';
 
 class PlansConfig extends StatefulWidget {
@@ -161,10 +161,7 @@ class _PlansConfigState extends State<PlansConfig>
                       )),
                   child: TabBarView(
                     controller: _tabControllerr,
-                    children: const <Widget>[
-                      SimulatorComponent(),
-                      CategoryComponent()
-                    ],
+                    children: const <Widget>[Planos(), CategoryComponent()],
                   ),
                 ),
               ),

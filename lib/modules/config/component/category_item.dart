@@ -43,7 +43,9 @@ class _CategoryItemState extends State<CategoryItem> {
       );
 
       if (response.statusCode == 200) {
-        setState(() {});
+        setState(() {
+          dataCategoryModel;
+        });
       } else {
         if (kDebugMode) {
           print('Erro ao excluir o item: ${response.statusCode}');

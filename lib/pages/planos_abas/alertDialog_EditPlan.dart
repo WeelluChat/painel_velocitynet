@@ -1,34 +1,45 @@
 import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:intl/intl.dart';
 import 'package:painel_velocitynet/constantes/api_url.dart';
 import 'package:painel_velocitynet/modules/config/component/PlansModel.dart';
 import 'package:painel_velocitynet/modules/config/model/category_model.dart';
 import 'package:painel_velocitynet/modules/create_complementos/complementos_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
-class CreatePlans extends StatefulWidget {
-  const CreatePlans({super.key});
+class AlertDialogEditPlan extends StatefulWidget {
+  final PlansModel plans;
+  const AlertDialogEditPlan({super.key, required this.plans});
 
   @override
-  State<CreatePlans> createState() => _CreatePlansState();
+  State<AlertDialogEditPlan> createState() => _AlertDialogEditPlanState();
 }
 
-class _CreatePlansState extends State<CreatePlans> {
-  TextEditingController nomePlano = TextEditingController();
-  TextEditingController descricao = TextEditingController();
-  final MoneyMaskedTextController valor = MoneyMaskedTextController(
-    leftSymbol: 'R\$ ',
-    decimalSeparator: ',',
-    thousandSeparator: '.',
-  );
-  String? selectedValue;
+class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
+  late TextEditingController nomePlano =
+      TextEditingController(text: widget.plans.nome);
+  late TextEditingController descricao =
+      TextEditingController(text: widget.plans.descricao);
+  late TextEditingController valor = TextEditingController(
+      text: 'R\$ ${widget.plans.preco.replaceAll(RegExp(r'[^\d.]'), '')}');
+  late String? selectedValue = widget.plans.idCategoria;
+
+  final NumberFormat _currencyFormat =
+      NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+  String formatCurrency(String value) {
+    String cleanedValue = value.replaceAll(RegExp(r'[^\d]'), '');
+    double parsedValue = double.tryParse(cleanedValue)! / 100;
+    return _currencyFormat.format(parsedValue);
+  }
 
   bool isChecked = false;
 
@@ -96,18 +107,19 @@ class _CreatePlansState extends State<CreatePlans> {
     }
   }
 
-  createPlans({
-    required String nome,
-    required String descricao,
-    required String idCategoria,
-    required List<Map<String, String>> complementar,
-    required String preco,
-    required String token,
-  }) async {
+  updatePlans(
+    String id,
+    String nome,
+    String descricao,
+    String idCategoria,
+    List<Map<String, String>> complementar,
+    String preco,
+    String token,
+  ) async {
     try {
       var request = http.MultipartRequest(
-        "POST",
-        Uri.parse('${ApiContants.baseApi}/plans/create'),
+        "PATCH",
+        Uri.parse('${ApiContants.baseApi}/plans/update'),
       );
       request.headers['Authorization'] = 'Bearer $token';
 
@@ -134,6 +146,7 @@ class _CreatePlansState extends State<CreatePlans> {
       String complementarJson = jsonEncode(complementar);
 
       request.fields.addAll({
+        'id': id,
         'nome': nome,
         'descricao': descricao,
         'idCategoria': idCategoria,
@@ -143,9 +156,9 @@ class _CreatePlansState extends State<CreatePlans> {
 
       var response = await request.send();
       if (response.statusCode == 200) {
-        print('Plano criado com sucesso.');
+        print('Plano atualizado com sucesso.');
       } else {
-        print('Erro ao criar plano: ${response.statusCode}');
+        print('Erro ao atualizar plano: ${response.statusCode}');
       }
     } catch (error) {
       print("Erro na requisição: $error");
@@ -209,7 +222,7 @@ class _CreatePlansState extends State<CreatePlans> {
       child: AlertDialog(
         title: Text(
           textAlign: TextAlign.center,
-          'Criar plano',
+          'Atualizar Plano',
           style: GoogleFonts.getFont('Poppins',
               fontSize: 22, color: Colors.white, fontWeight: FontWeight.w500),
         ),
@@ -220,43 +233,35 @@ class _CreatePlansState extends State<CreatePlans> {
             height: 480,
             child: Row(
               children: [
-                result == null
+                resultBase == null
                     ? InkWell(
                         onTap: () {
-                          uploadImage();
+                          uploadImageBase();
                         },
                         child: Container(
-                          width: 220,
                           decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white),
+                              borderRadius: BorderRadius.circular(10)),
+                          width: 220,
+                          child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Colors.white, width: 2),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.add,
-                                color: Colors.white,
-                                size: 30,
-                              ),
-                              Text(
-                                'Adicionar\nimagem plano base',
-                                style: GoogleFonts.getFont('Poppins',
-                                    fontSize: 13,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500),
-                                textAlign: TextAlign.center,
-                              )
-                            ],
+                            child: Image.network(
+                              "${ApiContants.baseApi}/uploads/${widget.plans.planoBase}",
+                              fit: BoxFit.contain,
+                            ),
                           ),
                         ),
                       )
-                    : Image.memory(
+                    : SizedBox(
                         width: 220,
-                        height: 480,
-                        resultBytes,
-                        fit: BoxFit.cover,
+                        height: 490,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.memory(
+                            resultBytesBase,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                 const SizedBox(
                   width: 10,
@@ -270,47 +275,37 @@ class _CreatePlansState extends State<CreatePlans> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          resultBase == null
+                          result == null
                               ? InkWell(
                                   onTap: () {
-                                    uploadImageBase();
+                                    uploadImage();
                                   },
                                   child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.white),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
                                     width: 150,
                                     height: 150,
-                                    decoration: BoxDecoration(
+                                    child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Icon(
-                                          Icons.add,
-                                          color: Colors.white,
-                                          size: 30,
-                                        ),
-                                        Text(
-                                          'Adicionar\nimagem de cabeçalho',
-                                          style: GoogleFonts.getFont('Poppins',
-                                              fontSize: 13,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                          textAlign: TextAlign.center,
-                                        )
-                                      ],
+                                      child: Image.network(
+                                        "${ApiContants.baseApi}/uploads/${widget.plans.imagem}",
+                                        fit: BoxFit.contain,
+                                      ),
                                     ),
                                   ),
                                 )
-                              : Image.memory(
+                              : SizedBox(
                                   width: 150,
                                   height: 150,
-                                  resultBytesBase,
-                                  fit: BoxFit.cover,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.memory(
+                                      resultBytes,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                 ),
                           const SizedBox(
                             width: 10,
@@ -485,6 +480,17 @@ class _CreatePlansState extends State<CreatePlans> {
                                           height: 30,
                                           width: 90,
                                           child: TextFormField(
+                                            onChanged: (value) {
+                                              final formattedValue =
+                                                  formatCurrency(value);
+                                              valor.value = TextEditingValue(
+                                                text: formattedValue,
+                                                selection:
+                                                    TextSelection.collapsed(
+                                                  offset: formattedValue.length,
+                                                ),
+                                              );
+                                            },
                                             keyboardType: TextInputType.number,
                                             inputFormatters: [
                                               FilteringTextInputFormatter
@@ -745,53 +751,49 @@ class _CreatePlansState extends State<CreatePlans> {
                                     padding: const EdgeInsets.all(20),
                                   ),
                                   onPressed: () async {
-                                    if (_formKey.currentState!.validate() &&
-                                        _isImageSelected() &&
-                                        _isImageSelectedBase()) {
-                                      String precoFormatado = valor.text
-                                          .replaceAll('R\$ ', '')
-                                          .replaceAll('.', '')
-                                          .replaceAll(',', '.');
+                                    String precoFormatado = valor.text
+                                        .replaceAll('R\$ ', '')
+                                        .replaceAll('.', '')
+                                        .replaceAll(',', '.');
 
-                                      List<Map<String, String>> complementar =
-                                          dataComplemento
-                                              .where((comp) => comp.isChecked)
-                                              .map((comp) => {
-                                                    "id": comp.idComplemento
-                                                        .toString()
-                                                  })
-                                              .toList();
+                                    List<Map<String, String>> complementar =
+                                        dataComplemento
+                                            .where((comp) => comp.isChecked)
+                                            .map((comp) => {
+                                                  "id": comp.idComplemento
+                                                      .toString()
+                                                })
+                                            .toList();
+                                    final token =
+                                        await getTokenFromLocalStorage();
+                                    updatePlans(
+                                        widget.plans.idSimulador,
+                                        nomePlano.text,
+                                        descricao.text,
 
-                                      await createPlans(
-                                        nome: nomePlano.text,
-                                        descricao: descricao.text,
-                                        idCategoria: selectedValue!,
-                                        complementar: complementar,
-                                        preco: precoFormatado,
-                                        token: await getTokenFromLocalStorage(),
-                                      );
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          backgroundColor: Colors.green,
-                                          content: Text(
-                                              'Plano cadastrado com sucesso!'),
-                                        ),
-                                      );
-                                      Navigator.pop(context, 'OK');
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          backgroundColor: Colors.red,
-                                          content: Text(
-                                              'Os campos não podem estar vazios'),
-                                        ),
-                                      );
-                                    }
+                                        // widget.plans.idCategoria,
+                                        valor.text,
+                                        complementar,
+                                        token,
+                                        precoFormatado);
+                                    //                                        String id,
+                                    // String nome,
+                                    // String descricao,
+                                    // String idCategoria,
+                                    // List<Map<String, String>> complementar,
+                                    // String preco,
+                                    // String token,
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        backgroundColor: Colors.green,
+                                        content: Text(
+                                            'Plano cadastrado com sucesso!'),
+                                      ),
+                                    );
+                                    Navigator.pop(context, 'OK');
                                   },
                                   child: const Text(
-                                    'Criar',
+                                    'Atualizar',
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 ),
@@ -811,18 +813,3 @@ class _CreatePlansState extends State<CreatePlans> {
     );
   }
 }
-
-// class ComplementoModel {
-//   final String id;
-//   bool isChecked;
-//   // Outros campos, se necessário
-
-//   ComplementoModel({required this.id, this.isChecked = false});
-
-//   factory ComplementoModel.fromJson(Map<String, dynamic> json) {
-//     return ComplementoModel(
-//       id: json['_id'],
-//       isChecked: false,
-//     );
-//   }
-// }
