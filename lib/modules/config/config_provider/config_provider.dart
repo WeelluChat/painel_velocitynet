@@ -6,7 +6,6 @@ class ConfigProvider extends ChangeNotifier {
   List<CategoryModel> category = [];
   loadCategory() async {
     category = await ConfigRepository().categoryPlans();
-    print(category);
     notifyListeners();
   }
 }
