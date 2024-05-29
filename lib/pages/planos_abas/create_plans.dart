@@ -438,7 +438,7 @@ class _CreatePlansState extends State<CreatePlans> {
                                                   child: Text(
                                                     category['nome'],
                                                     style: const TextStyle(
-                                                        fontSize: 13,
+                                                        fontSize: 10,
                                                         color: Colors.white),
                                                   ),
                                                 );

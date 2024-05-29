@@ -525,7 +525,7 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
                                                   child: Text(
                                                     category['nome'],
                                                     style: const TextStyle(
-                                                        fontSize: 13,
+                                                        fontSize: 10,
                                                         color: Colors.white),
                                                   ),
                                                 );
