@@ -143,12 +143,12 @@ class _CreatePlansState extends State<CreatePlans> {
 
       var response = await request.send();
       if (response.statusCode == 200) {
-        print('Plano criado com sucesso.');
+        // print('Plano criado com sucesso.');
       } else {
-        print('Erro ao criar plano: ${response.statusCode}');
+        // print('Erro ao criar plano: ${response.statusCode}');
       }
     } catch (error) {
-      print("Erro na requisição: $error");
+      // print("Erro na requisição: $error");
       return null;
     }
   }
@@ -173,7 +173,7 @@ class _CreatePlansState extends State<CreatePlans> {
             .toList();
       });
     } else {
-      print('Erro ao buscar dados: ${response.statusCode}');
+      // print('Erro ao buscar dados: ${response.statusCode}');
     }
   }
 

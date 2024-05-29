@@ -76,7 +76,7 @@ class _EditCardPlanCategoryAlertDialogState
             jsonList.map((json) => CategoryModel.fromJson(json)).toList();
       });
     } else {
-      print('Erro ao buscar dados: ${response.statusCode}');
+      // print('Erro ao buscar dados: ${response.statusCode}');
     }
   }
 
@@ -99,12 +99,12 @@ class _EditCardPlanCategoryAlertDialogState
         });
       } else {
         if (kDebugMode) {
-          print('Erro ao excluir o item: ${response.statusCode}');
+          // print('Erro ao excluir o item: ${response.statusCode}');
         }
       }
     } catch (error) {
       if (kDebugMode) {
-        print('Erro na solicitação DELETE: $error');
+        // print('Erro na solicitação DELETE: $error');
       }
     }
   }
@@ -141,12 +141,12 @@ class _EditCardPlanCategoryAlertDialogState
       var response = await request.send();
 
       if (response.statusCode == 200) {
-        print("Dados atualizados com sucesso");
+        // print("Dados atualizados com sucesso");
       } else {
-        print("Falha ao atualizar os dados: ${response.statusCode}");
+        // print("Falha ao atualizar os dados: ${response.statusCode}");
       }
     } catch (error) {
-      print("Error in request: $error");
+      // print("Error in request: $error");
       return null;
     }
   }
@@ -161,7 +161,7 @@ class _EditCardPlanCategoryAlertDialogState
   @override
   void initState() {
     super.initState();
-    print(widget.category.idCategoryPlan);
+    // print(widget.category.idCategoryPlan);
     cardsCategoryPlans(
         widget.category.idCategoryPlan, getTokenFromLocalStorage());
     listImages = widget.category.images;

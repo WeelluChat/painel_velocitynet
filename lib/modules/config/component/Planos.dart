@@ -47,7 +47,7 @@ class _MyWidgetState extends State<Planos> {
         dataPlans = responseData;
       });
     } else {
-      print('Erro ao buscar dados: ${response.statusCode}');
+      // print('Erro ao buscar dados: ${response.statusCode}');
     }
   }
 
@@ -67,12 +67,12 @@ class _MyWidgetState extends State<Planos> {
         setState(() {
           getPlans();
         });
-        print("Complemento deletado com sucesso.");
+        // print("Complemento deletado com sucesso.");
       } else {
-        print('Falha ao deletar recurso: ${response.statusCode}');
+        // print('Falha ao deletar recurso: ${response.statusCode}');
       }
     } catch (e) {
-      print('Erro ao conectar ao servidor: $e');
+      // print('Erro ao conectar ao servidor: $e');
     }
   }
 

@@ -73,7 +73,7 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
 
       await request.send();
     } catch (error) {
-      print("Erro na requisição: $error");
+      // print("Erro na requisição: $error");
       return null;
     }
   }

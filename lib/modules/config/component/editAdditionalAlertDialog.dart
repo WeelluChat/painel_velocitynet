@@ -77,12 +77,12 @@ class _EditAdditionalAlertDialogState extends State<EditAdditionalAlertDialog> {
       var response = await request.send();
 
       if (response.statusCode == 200) {
-        print("Dados atualizados com sucesso");
+        // print("Dados atualizados com sucesso");
       } else {
-        print("Falha ao atualizar os dados: ${response.statusCode}");
+        // print("Falha ao atualizar os dados: ${response.statusCode}");
       }
     } catch (error) {
-      print("Error in request: $error");
+      // print("Error in request: $error");
       return null;
     }
   }
@@ -112,7 +112,7 @@ class _EditAdditionalAlertDialogState extends State<EditAdditionalAlertDialog> {
         dataAdditional = json.decode(response.body);
       });
     } else {
-      print('Erro ao buscar dados: ${response.statusCode}');
+      // print('Erro ao buscar dados: ${response.statusCode}');
     }
   }
 

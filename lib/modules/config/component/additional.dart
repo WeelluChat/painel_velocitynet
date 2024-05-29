@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'dart:typed_data';
-import 'package:flutter/foundation.dart';
+// import 'dart:typed_data';
+// import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
@@ -76,7 +76,7 @@ class _AdditionalState extends State<Additional> {
         getAdditional();
       });
     } catch (error) {
-      print("Erro na requisição: $error");
+      // print("Erro na requisição: $error");
       return null;
     }
   }
@@ -104,7 +104,7 @@ class _AdditionalState extends State<Additional> {
         dataAdditional = json.decode(response.body);
       });
     } else {
-      print('Erro ao buscar dados: ${response.statusCode}');
+      // print('Erro ao buscar dados: ${response.statusCode}');
     }
   }
 
@@ -124,12 +124,12 @@ class _AdditionalState extends State<Additional> {
         setState(() {
           getAdditional();
         });
-        print("Complemento deletado com sucesso.");
+        // print("Complemento deletado com sucesso.");
       } else {
-        print('Falha ao deletar recurso: ${response.statusCode}');
+        // print('Falha ao deletar recurso: ${response.statusCode}');
       }
     } catch (e) {
-      print('Erro ao conectar ao servidor: $e');
+      // print('Erro ao conectar ao servidor: $e');
     }
   }
 

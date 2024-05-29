@@ -79,10 +79,10 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
           categoryPlans = data;
         });
       } else {
-        print('Erro ao buscar dados: ${response.statusCode}');
+        // print('Erro ao buscar dados: ${response.statusCode}');
       }
     } catch (e) {
-      print('Erro ao realizar requisição: $e');
+      // print('Erro ao realizar requisição: $e');
     }
   }
 
@@ -134,7 +134,7 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
         dataPlans = responseData;
       });
     } else {
-      print('Erro ao buscar dados: ${response.statusCode}');
+      // print('Erro ao buscar dados: ${response.statusCode}');
     }
   }
 
@@ -189,9 +189,9 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
 
       var response = await request.send();
       if (response.statusCode == 200) {
-        print('Plano atualizado com sucesso.');
+        // print('Plano atualizado com sucesso.');
       } else {
-        print('Erro ao atualizar plano: ${response.statusCode}');
+        // print('Erro ao atualizar plano: ${response.statusCode}');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.red,
@@ -200,7 +200,6 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
         );
       }
     } catch (error) {
-      print("Erro na requisição: $error");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.red,

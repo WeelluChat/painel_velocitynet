@@ -64,7 +64,7 @@ class _ComplementosState extends State<Complement> {
         getComplemento();
       });
     } catch (error) {
-      print("Erro na requisição: $error");
+      // print("Erro na requisição: $error");
       return null;
     }
   }
@@ -92,7 +92,7 @@ class _ComplementosState extends State<Complement> {
         dataComplemento = json.decode(response.body);
       });
     } else {
-      print('Erro ao buscar dados: ${response.statusCode}');
+      // print('Erro ao buscar dados: ${response.statusCode}');
     }
   }
 
@@ -110,12 +110,12 @@ class _ComplementosState extends State<Complement> {
           body: jsonEncode({"id": id}));
       if (response.statusCode == 200) {
         getComplemento();
-        print("Complemento deletado com sucesso.");
+        // print("Complemento deletado com sucesso.");
       } else {
-        print('Falha ao deletar recurso: ${response.statusCode}');
+        // print('Falha ao deletar recurso: ${response.statusCode}');
       }
     } catch (e) {
-      print('Erro ao conectar ao servidor: $e');
+      // print('Erro ao conectar ao servidor: $e');
     }
   }
 
