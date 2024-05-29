@@ -1,11 +1,8 @@
 import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -15,6 +12,8 @@ import 'package:painel_velocitynet/modules/config/component/PlansModel.dart';
 import 'package:painel_velocitynet/modules/config/model/category_model.dart';
 import 'package:painel_velocitynet/modules/create_complementos/complementos_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'alertDialog_createComplementPlan.dart';
 
 class AlertDialogEditPlan extends StatefulWidget {
   final PlansModel plans;
@@ -43,6 +42,14 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
 
   bool isChecked = false;
 
+  @override
+  void dispose() {
+    nomePlano.dispose();
+    descricao.dispose();
+    valor.dispose();
+    super.dispose();
+  }
+
   Future<String> getTokenFromLocalStorage() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
@@ -51,7 +58,9 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
 
   List<PlansModel> plans = [];
   List<CategoryModel> category = [];
+  List<CreateComplementoModel> dataComplemento = [];
   List<dynamic> categoryPlans = [];
+
   Future<void> CategoryPlans() async {
     try {
       final token = await getTokenFromLocalStorage();
@@ -107,6 +116,28 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
     }
   }
 
+  List<dynamic> dataPlans = [];
+  Future<void> getPlans() async {
+    final token = await getTokenFromLocalStorage();
+    final response = await http.get(
+      Uri.parse('${ApiContants.baseApi}/plans'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = json.decode(response.body);
+      setState(() {
+        dataPlans = responseData;
+      });
+    } else {
+      print('Erro ao buscar dados: ${response.statusCode}');
+    }
+  }
+
   updatePlans(
     String id,
     String nome,
@@ -122,7 +153,7 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
         Uri.parse('${ApiContants.baseApi}/plans/update'),
       );
       request.headers['Authorization'] = 'Bearer $token';
-
+      //segundo campo de imagem
       if (resultBase != null && resultBytesBase.isNotEmpty) {
         request.files.add(
           http.MultipartFile.fromBytes(
@@ -133,6 +164,9 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
           ),
         );
       }
+
+      //primeiro campo de imagem
+      //planoBase
       if (result != null && resultBytes.isNotEmpty) {
         request.files.add(
           http.MultipartFile.fromBytes(
@@ -143,14 +177,13 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
           ),
         );
       }
-      String complementarJson = jsonEncode(complementar);
 
       request.fields.addAll({
         'id': id,
         'nome': nome,
         'descricao': descricao,
         'idCategoria': idCategoria,
-        'complementar': complementarJson,
+        'complementar': jsonEncode(complementar),
         'preco': preco,
       });
 
@@ -159,14 +192,57 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
         print('Plano atualizado com sucesso.');
       } else {
         print('Erro ao atualizar plano: ${response.statusCode}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Erro ao atualizar plano: ${response.statusCode}'),
+          ),
+        );
       }
     } catch (error) {
       print("Erro na requisição: $error");
-      return null;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text("Erro na requisição: $error"),
+        ),
+      );
     }
   }
 
-  List<dynamic> dataComplemento = [];
+  List<CreateComplementoModel> dataComplementId = [];
+  Future<void> getComplementoId(idPlan) async {
+    final token = await getTokenFromLocalStorage();
+    final response =
+        await http.post(Uri.parse('${ApiContants.baseApi}/complement-get-id'),
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+            body: jsonEncode({
+              'idPlan': idPlan,
+            }));
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = json.decode(response.body);
+      setState(() {
+        dataComplementId = responseData
+            .map((json) => CreateComplementoModel.fromJson(json))
+            .toList();
+
+        for (var complemento in widget.plans.complementar) {
+          for (var item in dataComplementId) {
+            if (item.idComplemento == complemento) {
+              item.isChecked = true;
+            }
+          }
+        }
+      });
+    } else {
+      print('Erro ao buscar dados: ${response.statusCode}');
+    }
+  }
+
   Future<void> getComplemento() async {
     final token = await getTokenFromLocalStorage();
     final response = await http.get(
@@ -183,7 +259,16 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
       setState(() {
         dataComplemento = responseData
             .map((json) => CreateComplementoModel.fromJson(json))
+            .where((element) => element.idPlan == null)
             .toList();
+
+        for (var complemento in widget.plans.complementar) {
+          for (var item in dataComplemento) {
+            if (item.idComplemento == complemento) {
+              item.isChecked = true;
+            }
+          }
+        }
       });
     } else {
       print('Erro ao buscar dados: ${response.statusCode}');
@@ -212,6 +297,7 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
     super.initState();
     CategoryPlans();
     getComplemento();
+    getComplementoId(widget.plans.idSimulador);
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -230,35 +316,39 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
         actions: <Widget>[
           SizedBox(
             width: 600,
-            height: 480,
+            height: 520,
             child: Row(
               children: [
-                resultBase == null
+                result == null
                     ? InkWell(
                         onTap: () {
-                          uploadImageBase();
+                          uploadImage();
                         },
                         child: Container(
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.white),
                               borderRadius: BorderRadius.circular(10)),
                           width: 220,
+                          height: 540,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: Image.network(
                               "${ApiContants.baseApi}/uploads/${widget.plans.planoBase}",
-                              fit: BoxFit.contain,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
                       )
-                    : SizedBox(
+                    : Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white),
+                            borderRadius: BorderRadius.circular(10)),
                         width: 220,
-                        height: 490,
+                        height: 540,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: Image.memory(
-                            resultBytesBase,
+                            resultBytes,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -275,10 +365,10 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          result == null
+                          resultBase == null
                               ? InkWell(
                                   onTap: () {
-                                    uploadImage();
+                                    uploadImageBase();
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -296,14 +386,17 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
                                     ),
                                   ),
                                 )
-                              : SizedBox(
+                              : Container(
                                   width: 150,
                                   height: 150,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(10)),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child: Image.memory(
-                                      resultBytes,
-                                      fit: BoxFit.cover,
+                                      resultBytesBase,
+                                      fit: BoxFit.contain,
                                     ),
                                   ),
                                 ),
@@ -666,7 +759,24 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
                                   fontWeight: FontWeight.w400),
                             ),
                             TextButton(
-                                onPressed: () {},
+                                onPressed: () => showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialogCreateComplementPlan(
+                                          plans: PlansModel(
+                                              idSimulador:
+                                                  widget.plans.idSimulador,
+                                              nome: widget.plans.nome,
+                                              descricao: widget.plans.descricao,
+                                              idCategoria:
+                                                  widget.plans.idCategoria,
+                                              complementar:
+                                                  widget.plans.complementar,
+                                              preco: widget.plans.preco,
+                                              imagem: widget.plans.imagem,
+                                              planoBase:
+                                                  widget.plans.planoBase),
+                                        )),
                                 child: const Text(
                                   '+ Novo Complemento',
                                   style: TextStyle(
@@ -676,42 +786,73 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
                         ),
                       ),
                       SizedBox(
-                        width: 415,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.add_photo_alternate_outlined,
-                                  color: Colors.white,
-                                  size: 20,
+                        width: 400,
+                        height: 65,
+                        child: ListView.builder(
+                          itemCount: dataComplementId.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Container(
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
                                 ),
-                                Text(
-                                  'Instalação R\$ 100,00',
-                                  style: GoogleFonts.getFont('Poppins',
-                                      fontSize: 12,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 30,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                              color: Colors.grey,
+                                              borderRadius:
+                                                  BorderRadius.circular(100)),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            child: Image.network(
+                                                fit: BoxFit.cover,
+                                                '${ApiContants.baseApi}/uploads/${dataComplementId[index].imageComplemento}'),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          dataComplementId[index]
+                                              .nomeComplemento,
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12),
+                                        ),
+                                      ],
+                                    ),
+                                    Checkbox(
+                                      checkColor: Colors.white,
+                                      side: const BorderSide(
+                                        width: 2,
+                                        color:
+                                            Color.fromARGB(255, 128, 128, 128),
+                                      ),
+                                      fillColor: const MaterialStatePropertyAll(
+                                          Color(0xff5F5F5F)),
+                                      value: dataComplementId[index].isChecked,
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          dataComplementId[index].isChecked =
+                                              value!;
+                                        });
+                                      },
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            Checkbox(
-                              checkColor: Colors.white,
-                              side: const BorderSide(
-                                width: 2,
-                                color: Color.fromARGB(255, 128, 128, 128),
                               ),
-                              fillColor: const MaterialStatePropertyAll(
-                                  Color(0xff5F5F5F)),
-                              value: isChecked,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  isChecked = value!;
-                                });
-                              },
-                            ),
-                          ],
+                            );
+                          },
                         ),
                       ),
                       Expanded(
@@ -751,46 +892,56 @@ class _AlertDialogEditPlanState extends State<AlertDialogEditPlan> {
                                     padding: const EdgeInsets.all(20),
                                   ),
                                   onPressed: () async {
-                                    String precoFormatado = valor.text
-                                        .replaceAll('R\$ ', '')
-                                        .replaceAll('.', '')
-                                        .replaceAll(',', '.');
-
-                                    List<Map<String, String>> complementar =
-                                        dataComplemento
+                                    if (nomePlano.text.isNotEmpty &&
+                                        descricao.text.isNotEmpty &&
+                                        selectedValue!.isNotEmpty &&
+                                        valor.text.isNotEmpty) {
+                                      final token =
+                                          await getTokenFromLocalStorage();
+                                      List<Map<String, String>> complementar = [
+                                        ...dataComplemento
+                                            .where((comp) => comp.isChecked)
+                                            .map((comp) => {
+                                                  "id": comp.idComplemento
+                                                      .toString()
+                                                }),
+                                        ...dataComplementId
                                             .where((comp) => comp.isChecked)
                                             .map((comp) => {
                                                   "id": comp.idComplemento
                                                       .toString()
                                                 })
-                                            .toList();
-                                    final token =
-                                        await getTokenFromLocalStorage();
-                                    updatePlans(
+                                      ];
+
+                                      await updatePlans(
                                         widget.plans.idSimulador,
                                         nomePlano.text,
                                         descricao.text,
-
-                                        // widget.plans.idCategoria,
-                                        valor.text,
+                                        selectedValue!,
                                         complementar,
+                                        valor.text,
                                         token,
-                                        precoFormatado);
-                                    //                                        String id,
-                                    // String nome,
-                                    // String descricao,
-                                    // String idCategoria,
-                                    // List<Map<String, String>> complementar,
-                                    // String preco,
-                                    // String token,
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        backgroundColor: Colors.green,
-                                        content: Text(
-                                            'Plano cadastrado com sucesso!'),
-                                      ),
-                                    );
-                                    Navigator.pop(context, 'OK');
+                                      );
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          backgroundColor: Colors.green,
+                                          content: Text(
+                                              'Plano atualizado com sucesso!'),
+                                        ),
+                                      );
+
+                                      Navigator.pop(context, 'OK');
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          backgroundColor: Colors.red,
+                                          content: Text(
+                                              'Os campos não podem estar vazios'),
+                                        ),
+                                      );
+                                    }
                                   },
                                   child: const Text(
                                     'Atualizar',

@@ -573,7 +573,7 @@ class _CreatePlansState extends State<CreatePlans> {
                               ],
                             ),
                             SizedBox(
-                              height: 150,
+                              height: 220,
                               child: ListView.builder(
                                 itemCount: dataComplemento.length,
                                 itemBuilder: (context, index) {
@@ -647,67 +647,67 @@ class _CreatePlansState extends State<CreatePlans> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        width: 415,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Deste Plano',
-                              style: GoogleFonts.getFont('Poppins',
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            TextButton(
-                                onPressed: () {},
-                                child: const Text(
-                                  '+ Novo Complemento',
-                                  style: TextStyle(
-                                      fontSize: 13, color: Colors.green),
-                                ))
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 415,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.add_photo_alternate_outlined,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                                Text(
-                                  'Instalação R\$ 100,00',
-                                  style: GoogleFonts.getFont('Poppins',
-                                      fontSize: 12,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ],
-                            ),
-                            Checkbox(
-                              checkColor: Colors.white,
-                              side: const BorderSide(
-                                width: 2,
-                                color: Color.fromARGB(255, 128, 128, 128),
-                              ),
-                              fillColor: const MaterialStatePropertyAll(
-                                  Color(0xff5F5F5F)),
-                              value: isChecked,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  isChecked = value!;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
+                      // SizedBox(
+                      //   width: 415,
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       Text(
+                      //         'Deste Plano',
+                      //         style: GoogleFonts.getFont('Poppins',
+                      //             fontSize: 15,
+                      //             color: Colors.white,
+                      //             fontWeight: FontWeight.w400),
+                      //       ),
+                      //       TextButton(
+                      //           onPressed: () {},
+                      //           child: const Text(
+                      //             '+ Novo Complemento',
+                      //             style: TextStyle(
+                      //                 fontSize: 13, color: Colors.green),
+                      //           ))
+                      //     ],
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   width: 415,
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       Row(
+                      //         children: [
+                      //           const Icon(
+                      //             Icons.add_photo_alternate_outlined,
+                      //             color: Colors.white,
+                      //             size: 20,
+                      //           ),
+                      //           Text(
+                      //             'Instalação R\$ 100,00',
+                      //             style: GoogleFonts.getFont('Poppins',
+                      //                 fontSize: 12,
+                      //                 color: Colors.white,
+                      //                 fontWeight: FontWeight.w400),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //       Checkbox(
+                      //         checkColor: Colors.white,
+                      //         side: const BorderSide(
+                      //           width: 2,
+                      //           color: Color.fromARGB(255, 128, 128, 128),
+                      //         ),
+                      //         fillColor: const MaterialStatePropertyAll(
+                      //             Color(0xff5F5F5F)),
+                      //         value: isChecked,
+                      //         onChanged: (bool? value) {
+                      //           setState(() {
+                      //             isChecked = value!;
+                      //           });
+                      //         },
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       Expanded(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
