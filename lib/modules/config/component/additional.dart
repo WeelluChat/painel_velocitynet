@@ -1,31 +1,38 @@
 import 'dart:convert';
-import 'dart:typed_data';
+// import 'dart:typed_data';
+// import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:painel_velocitynet/constantes/api_url.dart';
 import 'package:painel_velocitynet/helpers/token.dart';
-import 'package:painel_velocitynet/modules/config/component/complement_alertdialog.dart';
-import 'package:painel_velocitynet/modules/create_complementos/complementos_model.dart';
+import 'package:painel_velocitynet/modules/config/component/additionalModel.dart';
+import 'package:painel_velocitynet/modules/config/component/editAdditionalAlertDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Complement extends StatefulWidget {
-  const Complement({super.key});
+class Additional extends StatefulWidget {
+  const Additional({super.key});
 
   @override
-  State<Complement> createState() => _ComplementosState();
+  State<Additional> createState() => _AdditionalState();
 }
 
-class _ComplementosState extends State<Complement> {
-  String? selectedImage;
-  List<CreateComplementoModel> dataComplementoModel = [];
-  late TextEditingController nomeComplemento = TextEditingController(text: '');
-
+class _AdditionalState extends State<Additional> {
+  final TextEditingController nome = TextEditingController();
+  final MoneyMaskedTextController valor = MoneyMaskedTextController(
+    leftSymbol: 'R\$ ',
+    decimalSeparator: ',',
+    thousandSeparator: '.',
+  );
   FilePickerResult? result;
   late Uint8List resultBytes;
+
+  final _formKey = GlobalKey<FormState>();
 
   uploadImage() async {
     result = await FilePicker.platform.pickFiles(
@@ -40,11 +47,15 @@ class _ComplementosState extends State<Complement> {
     }
   }
 
-  createComplemento(String nome, String token) async {
+  createAdditionalBenefit(
+    String nome,
+    String preco,
+    String token,
+  ) async {
     try {
       var request = http.MultipartRequest(
         "POST",
-        Uri.parse('${ApiContants.baseApi}/complement/create'),
+        Uri.parse('${ApiContants.baseApi}/additional/create'),
       );
       request.headers['Authorization'] = 'Bearer $token';
       request.files.add(
@@ -56,12 +67,13 @@ class _ComplementosState extends State<Complement> {
         ),
       );
       request.fields.addAll({
-        'nome': nome,
+        'name': nome,
+        'preco': preco,
       });
 
       await request.send();
       setState(() {
-        getComplemento();
+        getAdditional();
       });
     } catch (error) {
       // print("Erro na requisição: $error");
@@ -75,11 +87,11 @@ class _ComplementosState extends State<Complement> {
     return token ?? '';
   }
 
-  List<dynamic> dataComplemento = [];
-  Future<void> getComplemento() async {
+  List<dynamic> dataAdditional = [];
+  Future<void> getAdditional() async {
     final token = await getTokenFromLocalStorage();
     final response = await http.get(
-      Uri.parse('${ApiContants.baseApi}/complement'),
+      Uri.parse('${ApiContants.baseApi}/additional'),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -89,15 +101,15 @@ class _ComplementosState extends State<Complement> {
 
     if (response.statusCode == 200) {
       setState(() {
-        dataComplemento = json.decode(response.body);
+        dataAdditional = json.decode(response.body);
       });
     } else {
       // print('Erro ao buscar dados: ${response.statusCode}');
     }
   }
 
-  deletarComplemento(String id, token) async {
-    var url = Uri.parse('${ApiContants.baseApi}/complement/delete');
+  deletarAdditional(String id, token) async {
+    var url = Uri.parse('${ApiContants.baseApi}/additional/delete');
     try {
       final token = await getTokenFromLocalStorage();
 
@@ -109,7 +121,9 @@ class _ComplementosState extends State<Complement> {
           },
           body: jsonEncode({"id": id}));
       if (response.statusCode == 200) {
-        getComplemento();
+        setState(() {
+          getAdditional();
+        });
         // print("Complemento deletado com sucesso.");
       } else {
         // print('Falha ao deletar recurso: ${response.statusCode}');
@@ -119,13 +133,15 @@ class _ComplementosState extends State<Complement> {
     }
   }
 
+  bool _isImageSelected() {
+    return result != null;
+  }
+
   @override
   void initState() {
     super.initState();
-    getComplemento();
+    getAdditional();
   }
-
-  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +157,7 @@ class _ComplementosState extends State<Complement> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    'Complementos',
+                    'Adicionais',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.getFont(
                       'Poppins',
@@ -161,35 +177,34 @@ class _ComplementosState extends State<Complement> {
                       uploadImage();
                     },
                     child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Colors.white),
-                      ),
-                      child: result == null
-                          ? const Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.add_photo_alternate_outlined,
-                                  color: Colors.white,
-                                )
-                              ],
-                            )
-                          : SizedBox(
-                              width: 130,
-                              height: 200,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.memory(
-                                  resultBytes,
-                                  fit: BoxFit.cover,
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.white),
+                        ),
+                        child: result == null
+                            ? const Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.add_photo_alternate_outlined,
+                                    color: Colors.white,
+                                  )
+                                ],
+                              )
+                            : SizedBox(
+                                width: 130,
+                                height: 200,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.memory(
+                                    resultBytes,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              ),
-                            ),
-                    ),
+                              )),
                   ),
                   const SizedBox(
                     width: 10,
@@ -200,14 +215,13 @@ class _ComplementosState extends State<Complement> {
                         color: const Color(0xff5F5F5F),
                         borderRadius: BorderRadius.circular(5),
                       ),
-                      height: 50,
                       width: 400,
                       child: TextFormField(
-                        controller: nomeComplemento,
+                        controller: nome,
                         style:
                             const TextStyle(fontSize: 14, color: Colors.white),
                         decoration: const InputDecoration(
-                          hintText: 'Ex: Instalação grátis',
+                          hintText: 'Ex: Premiere',
                           hintStyle:
                               TextStyle(fontSize: 14, color: Color(0xffCFCFCF)),
                           border:
@@ -217,40 +231,78 @@ class _ComplementosState extends State<Complement> {
                     ),
                   ),
                   const SizedBox(
+                    width: 10,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xff5F5F5F),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    width: 200,
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      controller: valor,
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                      decoration: const InputDecoration(
+                          hintText: 'R\$ 99,99',
+                          hintStyle:
+                              TextStyle(fontSize: 10, color: Color(0xffCFCFCF)),
+                          contentPadding: EdgeInsets.only(
+                              left: 10, right: 10, top: 5, bottom: 10),
+                          border:
+                              OutlineInputBorder(borderSide: BorderSide.none)),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor insira um valor valido*';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  const SizedBox(
                     width: 5,
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(23),
-                      backgroundColor: Colors.green,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
+                        padding: const EdgeInsets.all(23),
+                        backgroundColor: Colors.green,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        )),
                     onPressed: () async {
-                      if (nomeComplemento.text.isNotEmpty && result != null) {
-                        createComplemento(
-                          nomeComplemento.text,
+                      if (_formKey.currentState!.validate() &&
+                          _isImageSelected()) {
+                        String precoFormatado = valor.text
+                            .replaceAll('R\$ ', '')
+                            .replaceAll('.', '')
+                            .replaceAll(',', '.');
+
+                        createAdditionalBenefit(
+                          nome.text,
+                          precoFormatado,
                           await GetToken().getTokenFromLocalStorage(),
                         );
 
-                        nomeComplemento.clear();
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             backgroundColor: Colors.green,
-                            content:
-                                Text('Complemento cadastrado com sucesso!'),
+                            content: Text('Benefício cadastrado com sucesso!'),
                           ),
                         );
                         setState(() {
                           result = null;
                         });
+                        nome.clear();
+                        valor.updateValue(0);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             backgroundColor: Colors.red,
-                            content:
-                                Text('Nome e imagem não podem estar vazios'),
+                            content: Text(
+                                'Nome, valor e imagem não podem estar vazios'),
                           ),
                         );
                       }
@@ -267,8 +319,10 @@ class _ComplementosState extends State<Complement> {
               child: SizedBox(
                 width: double.infinity,
                 child: ListView.builder(
-                  itemCount: dataComplemento.length,
+                  itemCount: dataAdditional.length,
                   itemBuilder: (context, index) {
+                    final item = dataAdditional[index];
+                    final preco = item['preco']['\$numberDecimal'].toString();
                     return Padding(
                       padding: const EdgeInsets.only(
                           left: 8.0, right: 8, top: 5, bottom: 5),
@@ -291,31 +345,42 @@ class _ComplementosState extends State<Complement> {
                                     width: 35,
                                     height: 40,
                                     decoration: BoxDecoration(
-                                      color: Colors.grey,
-                                      borderRadius: BorderRadius.circular(100),
-                                    ),
+                                        color: Colors.grey,
+                                        borderRadius:
+                                            BorderRadius.circular(100)),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(50),
                                       child: Image.network(
-                                        fit: BoxFit.cover,
-                                        '${ApiContants.baseApi}/uploads/${dataComplemento[index]['image']}',
-                                      ),
+                                          fit: BoxFit.cover,
+                                          '${ApiContants.baseApi}/uploads/${item['image']}'),
                                     ),
                                   ),
                                   const SizedBox(
                                     width: 10,
                                   ),
                                   Text(
-                                    dataComplemento[index]['nome'],
+                                    item['nome'],
                                     style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
                               Row(
                                 children: [
+                                  SizedBox(
+                                    width: 80,
+                                    child: Text(
+                                      'R\$ $preco',
+                                      textAlign: TextAlign.start,
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       side:
@@ -326,22 +391,25 @@ class _ComplementosState extends State<Complement> {
                                       ),
                                     ),
                                     onPressed: () => showDialog<String>(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          ComplementEditAlertDialog(
-                                        complement: CreateComplementoModel(
-                                          idComplemento: dataComplemento[index]
-                                                  ['_id']
-                                              .toString(),
-                                          nomeComplemento:
-                                              dataComplemento[index]['nome']
-                                                  .toString(),
-                                          imageComplemento:
-                                              dataComplemento[index]['image']
-                                                  .toString(),
-                                        ),
-                                      ),
-                                    ),
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            EditAdditionalAlertDialog(
+                                              additional: AdditionalModel(
+                                                idAdditional:
+                                                    dataAdditional[index]['_id']
+                                                        .toString(),
+                                                nome: dataAdditional[index]
+                                                        ['nome']
+                                                    .toString(),
+                                                image: dataAdditional[index]
+                                                        ['image']
+                                                    .toString(),
+                                                preco: dataAdditional[index]
+                                                        ['preco']
+                                                    .toString(),
+                                                idPlans: '',
+                                              ),
+                                            )),
                                     child: const Text(
                                       'Editar',
                                       style: TextStyle(color: Colors.green),
@@ -362,7 +430,7 @@ class _ComplementosState extends State<Complement> {
                                           style: TextStyle(color: Colors.white),
                                         ),
                                         content: const Text(
-                                          'Deseja mesmo deletar este complemento?',
+                                          'Deseja mesmo deletar este item?',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                         actions: <Widget>[
@@ -377,16 +445,16 @@ class _ComplementosState extends State<Complement> {
                                           ),
                                           TextButton(
                                             onPressed: () async {
-                                              deletarComplemento(
-                                                  dataComplemento[index]['_id'],
-                                                  await GetToken()
-                                                      .getTokenFromLocalStorage());
+                                              deletarAdditional(
+                                                  dataAdditional[index]['_id'],
+                                                  GetToken()
+                                                      .getTokenFromLocalStorage);
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
                                                 const SnackBar(
                                                   backgroundColor: Colors.green,
                                                   content: Text(
-                                                      'Complemento Deletado com sucesso!'),
+                                                      'Benefício excluido com sucesso!'),
                                                 ),
                                               );
                                               Navigator.pop(context, 'Excluir');

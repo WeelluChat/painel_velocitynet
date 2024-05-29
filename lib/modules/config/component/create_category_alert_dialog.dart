@@ -72,7 +72,7 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
 
       await request.send();
     } catch (error) {
-      print("Erro na requisição: $error");
+      // print("Erro na requisição: $error");
       return null;
     }
   }
@@ -326,14 +326,31 @@ class _CreateCategoryAlertDialogState extends State<CreateCategoryAlertDialog> {
                           padding: const EdgeInsets.all(20),
                         ),
                         onPressed: () async {
-                          createCategoryPlan(
-                            nomePlano.text,
-                            subTitulo.text,
-                            selectedValue,
-                            await GetToken().getTokenFromLocalStorage(),
-                          );
-
-                          Navigator.pop(context, 'Salvar');
+                          if (nomePlano.text.isNotEmpty &&
+                              subTitulo.text.isNotEmpty &&
+                              selectedValue != null &&
+                              selectedValue!.isNotEmpty) {
+                            createCategoryPlan(
+                              nomePlano.text,
+                              subTitulo.text,
+                              selectedValue!,
+                              await GetToken().getTokenFromLocalStorage(),
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                backgroundColor: Colors.green,
+                                content: Text('Categoria criada com sucesso!'),
+                              ),
+                            );
+                            Navigator.pop(context, 'Salvar');
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                backgroundColor: Colors.red,
+                                content: Text('Os campos não podem ser vazios'),
+                              ),
+                            );
+                          }
 
                           Provider.of<ConfigProvider>(context, listen: false)
                               .loadCategory();

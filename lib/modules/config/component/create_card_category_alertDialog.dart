@@ -65,12 +65,12 @@ class _CreateCardCategoryAlertDialogState
       var response = await request.send();
 
       if (response.statusCode == 200) {
-        print("Images updated successfully.");
+        // print("Images updated successfully.");
       } else {
-        print("Failed to update images: ${response.statusCode}");
+        // print("Failed to update images: ${response.statusCode}");
       }
     } catch (error) {
-      print("Error in request: $error");
+      // print("Error in request: $error");
       return null;
     }
   }

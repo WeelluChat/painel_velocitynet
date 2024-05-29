@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:painel_velocitynet/modules/config/component/category.dart';
-import 'package:painel_velocitynet/modules/config/component/simulator.dart';
+import 'package:painel_velocitynet/modules/config/component/Planos.dart';
 import 'package:painel_velocitynet/modules/entity/menu_entity.dart';
 
 class PlansConfig extends StatefulWidget {
@@ -17,8 +17,6 @@ class _PlansConfigState extends State<PlansConfig>
     with SingleTickerProviderStateMixin {
   late TabController _tabControllerr;
 
-  final List<String> tabNames = ['Inicio', 'Sobre', 'Contact'];
-  final int _currentIndex = 0;
   final PageController _pageController = PageController();
 
   @override
@@ -31,7 +29,7 @@ class _PlansConfigState extends State<PlansConfig>
   void initState() {
     super.initState();
     _tabControllerr = TabController(
-      length: 2,
+      length: 3,
       vsync: this,
     );
   }
@@ -47,13 +45,17 @@ class _PlansConfigState extends State<PlansConfig>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  'Configurações',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: MediaQuery.of(context).size.width < 600 ? 18 : 22,
-                    fontWeight: FontWeight.bold,
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15.0),
+                  child: Text(
+                    'Configurações',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize:
+                          MediaQuery.of(context).size.width < 600 ? 18 : 22,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -144,6 +146,39 @@ class _PlansConfigState extends State<PlansConfig>
                     ),
                   ),
                 ),
+                Tab(
+                  child: Container(
+                    padding: const EdgeInsets.only(
+                      left: 100,
+                      right: 100,
+                    ),
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        top: BorderSide(color: Color(0xff2F2F2F), width: 1),
+                        left: BorderSide(color: Color(0xff2F2F2F), width: 1),
+                        right: BorderSide(color: Color(0xff2F2F2F), width: 1),
+                      ),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(5),
+                        topRight: Radius.circular(5),
+                      ),
+                    ),
+                    child: const Text(
+                      'Integrações',
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                      // style: GoogleFonts.getFont('Poppins',
+                      //     color: isVisibleHoje == true
+                      //         ? ColorsDashboard().white
+                      //         : ColorsDashboard().grey,
+                      //     fontSize: 15,
+                      //     fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
               ],
             ),
             Expanded(
@@ -162,8 +197,9 @@ class _PlansConfigState extends State<PlansConfig>
                   child: TabBarView(
                     controller: _tabControllerr,
                     children: const <Widget>[
-                      SimulatorComponent(),
-                      CategoryComponent()
+                      Planos(),
+                      CategoryComponent(),
+                      Text('data')
                     ],
                   ),
                 ),
